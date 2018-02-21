@@ -1,89 +1,78 @@
-//
-//  GameScene.swift
-//  Reading_Robot
-//
-//  Created by Hayden Lawler on 2/17/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
-//
 
 import SpriteKit
-import GameplayKit
 
 class GameScene: SKScene {
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
-    
+    // 1
+    let player = SKSpriteNode(imageNamed: "Idle_000")
+    let walk0 = SKTexture(imageNamed: "Walk_000")
+    let walk1 = SKTexture(imageNamed: "Walk_001")
+    let walk2 = SKTexture(imageNamed: "Walk_002")
+    let walk3 = SKTexture(imageNamed: "Walk_003")
+    let walk4 = SKTexture(imageNamed: "Walk_004")
+    let walk5 = SKTexture(imageNamed: "Walk_005")
+    let walk6 = SKTexture(imageNamed: "Walk_006")
+    let walk7 = SKTexture(imageNamed: "Walk_007")
+    let walk8 = SKTexture(imageNamed: "Walk_008")
+    let walk9 = SKTexture(imageNamed: "Walk_009")
+   
     override func didMove(to view: SKView) {
+        backgroundColor = SKColor.white
+        player.setScale(0.2)
+        player.position = CGPoint(x: size.width * 0.9, y: size.height * 0.5)
+        addChild(player)
+    }
+    
+    override func  touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let robotVelocity = self.frame.size.width / 4.0
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
-        
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-        
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
+        //choose one of the touches to work with
+        if let touch = touches.first {
+            let currentPoint = touch.location(in: self)
+            var multiplierForDirection : CGFloat
+            if (currentPoint.x <= player.position.x) {
+                // walk left
+                multiplierForDirection = 1.0
+            } else {
+                // walk right
+                multiplierForDirection = -1.0
+            }
+            player.xScale = fabs(player.xScale) * multiplierForDirection
+            let walkingTime = fabs(player.position.x - currentPoint.x)  / robotVelocity
             
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
-    }
-    
-    
-    func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+            //check if robot is moving if so stop the old walking so we can start the new walking
+            if(player.action(forKey: "movingRobot") == nil){
+                player.removeAction(forKey: "movingRobot")
+            }
+            //check if robot is already walking or not, if not start
+            if(player.action(forKey: "walkingRobot") == nil){
+                walkingRobot()
+            }
+            
+            let moveAction = SKAction.moveTo(x: currentPoint.x, duration: Double(walkingTime))
+            let idleAction = SKAction.run{
+                self.idleRobot()
+            }
+            let sequence = SKAction.sequence([moveAction, idleAction])
+            player.run(sequence, withKey:"movingRobot")
+            
+            
+        }else {
+            return
         }
         
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+    func walkingRobot(){
+        let walking = [walk0, walk1, walk2, walk3, walk4, walk5, walk6, walk7, walk8, walk9]
+        let walkAnimation = SKAction.animate(with: walking, timePerFrame: 0.07)
+        player.run(SKAction.repeatForever(walkAnimation), withKey:"walkingRobot")
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+    func idleRobot(){
+        player.removeAction(forKey: "walkingRobot")
     }
     
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
-    
-    override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
-    }
 }
+
