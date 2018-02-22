@@ -4,6 +4,8 @@ import SpriteKit
 class GameScene: SKScene {
     
     // 1
+    let rope = SKSpriteNode(imageNamed: "rope")
+    let background = SKSpriteNode(imageNamed: "Classroom")
     let player = SKSpriteNode(imageNamed: "Idle_000")
     let walk0 = SKTexture(imageNamed: "Walk_000")
     let walk1 = SKTexture(imageNamed: "Walk_001")
@@ -17,14 +19,26 @@ class GameScene: SKScene {
     let walk9 = SKTexture(imageNamed: "Walk_009")
    
     override func didMove(to view: SKView) {
-        backgroundColor = SKColor.white
-        player.setScale(0.2)
-        player.position = CGPoint(x: size.width * 0.9, y: size.height * 0.5)
+//        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+//        background.size = self.frame.size
+//        background.zPosition = -1
+//        addChild(background)
+        
+        
+        player.size.width = size.width / 3.1
+        player.size.height = size.height / 2
+        player.position = CGPoint(x: size.width * 0.8, y: size.height * 0.25)
+        player.zPosition = 1
         addChild(player)
+        
+        rope.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+        rope.size.width = frame.size.width - (player.size.width)
+        rope.zPosition = 0
+        addChild(rope)
     }
     
     override func  touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let robotVelocity = self.frame.size.width / 4.0
+        let robotVelocity = self.frame.size.width / 6.0
         
         //choose one of the touches to work with
         if let touch = touches.first {
@@ -66,7 +80,7 @@ class GameScene: SKScene {
     
     func walkingRobot(){
         let walking = [walk0, walk1, walk2, walk3, walk4, walk5, walk6, walk7, walk8, walk9]
-        let walkAnimation = SKAction.animate(with: walking, timePerFrame: 0.07)
+        let walkAnimation = SKAction.animate(with: walking, timePerFrame: 0.1)
         player.run(SKAction.repeatForever(walkAnimation), withKey:"walkingRobot")
     }
     
