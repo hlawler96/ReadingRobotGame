@@ -6,7 +6,8 @@ class GameScene: SKScene {
     // 1
     let rope = SKSpriteNode(imageNamed: "rope")
     let background = SKSpriteNode(imageNamed: "Classroom")
-    let player = SKSpriteNode(imageNamed: "Idle_000")
+    let player = SKSpriteNode(imageNamed: "Attack_005")
+    let player2 = SKSpriteNode(imageNamed: "Attack_005")
     let walk0 = SKTexture(imageNamed: "Walk_000")
     let walk1 = SKTexture(imageNamed: "Walk_001")
     let walk2 = SKTexture(imageNamed: "Walk_002")
@@ -27,13 +28,22 @@ class GameScene: SKScene {
         
         player.size.width = size.width / 3.1
         player.size.height = size.height / 2
-        player.position = CGPoint(x: size.width * 0.8, y: size.height * 0.25)
-        player.zPosition = 1
+        player.position = CGPoint(x: size.width * 0.8 , y: size.height * 0.25)
+        player.zPosition = 2
         addChild(player)
         
-        rope.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
-        rope.size.width = frame.size.width - (player.size.width)
-        rope.zPosition = 0
+        
+        player2.size.width = size.width / 3.1
+        player2.size.height = size.height / 2
+        player2.position = CGPoint(x: size.width * 0.2 , y: size.height * 0.25)
+        player2.zPosition = 2
+        player2.xScale = player2.xScale * -1
+        addChild(player2)
+        
+        rope.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 4  - player.size.height/4)
+        rope.size.width = size.width * 0.6
+        rope.size.height = player.size.height / 3
+        rope.zPosition = 1
         addChild(rope)
     }
     
