@@ -18,7 +18,13 @@ class GameScene: SKScene {
     let walk7 = SKTexture(imageNamed: "Walk_007")
     let walk8 = SKTexture(imageNamed: "Walk_008")
     let walk9 = SKTexture(imageNamed: "Walk_009")
-   
+    
+    let pull0 = SKTexture(imageNamed: "Attack_007")
+    let pull1 = SKTexture(imageNamed: "Attack_006")
+    let pull2 = SKTexture(imageNamed: "Attack_005")
+    let pull3 = SKTexture(imageNamed: "Attack_006")
+    let pull4 = SKTexture(imageNamed: "Attack_007")
+    
     override func didMove(to view: SKView) {
 //        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
 //        background.size = self.frame.size
@@ -85,6 +91,8 @@ class GameScene: SKScene {
             return
         }
         
+        // pulling motion on every click
+        pullingRobot()
         
     }
     
@@ -96,6 +104,12 @@ class GameScene: SKScene {
     
     func idleRobot(){
         player.removeAction(forKey: "walkingRobot")
+    }
+    
+    func pullingRobot(){
+        let pulling = [pull0, pull1, pull2, pull3, pull4]
+        let pullAnimation = SKAction.animate(with: pulling, timePerFrame: 0.15)
+        player.run(pullAnimation)
     }
     
 }
