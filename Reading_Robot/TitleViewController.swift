@@ -34,14 +34,14 @@ class TitleViewController: UIViewController {
         if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
             print("error opening database")
         }
-//       dropDB(db: db)
+       dropDB(db: db)
         
         if sqlite3_exec(db, "create table if not exists Words (phoneme text , word text)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
         
-//        loadWords(db: db)
+        loadWords(db: db)
 //        printDB(db: db)
     
     
