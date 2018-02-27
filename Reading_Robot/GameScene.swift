@@ -26,6 +26,12 @@ class GameScene: SKScene {
     let pull3 = SKTexture(imageNamed: "Attack_006")
     let pull4 = SKTexture(imageNamed: "Attack_007")
     
+    var correctWords = [String]()
+    var wrongWords = [String]()
+    
+    var correctCounter = 0
+    var wrongCounter = 0
+    
     var cloudArray = [SKSpriteNode]()
     
     override func didMove(to view: SKView) {
@@ -38,27 +44,25 @@ class GameScene: SKScene {
         
         player.size.width = size.width / 3.1
         player.size.height = size.height / 2
-        player.position = CGPoint(x: size.width * 0.8 , y: size.height * 0.25)
+        player.position = CGPoint(x: size.width * 0.8 , y: size.height * 0.33)
         player.zPosition = 2
         addChild(player)
         
         
         player2.size.width = size.width / 3.1
         player2.size.height = size.height / 2
-        player2.position = CGPoint(x: size.width * 0.2 , y: size.height * 0.25)
+        player2.position = CGPoint(x: size.width * 0.2 , y: size.height * 0.33)
         player2.zPosition = 2
         player2.xScale = player2.xScale * -1
         addChild(player2)
         
-        rope.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 4  - player.size.height/4)
+        rope.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 4  - player.size.height/4 + size.height * 0.08)
         rope.size.width = size.width * 0.6
         rope.size.height = player.size.height / 3
         rope.zPosition = 1
         addChild(rope)
         
-        insertCloud(x: size.width * 0.2, y: size.height * 0.8)
-        insertCloud(x: size.width * 0.5, y: size.height * 0.8)
-        insertCloud(x: size.width * 0.8 , y: size.height * 0.8)
+       
         
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             .appendingPathComponent("test.sqlite")
@@ -67,10 +71,8 @@ class GameScene: SKScene {
         if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
             print("error opening database")
         }
-        
-        
-        let correctWords = getRandomCorrectWords(phoneme: "-ck", db: db)
-        let wrongWords = getRandomWrongWords(phoneme: "not-ck", db: db)
+        correctWords = getRandomCorrectWords(phoneme: "-ck", db: db)
+        wrongWords = getRandomWrongWords(phoneme: "not-ck", db: db)
         
         print("Correct Words")
         for word in correctWords {
@@ -81,6 +83,10 @@ class GameScene: SKScene {
         for word in wrongWords {
             print(word)
         }
+        
+        insertCloud(x: size.width * 0.2, y: size.height * 0.8)
+        insertCloud(x: size.width * 0.5, y: size.height * 0.8)
+        insertCloud(x: size.width * 0.8 , y: size.height * 0.8)
         
     }
     
@@ -152,6 +158,16 @@ class GameScene: SKScene {
         cloud.zPosition = 0
         addChild(cloud)
         cloudArray.append(cloud)
+        
+        let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+        text.text = correctWords[correctCounter]
+        text.fontSize = 32
+        text.fontColor = SKColor.black
+        text.position = CGPoint(x: x, y: y - cloud.size.height / 8)
+        text.zPosition = 1
+        addChild(text)
+        
+        correctCounter = correctCounter + 1
         
     }
     
