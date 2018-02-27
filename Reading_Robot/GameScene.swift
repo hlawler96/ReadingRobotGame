@@ -1,11 +1,12 @@
 
 import SpriteKit
+import SQLite3
 
 class GameScene: SKScene {
     
     // 1
     let rope = SKSpriteNode(imageNamed: "rope")
-    let background = SKSpriteNode(imageNamed: "Classroom")
+    let background = SKSpriteNode(imageNamed: "LevelBackground1")
     let player = SKSpriteNode(imageNamed: "Attack_005")
     let player2 = SKSpriteNode(imageNamed: "Attack_005")
     let walk0 = SKTexture(imageNamed: "Walk_000")
@@ -25,32 +26,68 @@ class GameScene: SKScene {
     let pull3 = SKTexture(imageNamed: "Attack_006")
     let pull4 = SKTexture(imageNamed: "Attack_007")
     
+    var correctWords = [String]()
+    var wrongWords = [String]()
+    
+    var correctCounter = 0
+    var wrongCounter = 0
+    
+    var cloudArray = [SKSpriteNode]()
+    
     override func didMove(to view: SKView) {
-//        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
-//        background.size = self.frame.size
-//        background.zPosition = -1
-//        addChild(background)
         
+        background.size.width = size.width
+        background.size.height = size.height
+        background.position = CGPoint(x: size.width/2, y: size.height/2)
+        background.zPosition = 0
+        addChild(background)
         
         player.size.width = size.width / 3.1
         player.size.height = size.height / 2
-        player.position = CGPoint(x: size.width * 0.8 , y: size.height * 0.25)
+        player.position = CGPoint(x: size.width * 0.8 , y: size.height * 0.33)
         player.zPosition = 2
         addChild(player)
         
         
         player2.size.width = size.width / 3.1
         player2.size.height = size.height / 2
-        player2.position = CGPoint(x: size.width * 0.2 , y: size.height * 0.25)
+        player2.position = CGPoint(x: size.width * 0.2 , y: size.height * 0.33)
         player2.zPosition = 2
         player2.xScale = player2.xScale * -1
         addChild(player2)
         
-        rope.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 4  - player.size.height/4)
+        rope.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 4  - player.size.height/4 + size.height * 0.08)
         rope.size.width = size.width * 0.6
         rope.size.height = player.size.height / 3
         rope.zPosition = 1
         addChild(rope)
+        
+       
+        
+        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            .appendingPathComponent("test.sqlite")
+        // open database
+        var db: OpaquePointer?
+        if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
+            print("error opening database")
+        }
+        correctWords = getRandomCorrectWords(phoneme: "-ck", db: db)
+        wrongWords = getRandomWrongWords(phoneme: "not-ck", db: db)
+        
+        print("Correct Words")
+        for word in correctWords {
+            print(word)
+        }
+        
+        print("Wrong Words")
+        for word in wrongWords {
+            print(word)
+        }
+        
+        insertCloud(x: size.width * 0.2, y: size.height * 0.8)
+        insertCloud(x: size.width * 0.5, y: size.height * 0.8)
+        insertCloud(x: size.width * 0.8 , y: size.height * 0.8)
+        
     }
     
     override func  touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -112,5 +149,103 @@ class GameScene: SKScene {
         player.run(pullAnimation)
     }
     
+    
+    func insertCloud(x: CGFloat, y: CGFloat){
+        let cloud = SKSpriteNode(imageNamed: "cloud-cartoon")
+        cloud.position = CGPoint(x: x, y: y)
+        cloud.size.width = size.width / 4
+        cloud.size.height = size.height / 4
+        cloud.zPosition = 0
+        addChild(cloud)
+        cloudArray.append(cloud)
+        
+        let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+        text.text = correctWords[correctCounter]
+        text.fontSize = 32
+        text.fontColor = SKColor.black
+        text.position = CGPoint(x: x, y: y - cloud.size.height / 8)
+        text.zPosition = 1
+        addChild(text)
+        
+        correctCounter = correctCounter + 1
+        
+    }
+    
+    func getRandomCorrectWords(phoneme: String, db: OpaquePointer?) -> [String] {
+        var wordArray = [String]()
+        let queryString = "select word from Words where phoneme = '" + phoneme + "'"
+        
+        //statement pointer
+        var stmt:OpaquePointer?
+        
+        //preparing the query
+        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error preparing insert: \(errmsg)")
+            return []
+        }
+        
+        //traversing through all the records
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            let word = String(cString: sqlite3_column_text(stmt, 0))
+            //adding values to list
+            wordArray.append(word)
+        }
+        wordArray.shuffle();
+        wordArray = Array(wordArray.prefix(7))
+        return wordArray
+    }
+    
+    func getRandomWrongWords(phoneme: String, db: OpaquePointer?) -> [String] {
+        var wordArray = [String]()
+        let queryString = "select word from Words where phoneme = '" + phoneme + "'"
+        
+        //statement pointer
+        var stmt:OpaquePointer?
+        
+        //preparing the query
+        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error preparing insert: \(errmsg)")
+            return []
+        }
+        
+        //traversing through all the records
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            let word = String(cString: sqlite3_column_text(stmt, 0))
+            //adding values to list
+            wordArray.append(word)
+        }
+        wordArray.shuffle();
+        wordArray = Array(wordArray.prefix(14))
+        return wordArray
+    }
 }
+
+extension MutableCollection {
+    /// Shuffles the contents of this collection.
+    mutating func shuffle() {
+        let c = count
+        guard c > 1 else { return }
+        
+        for (firstUnshuffled, unshuffledCount) in zip(indices, stride(from: c, to: 1, by: -1)) {
+            let d: IndexDistance = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
+            let i = index(firstUnshuffled, offsetBy: d)
+            swapAt(firstUnshuffled, i)
+        }
+    }
+}
+
+extension Sequence {
+    /// Returns an array with the contents of this sequence, shuffled.
+    func shuffled() -> [Element] {
+        var result = Array(self)
+        result.shuffle()
+        return result
+    }
+}
+
+
+
+
 
