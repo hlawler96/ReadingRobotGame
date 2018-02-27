@@ -6,7 +6,7 @@ class GameScene: SKScene {
     
     // 1
     let rope = SKSpriteNode(imageNamed: "rope")
-    let background = SKSpriteNode(imageNamed: "Classroom")
+    let background = SKSpriteNode(imageNamed: "LevelBackground1")
     let player = SKSpriteNode(imageNamed: "Attack_005")
     let player2 = SKSpriteNode(imageNamed: "Attack_005")
     let walk0 = SKTexture(imageNamed: "Walk_000")
@@ -29,6 +29,13 @@ class GameScene: SKScene {
     var cloudArray = [SKSpriteNode]()
     
     override func didMove(to view: SKView) {
+        
+        background.size.width = size.width
+        background.size.height = size.height
+        background.position = CGPoint(x: size.width/2, y: size.height/2)
+        background.zPosition = 0
+        addChild(background)
+        
         player.size.width = size.width / 3.1
         player.size.height = size.height / 2
         player.position = CGPoint(x: size.width * 0.8 , y: size.height * 0.25)
@@ -61,7 +68,20 @@ class GameScene: SKScene {
             print("error opening database")
         }
         
-        printDB(db: db)
+        
+        let correctWords = getRandomCorrectWords(phoneme: "-ck", db: db)
+        let wrongWords = getRandomWrongWords(phoneme: "not-ck", db: db)
+        
+        print("Correct Words")
+        for word in correctWords {
+            print(word)
+        }
+        
+        print("Wrong Words")
+        for word in wrongWords {
+            print(word)
+        }
+        
     }
     
     override func  touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -123,31 +143,6 @@ class GameScene: SKScene {
         player.run(pullAnimation)
     }
     
-    func printDB(db: OpaquePointer?){
-        var wordList = [Word]()
-        
-        let queryString = "select phoneme, word from Words"
-        
-        //statement pointer
-        var stmt:OpaquePointer?
-        
-        //preparing the query
-        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("error preparing insert: \(errmsg)")
-            return
-        }
-        
-        //traversing through all the records
-        while(sqlite3_step(stmt) == SQLITE_ROW){
-            let phoneme = String(cString: sqlite3_column_text(stmt, 0))
-            let word = String(cString: sqlite3_column_text(stmt, 1))
-            
-            //adding values to list
-            wordList.append(Word(phoneme: phoneme, word: word))
-            print("Phoneme: " + phoneme + " , Word: " + word)
-        }
-    }
     
     func insertCloud(x: CGFloat, y: CGFloat){
         let cloud = SKSpriteNode(imageNamed: "cloud-cartoon")
@@ -159,7 +154,81 @@ class GameScene: SKScene {
         cloudArray.append(cloud)
         
     }
+    
+    func getRandomCorrectWords(phoneme: String, db: OpaquePointer?) -> [String] {
+        var wordArray = [String]()
+        let queryString = "select word from Words where phoneme = '" + phoneme + "'"
+        
+        //statement pointer
+        var stmt:OpaquePointer?
+        
+        //preparing the query
+        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error preparing insert: \(errmsg)")
+            return []
+        }
+        
+        //traversing through all the records
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            let word = String(cString: sqlite3_column_text(stmt, 0))
+            //adding values to list
+            wordArray.append(word)
+        }
+        wordArray.shuffle();
+        wordArray = Array(wordArray.prefix(7))
+        return wordArray
+    }
+    
+    func getRandomWrongWords(phoneme: String, db: OpaquePointer?) -> [String] {
+        var wordArray = [String]()
+        let queryString = "select word from Words where phoneme = '" + phoneme + "'"
+        
+        //statement pointer
+        var stmt:OpaquePointer?
+        
+        //preparing the query
+        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error preparing insert: \(errmsg)")
+            return []
+        }
+        
+        //traversing through all the records
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            let word = String(cString: sqlite3_column_text(stmt, 0))
+            //adding values to list
+            wordArray.append(word)
+        }
+        wordArray.shuffle();
+        wordArray = Array(wordArray.prefix(14))
+        return wordArray
+    }
 }
+
+extension MutableCollection {
+    /// Shuffles the contents of this collection.
+    mutating func shuffle() {
+        let c = count
+        guard c > 1 else { return }
+        
+        for (firstUnshuffled, unshuffledCount) in zip(indices, stride(from: c, to: 1, by: -1)) {
+            let d: IndexDistance = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
+            let i = index(firstUnshuffled, offsetBy: d)
+            swapAt(firstUnshuffled, i)
+        }
+    }
+}
+
+extension Sequence {
+    /// Returns an array with the contents of this sequence, shuffled.
+    func shuffled() -> [Element] {
+        var result = Array(self)
+        result.shuffle()
+        return result
+    }
+}
+
 
 
 
