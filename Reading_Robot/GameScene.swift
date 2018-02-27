@@ -1,5 +1,6 @@
 
 import SpriteKit
+import SQLite3
 
 class GameScene: SKScene {
     
@@ -25,13 +26,9 @@ class GameScene: SKScene {
     let pull3 = SKTexture(imageNamed: "Attack_006")
     let pull4 = SKTexture(imageNamed: "Attack_007")
     
+    var cloudArray = [SKSpriteNode]()
+    
     override func didMove(to view: SKView) {
-//        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
-//        background.size = self.frame.size
-//        background.zPosition = -1
-//        addChild(background)
-        
-        
         player.size.width = size.width / 3.1
         player.size.height = size.height / 2
         player.position = CGPoint(x: size.width * 0.8 , y: size.height * 0.25)
@@ -51,6 +48,20 @@ class GameScene: SKScene {
         rope.size.height = player.size.height / 3
         rope.zPosition = 1
         addChild(rope)
+        
+        insertCloud(x: size.width * 0.2, y: size.height * 0.8)
+        insertCloud(x: size.width * 0.5, y: size.height * 0.8)
+        insertCloud(x: size.width * 0.8 , y: size.height * 0.8)
+        
+        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            .appendingPathComponent("test.sqlite")
+        // open database
+        var db: OpaquePointer?
+        if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
+            print("error opening database")
+        }
+        
+        printDB(db: db)
     }
     
     override func  touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -112,5 +123,44 @@ class GameScene: SKScene {
         player.run(pullAnimation)
     }
     
+    func printDB(db: OpaquePointer?){
+        var wordList = [Word]()
+        
+        let queryString = "select phoneme, word from Words"
+        
+        //statement pointer
+        var stmt:OpaquePointer?
+        
+        //preparing the query
+        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error preparing insert: \(errmsg)")
+            return
+        }
+        
+        //traversing through all the records
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            let phoneme = String(cString: sqlite3_column_text(stmt, 0))
+            let word = String(cString: sqlite3_column_text(stmt, 1))
+            
+            //adding values to list
+            wordList.append(Word(phoneme: phoneme, word: word))
+            print("Phoneme: " + phoneme + " , Word: " + word)
+        }
+    }
+    
+    func insertCloud(x: CGFloat, y: CGFloat){
+        let cloud = SKSpriteNode(imageNamed: "cloud-cartoon")
+        cloud.position = CGPoint(x: x, y: y)
+        cloud.size.width = size.width / 4
+        cloud.size.height = size.height / 4
+        cloud.zPosition = 0
+        addChild(cloud)
+        cloudArray.append(cloud)
+        
+    }
 }
+
+
+
 
