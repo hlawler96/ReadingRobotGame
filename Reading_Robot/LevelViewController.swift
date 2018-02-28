@@ -20,6 +20,12 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         
         
     }
+    override var shouldAutorotate: Bool {
+        return false;
+    }
+    
+    
+    
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
         return levels.count
@@ -31,6 +37,13 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         cell.LevelImage.image = UIImage(named: levels[indexPath.row])
         
+        //must add condition for scoring and retrieving from database
+        //ex. if % > 33 1 star
+        // if % > 66 2 star
+        // if % = 100 3 star
+        cell.StarView.image = UIImage(named: "Star.png")
+        cell.StarView1.image = UIImage(named: "Star.png")
+        //cell.StarView2.image = UIImage(named: "Star.png")
         
         return cell
     }

@@ -16,6 +16,7 @@
 		D5150C97203F6A8200D75CD0 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5150C96203F6A8200D75CD0 /* CollectionViewCell.swift */; };
 		D5909FB0203F3F0000C9BEF1 /* TitleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5909FAF203F3F0000C9BEF1 /* TitleViewController.swift */; };
 		D5909FB2203F40F300C9BEF1 /* LevelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5909FB1203F40F300C9BEF1 /* LevelViewController.swift */; };
+		D5FFB68F2046321800619A1D /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5FFB68E2046321800619A1D /* AccountViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		D5150C96203F6A8200D75CD0 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		D5909FAF203F3F0000C9BEF1 /* TitleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleViewController.swift; sourceTree = "<group>"; };
 		D5909FB1203F40F300C9BEF1 /* LevelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelViewController.swift; sourceTree = "<group>"; };
+		D5FFB68E2046321800619A1D /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				D5909FB1203F40F300C9BEF1 /* LevelViewController.swift */,
 				D5150C96203F6A8200D75CD0 /* CollectionViewCell.swift */,
 				BC1A71872038E71E00B2ECE6 /* GameViewController.swift */,
+				D5FFB68E2046321800619A1D /* AccountViewController.swift */,
 				BC1A718C2038E71E00B2ECE6 /* Assets.xcassets */,
 				BCB8E803203F12FA00C12886 /* LaunchScreen.storyboard */,
 				BCB8E801203F12FA00C12886 /* Main.storyboard */,
@@ -150,6 +153,7 @@
 			files = (
 				BC1A71882038E71E00B2ECE6 /* GameViewController.swift in Sources */,
 				D5909FB2203F40F300C9BEF1 /* LevelViewController.swift in Sources */,
+				D5FFB68F2046321800619A1D /* AccountViewController.swift in Sources */,
 				D5150C97203F6A8200D75CD0 /* CollectionViewCell.swift in Sources */,
 				D5909FB0203F3F0000C9BEF1 /* TitleViewController.swift in Sources */,
 				BCB8E7F7203F109500C12886 /* GameScene.swift in Sources */,
