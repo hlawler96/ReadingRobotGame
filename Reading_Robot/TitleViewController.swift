@@ -137,7 +137,7 @@ class TitleViewController: UIViewController {
         }
         
         //displaying a success message
-        print("Words inserted into successfully")
+//        print("Words inserted into successfully")
     }
     
     func loadWords(db: OpaquePointer?){

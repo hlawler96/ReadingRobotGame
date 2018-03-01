@@ -27,10 +27,12 @@ class GameScene: SKScene {
     let pull4 = SKTexture(imageNamed: "Attack_007")
     
     var correctWords = [String]()
-    var wrongWords = [String]()
+    var Words = [String]()
     
     var correctCounter = 0
-    var wrongCounter = 0
+    var wordCounter = 0
+    
+    let timeOfGame = 30.0
     
     var cloudArray = [SKSpriteNode]()
     
@@ -72,17 +74,10 @@ class GameScene: SKScene {
             print("error opening database")
         }
         correctWords = getRandomCorrectWords(phoneme: "-ck", db: db)
-        wrongWords = getRandomWrongWords(phoneme: "not-ck", db: db)
+        Words = getRandomWrongWords(phoneme: "not-ck", db: db)
+        Words.append(contentsOf: correctWords)
+        Words.shuffle()
         
-        print("Correct Words")
-        for word in correctWords {
-            print(word)
-        }
-        
-        print("Wrong Words")
-        for word in wrongWords {
-            print(word)
-        }
         
         insertCloud(x: size.width * 0.2, y: size.height * 0.8)
         insertCloud(x: size.width * 0.5, y: size.height * 0.8)
@@ -151,23 +146,24 @@ class GameScene: SKScene {
     
     
     func insertCloud(x: CGFloat, y: CGFloat){
+        print("inserting cloud")
         let cloud = SKSpriteNode(imageNamed: "cloud-cartoon")
         cloud.position = CGPoint(x: x, y: y)
         cloud.size.width = size.width / 4
         cloud.size.height = size.height / 4
-        cloud.zPosition = 0
+        cloud.zPosition = 1
         addChild(cloud)
         cloudArray.append(cloud)
         
         let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
-        text.text = correctWords[correctCounter]
+        text.text = Words[wordCounter]
         text.fontSize = 32
         text.fontColor = SKColor.black
         text.position = CGPoint(x: x, y: y - cloud.size.height / 8)
-        text.zPosition = 1
+        text.zPosition = 2
         addChild(text)
         
-        correctCounter = correctCounter + 1
+        wordCounter = wordCounter + 1
         
     }
     

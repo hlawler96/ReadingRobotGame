@@ -312,15 +312,6 @@
                                     <segue destination="rHw-tu-PAZ" kind="unwind" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="6Zz-jT-gtb"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zCd-iL-kCc">
-                                <rect key="frame" x="992" y="20" width="100" height="100"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" backgroundImage="Idle_000"/>
-                                <connections>
-                                    <segue destination="rHw-tu-PAZ" kind="unwind" unwindAction="unwindToAccountMenuWithUnwindSegue:" id="9gZ-Ko-Tzb"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
