@@ -116,8 +116,6 @@ class GameScene: SKScene {
                             cloudCounter = 0
                         }
                     }
-                    
-                    
                 }else {
                     if secondsSinceStart % 3 == 1 {
                         if cloudArray[cloudCounter].size.width != 0 {
@@ -138,6 +136,7 @@ class GameScene: SKScene {
                         if cloudCounter == 3 {
                             cloudCounter = 0
                         }
+                        
                     }
                 }
             }
