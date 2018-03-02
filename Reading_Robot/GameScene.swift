@@ -2,6 +2,7 @@
 import SpriteKit
 import SQLite3
 
+
 class GameScene: SKScene {
     
     // 1
@@ -19,7 +20,6 @@ class GameScene: SKScene {
     let walk7 = SKTexture(imageNamed: "Walk_007")
     let walk8 = SKTexture(imageNamed: "Walk_008")
     let walk9 = SKTexture(imageNamed: "Walk_009")
-    
     let pull0 = SKTexture(imageNamed: "Attack_007")
     let pull1 = SKTexture(imageNamed: "Attack_006")
     let pull2 = SKTexture(imageNamed: "Attack_005")
@@ -29,12 +29,21 @@ class GameScene: SKScene {
     var correctWords = [String]()
     var Words = [String]()
     
-    var correctCounter = 0
     var wordCounter = 0
+    var textCounter = 0
+    var cloudCounter = 0
     
-    let timeOfGame = 30.0
+    let numWords = 18
+    let calendar = Calendar.current
+    let date = Date()
+    var startSecond = 0
+    var startMinute = 0
+    var startHour = 0
+    var secondsSinceStart = 0
+    
     
     var cloudArray = [SKSpriteNode]()
+    var wordsShownArray = [SKLabelNode] ()
     
     override func didMove(to view: SKView) {
         
@@ -63,8 +72,10 @@ class GameScene: SKScene {
         rope.size.height = player.size.height / 3
         rope.zPosition = 1
         addChild(rope)
+        startHour = calendar.component(.hour, from: date)
+        startSecond = calendar.component(.second, from: date)
+        startMinute = calendar.component(.minute, from: date)
         
-       
         
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             .appendingPathComponent("test.sqlite")
@@ -82,50 +93,72 @@ class GameScene: SKScene {
         insertCloud(x: size.width * 0.2, y: size.height * 0.8)
         insertCloud(x: size.width * 0.5, y: size.height * 0.8)
         insertCloud(x: size.width * 0.8 , y: size.height * 0.8)
+
+        
         
     }
-    
-    override func  touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let robotVelocity = self.frame.size.width / 6.0
-        
-        //choose one of the touches to work with
-        if let touch = touches.first {
-            let currentPoint = touch.location(in: self)
-            var multiplierForDirection : CGFloat
-            if (currentPoint.x <= player.position.x) {
-                // walk left
-                multiplierForDirection = 1.0
-            } else {
-                // walk right
-                multiplierForDirection = -1.0
+    override func update(_ currentTime: TimeInterval){
+        let seconds = getSecondsSinceStart()
+        //only update words/ clouds until game is over
+        if wordCounter < 18 {
+            // only run once per second, not per frame
+            if secondsSinceStart != seconds{
+                secondsSinceStart = seconds
+                if secondsSinceStart <= 9 {
+                    //grow cloud a second before the text appears
+                    if secondsSinceStart % 3 == 2 {
+                        cloudArray[cloudCounter].run( SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: 0.8))
+                    }else if secondsSinceStart % 3 == 0 {
+                        wordsShownArray[cloudCounter].text = Words[wordCounter]
+                        wordCounter = wordCounter + 1
+                        cloudCounter = cloudCounter + 1
+                        if cloudCounter == 3 {
+                            cloudCounter = 0
+                        }
+                    }
+                    
+                    
+                }else {
+                    if secondsSinceStart % 3 == 1 {
+                        if cloudArray[cloudCounter].size.width != 0 {
+                            wordsShownArray[cloudCounter].text = ""
+                            cloudArray[cloudCounter].run(SKAction.resize(toWidth: 0, height: 0, duration: 0.8))
+                        }
+                    } else if secondsSinceStart % 3 == 2 {
+                         cloudArray[cloudCounter].run(SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: 0.8))
+                        
+                    } else if secondsSinceStart % 3 == 0 {
+                        wordsShownArray[textCounter].text = Words[wordCounter]
+                        wordCounter = wordCounter + 1
+                        textCounter = textCounter + 1
+                        if textCounter == 3 {
+                            textCounter = 0
+                        }
+                        cloudCounter = cloudCounter + 1
+                        if cloudCounter == 3 {
+                            cloudCounter = 0
+                        }
+                    }
+                }
             }
-            player.xScale = fabs(player.xScale) * multiplierForDirection
-            let walkingTime = fabs(player.position.x - currentPoint.x)  / robotVelocity
-            
-            //check if robot is moving if so stop the old walking so we can start the new walking
-            if(player.action(forKey: "movingRobot") == nil){
-                player.removeAction(forKey: "movingRobot")
-            }
-            //check if robot is already walking or not, if not start
-            if(player.action(forKey: "walkingRobot") == nil){
-                walkingRobot()
-            }
-            
-            let moveAction = SKAction.moveTo(x: currentPoint.x, duration: Double(walkingTime))
-            let idleAction = SKAction.run{
-                self.idleRobot()
-            }
-            let sequence = SKAction.sequence([moveAction, idleAction])
-            player.run(sequence, withKey:"movingRobot")
-            
-            
         }else {
-            return
+            // end game
         }
+    }
+
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+       
         
-        // pulling motion on every click
-        pullingRobot()
-        
+//        //choose one of the touches to work with
+//        if let touch = touches.first {
+//            let currentPoint = touch.location(in: self)
+//
+//        }else {
+//            return
+//        }
+        print("testing asych")
+        return
     }
     
     func walkingRobot(){
@@ -149,21 +182,22 @@ class GameScene: SKScene {
         print("inserting cloud")
         let cloud = SKSpriteNode(imageNamed: "cloud-cartoon")
         cloud.position = CGPoint(x: x, y: y)
-        cloud.size.width = size.width / 4
-        cloud.size.height = size.height / 4
+        //grow to size.width / 4
+        cloud.size.width = 0
+        cloud.size.height = 0
         cloud.zPosition = 1
         addChild(cloud)
         cloudArray.append(cloud)
         
         let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
-        text.text = Words[wordCounter]
+        text.text = ""
         text.fontSize = 32
         text.fontColor = SKColor.black
-        text.position = CGPoint(x: x, y: y - cloud.size.height / 8)
+        text.position = CGPoint(x: x, y: y - (size.height / 32))
         text.zPosition = 2
         addChild(text)
+        wordsShownArray.append(text)
         
-        wordCounter = wordCounter + 1
         
     }
     
@@ -188,7 +222,7 @@ class GameScene: SKScene {
             wordArray.append(word)
         }
         wordArray.shuffle();
-        wordArray = Array(wordArray.prefix(7))
+        wordArray = Array(wordArray.prefix(numWords/3))
         return wordArray
     }
     
@@ -213,9 +247,18 @@ class GameScene: SKScene {
             wordArray.append(word)
         }
         wordArray.shuffle();
-        wordArray = Array(wordArray.prefix(14))
+        wordArray = Array(wordArray.prefix(2*numWords/3))
         return wordArray
     }
+    
+    func getSecondsSinceStart() -> Int {
+        let currentDate = Date()
+        let currentSecond = calendar.component(.second, from: currentDate)
+        let currentMinute = calendar.component(.minute, from: currentDate)
+        let currentHour = calendar.component(.hour, from: currentDate)
+        return (currentHour - startHour) * 3600 + (currentMinute - startMinute) * 60 + (currentSecond - startSecond)
+    }
+    
 }
 
 extension MutableCollection {
