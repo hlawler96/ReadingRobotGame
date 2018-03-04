@@ -103,6 +103,8 @@ class GameScene: SKScene {
         
     }
     override func update(_ currentTime: TimeInterval){
+       
+        
         let seconds = getSecondsSinceStart()
         //only update words/ clouds until game is over
         if wordCounter < 18 {
@@ -147,6 +149,30 @@ class GameScene: SKScene {
             }
         }else {
             // end game
+           // convert scores to stars, display an end-game screen or toast
+            var stars = 1
+            //            stars = getStars()
+            
+            let popup = SKSpriteNode(imageNamed: "rounded-square")
+            popup.position = CGPoint(x: 50, y: 50)
+            popup.size.width = size.width/1.3
+            popup.size.height = size.height/1.3
+            popup.position = CGPoint(x: size.width/2, y: size.height/2)
+            popup.zPosition = 4
+            addChild(popup)
+            
+            let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+            text.text = "End-Game Message Placeholder"
+            text.fontSize = 32
+            text.fontColor = SKColor.black
+            text.position = CGPoint(x: 500, y: 350)
+            text.zPosition = 5
+            addChild(text)
+            
+            
+            
+            
+            
         }
     }
 
