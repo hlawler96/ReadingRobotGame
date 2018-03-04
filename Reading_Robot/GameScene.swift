@@ -192,7 +192,7 @@ class GameScene: SKScene {
         text.text = ""
         text.fontSize = 32
         text.fontColor = SKColor.black
-        text.position = CGPoint(x: x, y: y - (size.height / 32))
+        text.position = CGPoint(x: x, y: y)
         text.zPosition = 2
         addChild(text)
         wordsShownArray.append(text)
