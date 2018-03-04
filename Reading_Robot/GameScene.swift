@@ -5,6 +5,7 @@ import SQLite3
 
 class GameScene: SKScene {
     
+     var db: OpaquePointer?
     // 1
     let rope = SKSpriteNode(imageNamed: "rope")
     let background = SKSpriteNode(imageNamed: "LevelBackground1")
@@ -84,7 +85,7 @@ class GameScene: SKScene {
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             .appendingPathComponent("test.sqlite")
         // open database
-        var db: OpaquePointer?
+       
         if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
             print("error opening database")
         }
