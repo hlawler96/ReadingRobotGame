@@ -169,10 +169,7 @@ class GameScene: SKScene {
             text.zPosition = 5
             addChild(text)
             
-            
-            
-            
-            
+
         }
     }
 
