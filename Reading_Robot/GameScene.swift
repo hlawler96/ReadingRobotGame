@@ -26,8 +26,12 @@ class GameScene: SKScene {
     let pull3 = SKTexture(imageNamed: "Attack_006")
     let pull4 = SKTexture(imageNamed: "Attack_007")
     
+    var homePoints = 0
+    var awayPoints = 0
+    
     var correctWords = [String]()
     var Words = [String]()
+    var wrongAnswers = [String]()
     
     var wordCounter = 0
     var textCounter = 0
@@ -90,9 +94,9 @@ class GameScene: SKScene {
         Words.shuffle()
         
         
-        insertCloud(x: size.width * 0.2, y: size.height * 0.8)
-        insertCloud(x: size.width * 0.5, y: size.height * 0.8)
-        insertCloud(x: size.width * 0.8 , y: size.height * 0.8)
+        insertCloud(x: size.width * 0.2, y: size.height * 0.8, count: 1)
+        insertCloud(x: size.width * 0.5, y: size.height * 0.8, count: 2)
+        insertCloud(x: size.width * 0.8 , y: size.height * 0.8 ,count: 3)
 
         
         
@@ -149,14 +153,32 @@ class GameScene: SKScene {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
        
         
-//        //choose one of the touches to work with
-//        if let touch = touches.first {
-//            let currentPoint = touch.location(in: self)
-//
-//        }else {
-//            return
-//        }
-        print("testing asych")
+        //choose one of the touches to work with
+        if let touch = touches.first {
+            let currentPoint = touch.location(in: self)
+            let touchedNodes = self.nodes(at: currentPoint)
+            for node in touchedNodes {
+                for i in 1...3 {
+                    if node.name == "cloud-\(i)" {
+                        var word: String!
+                        word = wordsShownArray[i-1].text
+                        if correctWords.contains(word){
+                            homePoints = homePoints + 10
+                        }else if !wrongAnswers.contains(word) {
+                            awayPoints = awayPoints + 10
+                            wrongAnswers.append(word)
+                        }
+                        wordsShownArray[i-1].text = ""
+                        cloudArray[i-1].run( SKAction.resize(toWidth: 0, height: 0, duration: 0.8))
+                        
+                    }
+                }
+            }
+
+        }else {
+            return
+        }
+        print("Home Points: \(homePoints) , AwayPoints: \(awayPoints)")
         return
     }
     
@@ -177,7 +199,7 @@ class GameScene: SKScene {
     }
     
     
-    func insertCloud(x: CGFloat, y: CGFloat){
+    func insertCloud(x: CGFloat, y: CGFloat, count: Int){
         print("inserting cloud")
         let cloud = SKSpriteNode(imageNamed: "cloud-cartoon")
         cloud.position = CGPoint(x: x, y: y)
@@ -186,6 +208,7 @@ class GameScene: SKScene {
         cloud.size.height = 0
         cloud.zPosition = 1
         addChild(cloud)
+        cloud.name = "cloud-\(count)"
         cloudArray.append(cloud)
         
         let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
