@@ -30,6 +30,7 @@ class GameScene: SKScene {
     var homePoints = 0
     var awayPoints = 0
     
+    
     var correctWords = [String]()
     var Words = [String]()
     var wrongAnswers = [String]()
@@ -46,6 +47,7 @@ class GameScene: SKScene {
     var startHour = 0
     var secondsSinceStart = 0
     
+    var gameOver = false
     
     var cloudArray = [SKSpriteNode]()
     var wordsShownArray = [SKLabelNode] ()
@@ -147,6 +149,30 @@ class GameScene: SKScene {
             }
         }else {
             // end game
+            // update db with data, asserting gameOver, printing most recent data
+            if !gameOver {
+                var stmt: OpaquePointer?
+                let numStars = getStars()
+                let wrong_words = wrongAnswers.joined(separator: ", ")
+                print(wrong_words)
+                let insert_query = "insert into LevelData VALUES('TOW' , 1 , \(numStars) , '\(wrong_words)', CURRENT_TIMESTAMP)"
+                
+                //preparing query
+                if sqlite3_prepare(db, insert_query, -1, &stmt, nil) != SQLITE_OK{
+                    let errmsg = String(cString: sqlite3_errmsg(db)!)
+                    print("error preparing insert: \(errmsg)")
+                }
+                
+                // executing insert
+                if sqlite3_step(stmt) != SQLITE_DONE {
+                    let errmsg = String(cString: sqlite3_errmsg(db)!)
+                    print("failure inserting level data: \(errmsg)")
+                }
+    
+                gameOver = true
+                print(getLastPlayData()) // printing out the data from the last play, retrieving from db
+                
+            }
         }
     }
 
@@ -180,6 +206,7 @@ class GameScene: SKScene {
             return
         }
         print("Home Points: \(homePoints) , AwayPoints: \(awayPoints)")
+        
         return
     }
     
@@ -281,8 +308,59 @@ class GameScene: SKScene {
         let currentHour = calendar.component(.hour, from: currentDate)
         return (currentHour - startHour) * 3600 + (currentMinute - startMinute) * 60 + (currentSecond - startSecond)
     }
+ 
+    func getStars() -> Int {
+        // 0 stars = 50 away points or less than 40 home points
+        // 1 star = 40 or 50 home points and no more than 40 away points
+        // 2 stars = 60 home points and greater than 0 away points
+        // 3 stars is perfect game (60 home points, 0 away points)
+        
+        if awayPoints < 50 && homePoints >= 40{
+            if homePoints < 60{
+                return 1
+            }
+            else if awayPoints > 0{
+                return 2
+            }
+            else{
+                return 3
+            }
+        }else{
+            return 0
+        }
+    }
+    
+    func getLastPlayData() -> String {
+        let queryString =  "select * from LevelData L where L.time in (select MAX(time) from LevelData)"
+        
+        //statement pointer
+        var stmt:OpaquePointer?
+        
+        //preparing the query
+        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error preparing select : \(errmsg)")
+            return " no record returned: error preparing query"
+        }
+        
+        //traversing through all the records. should be just one, since I'm selecting only the most recent play
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            let game = String(cString: sqlite3_column_text(stmt, 0))
+            let lvl = String(sqlite3_column_int(stmt, 1))
+            let star = String(sqlite3_column_int(stmt, 2))
+            let wrongs = String(cString: sqlite3_column_text(stmt, 3))
+            let time = String(cString: sqlite3_column_text(stmt, 4))
+            return "\(game), \(lvl), \(star), [\(wrongs)], \(time)"
+        }
+        
+        return "no record returned"
+        
+    }
     
 }
+
+
+
 
 extension MutableCollection {
     /// Shuffles the contents of this collection.

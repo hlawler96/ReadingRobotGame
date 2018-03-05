@@ -43,7 +43,14 @@ class TitleViewController: UIViewController {
         loadWords(db: db)
 //        printDB(db: db)
     
-    
+        // checking for LevelData table, creating if not found
+        if sqlite3_exec(db, "create table if not exists LevelData (miniGame text , lvl int , stars int , wrongWords text , time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error creating table: \(errmsg)")
+        }
+        
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
