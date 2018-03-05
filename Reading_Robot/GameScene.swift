@@ -26,6 +26,7 @@ class GameScene: SKScene {
     let pull2 = SKTexture(imageNamed: "Attack_005")
     let pull3 = SKTexture(imageNamed: "Attack_006")
     let pull4 = SKTexture(imageNamed: "Attack_007")
+    let scoreboard = SKSpriteNode(imageNamed: "rectangle")
     
     var homePoints = 0
     var awayPoints = 0
@@ -34,10 +35,12 @@ class GameScene: SKScene {
     var correctWords = [String]()
     var Words = [String]()
     var wrongAnswers = [String]()
+    var circles = [SKShapeNode]()
     
     var wordCounter = 0
     var textCounter = 0
     var cloudCounter = 0
+    var circleCounter = 0
     
     let numWords = 18
     let calendar = Calendar.current
@@ -83,6 +86,27 @@ class GameScene: SKScene {
         startSecond = calendar.component(.second, from: date)
         startMinute = calendar.component(.minute, from: date)
         
+        scoreboard.position = CGPoint(x: frame.size.width/2, y: 15*frame.size.height/16)
+        scoreboard.size.width = size.width / 2
+        scoreboard.size.height = size.height / 8
+        scoreboard.zPosition = 2
+        addChild(scoreboard)
+        
+        let buffer = scoreboard.size.width / 64
+        let radius = (scoreboard.size.width - 6*buffer) / 16
+        
+        for i in 1 ... 6 {
+            
+            let circle = SKShapeNode(circleOfRadius: radius)
+            //MAKE THIS MATH MORE BETTER
+            circle.position.x = (scoreboard.position.x - scoreboard.size.width / 2 ) + 1.8 * CGFloat(radius) + 2.0*buffer + CGFloat(2*(i-1)) * CGFloat(buffer + radius)
+            circle.position.y = scoreboard.position.y
+            circle.zPosition = 3
+            circle.name = "circle-\(i)"
+            circles.append(circle)
+            addChild(circle)
+        }
+        
         
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             .appendingPathComponent("test.sqlite")
@@ -97,14 +121,18 @@ class GameScene: SKScene {
         Words.shuffle()
         
         
-        insertCloud(x: size.width * 0.2, y: size.height * 0.8, count: 1)
-        insertCloud(x: size.width * 0.5, y: size.height * 0.8, count: 2)
-        insertCloud(x: size.width * 0.8 , y: size.height * 0.8 ,count: 3)
+        
+        
+        insertCloud(x: size.width * 0.2, y: size.height * 0.7, count: 1)
+        insertCloud(x: size.width * 0.5, y: size.height * 0.7, count: 2)
+        insertCloud(x: size.width * 0.8 , y: size.height * 0.7 ,count: 3)
 
         
         
     }
     override func update(_ currentTime: TimeInterval){
+       
+        
         let seconds = getSecondsSinceStart()
         //only update words/ clouds until game is over
         if wordCounter < 18 {
@@ -126,6 +154,12 @@ class GameScene: SKScene {
                 }else {
                     if secondsSinceStart % 3 == 1 {
                         if cloudArray[cloudCounter].size.width != 0 {
+                            var word: String!
+                            word = wordsShownArray[cloudCounter].text
+                            if correctWords.contains(word){
+                                circles[circleCounter].fillColor = UIColor.red
+                                circleCounter = circleCounter + 1
+                            }
                             wordsShownArray[cloudCounter].text = ""
                             cloudArray[cloudCounter].run(SKAction.resize(toWidth: 0, height: 0, duration: 0.8))
                         }
@@ -191,6 +225,8 @@ class GameScene: SKScene {
                         word = wordsShownArray[i-1].text
                         if correctWords.contains(word){
                             homePoints = homePoints + 10
+                            circles[circleCounter].fillColor = UIColor.green
+                            circleCounter = circleCounter + 1
                         }else if !wrongAnswers.contains(word) {
                             awayPoints = awayPoints + 10
                             wrongAnswers.append(word)
@@ -243,7 +279,7 @@ class GameScene: SKScene {
         text.text = ""
         text.fontSize = 32
         text.fontColor = SKColor.black
-        text.position = CGPoint(x: x, y: y)
+        text.position = CGPoint(x: x, y: y - frame.size.height/64 )
         text.zPosition = 2
         addChild(text)
         wordsShownArray.append(text)
@@ -384,8 +420,3 @@ extension Sequence {
         return result
     }
 }
-
-
-
-
-
