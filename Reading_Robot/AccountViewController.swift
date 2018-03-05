@@ -11,23 +11,13 @@ import SpriteKit
 import GameplayKit
 
 
-class AccountViewController: UIViewController {
-
-    //var pushFromLevel = false
-    
-
-    //@IBAction func LevelBackButton(_ sender: Any) {pushFromLevel = true}
+class AccountViewController: UIViewController {    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
     }
-    /*override func viewDidAppear(_ animated: Bool) {
-        performSegue(withIdentifier: "UnwindToLevelMenu", sender: self)
-        self.pushFromLevel = false
-        
-    }
-    */
+
     
     override var shouldAutorotate: Bool {
         return true;

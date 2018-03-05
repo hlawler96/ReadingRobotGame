@@ -44,13 +44,6 @@
                                     <segue destination="Rdv-CE-vUu" kind="show" id="wMe-SD-4ZR"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yU9-VZ-MAF">
-                                <rect key="frame" x="52" y="20" width="22" height="22"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <segue destination="7m5-N1-3SW" kind="show" identifier="AccountSegue" id="cEY-3H-xsg"/>
-                                </connections>
-                            </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Title_Screen-1" translatesAutoresizingMaskIntoConstraints="NO" id="OJh-tE-OQk">
                                 <rect key="frame" x="296" y="1" width="816" height="833"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
@@ -131,8 +124,8 @@
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="LevelBackButton:" destination="7m5-N1-3SW" eventType="touchUpInside" id="T76-sH-y0b"/>
-                                    <segue destination="X32-sL-gdi" kind="unwind" unwindAction="unwindToMainMenuWithUnwindSegue:" id="RWN-DF-RTI"/>
+                                    <action selector="LevelBackButton:" destination="7m5-N1-3SW" eventType="touchUpInside" id="Mpi-sN-Jm9"/>
+                                    <segue destination="X32-sL-gdi" kind="unwind" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="VhI-6J-hWr"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Character Customization Coming Soon!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hS5-kK-ESj">
@@ -148,13 +141,14 @@
                         <viewLayoutGuide key="safeArea" id="UoM-NK-XM8"/>
                     </view>
                     <connections>
+                        <outlet property="AccountBackButton" destination="wnI-Ap-vHY" id="Qau-6T-gLQ"/>
                         <outlet property="LevelBackButton" destination="wnI-Ap-vHY" id="KXC-R0-r5G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dLN-h6-PGV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="X32-sL-gdi" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="970.14388489208636" y="63.309352517985616"/>
+            <point key="canvasLocation" x="960" y="131"/>
         </scene>
         <!--Progress View Controller-->
         <scene sceneID="9WL-xZ-VXf">
@@ -290,6 +284,9 @@
                                 <rect key="frame" x="962" y="20" width="130" height="130"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="Idle_000"/>
+                                <connections>
+                                    <segue destination="7m5-N1-3SW" kind="show" id="bvY-Lq-HWd"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
