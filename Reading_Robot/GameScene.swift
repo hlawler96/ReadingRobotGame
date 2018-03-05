@@ -2,6 +2,17 @@
 import SpriteKit
 import SQLite3
 
+//TODO:
+// 1) Fix the scoreboard to center circles better and include the scores on the board itself - Hayden
+// 2) Add labels to players and scores at the top - ??
+// 3) Change the timing of clouds dissappearing/reappearing to go off of variable time instead of using mod - Hayden
+// 4) Animate the tug of war during the game - ??
+// 5) Add an end game animation based on the number of stars - ??
+// 6) Have the phoneme spoken at the beginning of the mini game with possible time delay / "Start" popup message - ??
+// 7) change the constructor to take in parameters to allow for multiple levels using the same GameScene object type - Hayden
+// 8) Add an extra frame to the rope pulling animation to make animation cleaner - ??
+// 9) Figure out way to center text on clouds with varying device screen size - Hayden
+// 10) Read in words from project db file and not the db file stored on the local machine - Hayden
 
 class GameScene: SKScene {
     
@@ -27,6 +38,8 @@ class GameScene: SKScene {
     let pull3 = SKTexture(imageNamed: "Attack_006")
     let pull4 = SKTexture(imageNamed: "Attack_007")
     let scoreboard = SKSpriteNode(imageNamed: "rectangle")
+    let homeScore = SKLabelNode()
+    let awayScore = SKLabelNode()
     
     var homePoints = 0
     var awayPoints = 0
@@ -92,6 +105,21 @@ class GameScene: SKScene {
         scoreboard.zPosition = 2
         addChild(scoreboard)
         
+        homeScore.position = CGPoint(x: scoreboard.position.x - scoreboard.size.width/2 - frame.size.width / 16, y: 15*frame.size.height/16)
+        homeScore.zPosition = 2
+        homeScore.text = "0"
+        homeScore.fontSize = 32
+        homeScore.fontColor = UIColor.black
+        addChild(homeScore)
+        
+        awayScore.position = CGPoint(x: scoreboard.position.x + scoreboard.size.width/2 + frame.size.width / 16, y: 15*frame.size.height/16)
+        awayScore.zPosition = 2
+        awayScore.text = "0"
+        awayScore.fontSize = 32
+        awayScore.fontColor = UIColor.black
+        addChild(awayScore)
+        
+        
         let buffer = scoreboard.size.width / 64
         let radius = (scoreboard.size.width - 6*buffer) / 16
         
@@ -120,9 +148,6 @@ class GameScene: SKScene {
         Words.append(contentsOf: correctWords)
         Words.shuffle()
         
-        
-        
-        
         insertCloud(x: size.width * 0.2, y: size.height * 0.7, count: 1)
         insertCloud(x: size.width * 0.5, y: size.height * 0.7, count: 2)
         insertCloud(x: size.width * 0.8 , y: size.height * 0.7 ,count: 3)
@@ -132,12 +157,13 @@ class GameScene: SKScene {
     }
     override func update(_ currentTime: TimeInterval){
        
-        
         let seconds = getSecondsSinceStart()
         //only update words/ clouds until game is over
         if wordCounter < 18 {
             // only run once per second, not per frame
             if secondsSinceStart != seconds{
+                homeScore.text = String(homePoints)
+                awayScore.text = String(awayPoints)
                 secondsSinceStart = seconds
                 if secondsSinceStart <= 9 {
                     //grow cloud a second before the text appears
@@ -269,11 +295,7 @@ class GameScene: SKScene {
                 }
             }
 
-        }else {
-            return
         }
-        print("Home Points: \(homePoints) , AwayPoints: \(awayPoints)")
-        
         return
     }
     
