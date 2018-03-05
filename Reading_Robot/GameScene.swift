@@ -181,10 +181,19 @@ class GameScene: SKScene {
                     }
                 }
             }
-        }else {
+        }else if getSecondsSinceStart() >= (Words.count+1) * 3{
             // end game
             // update db with data, asserting gameOver, printing most recent data
             if !gameOver {
+                //add any remaining words in phoneme to wrongAnswers and color remaining circles in red
+                for i in 0...2 {
+                    let word = wordsShownArray[i].text!
+                    if correctWords.contains(word){
+                        circles[circleCounter].fillColor = UIColor.red
+                        circleCounter = circleCounter + 1
+                        wrongAnswers.append(word)
+                    }
+                }
                 var stmt: OpaquePointer?
                 let numStars = getStars()
                 let wrong_words = wrongAnswers.joined(separator: ", ")
@@ -238,14 +247,17 @@ class GameScene: SKScene {
             let currentPoint = touch.location(in: self)
             let touchedNodes = self.nodes(at: currentPoint)
             for node in touchedNodes {
+                // check and see if node touched was one of the clouds
                 for i in 1...3 {
                     if node.name == "cloud-\(i)" {
-                        var word: String!
-                        word = wordsShownArray[i-1].text
+                        let word =  wordsShownArray[i-1].text!
+                        // if word is correct score the home 10 points
                         if correctWords.contains(word){
                             homePoints = homePoints + 10
                             circles[circleCounter].fillColor = UIColor.green
                             circleCounter = circleCounter + 1
+                            
+                        //if the word is incorrect give the oppenent 10 points and store the word missed
                         }else if !wrongAnswers.contains(word) {
                             awayPoints = awayPoints + 10
                             wrongAnswers.append(word)
@@ -283,7 +295,7 @@ class GameScene: SKScene {
     
     
     func insertCloud(x: CGFloat, y: CGFloat, count: Int){
-        print("inserting cloud")
+        // create spritenode and label node for cloud and words and store in an array so they can be referenced later on without name lookup
         let cloud = SKSpriteNode(imageNamed: "cloud-cartoon")
         cloud.position = CGPoint(x: x, y: y)
         //grow to size.width / 4
@@ -416,6 +428,7 @@ class GameScene: SKScene {
 
 
 
+//following two extensions allow to call .shuffle() on arrays to make life simpler when choosing words
 
 extension MutableCollection {
     /// Shuffles the contents of this collection.
