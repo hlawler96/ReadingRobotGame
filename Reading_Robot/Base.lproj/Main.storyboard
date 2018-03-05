@@ -71,7 +71,7 @@
         <!--Account View Controller-->
         <scene sceneID="ceE-5z-BLZ">
             <objects>
-                <viewController title="Account View Controller" id="7m5-N1-3SW" customClass="AccountViewController" sceneMemberID="viewController">
+                <viewController title="Account View Controller" id="7m5-N1-3SW" customClass="AccountViewController" customModule="Reading_Robot" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6vk-k2-6Tv">
                         <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -115,7 +115,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Necklace" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zjc-7Y-8xw">
-                                        <rect key="frame" x="61" y="263" width="121" height="41"/>
+                                        <rect key="frame" x="61" y="263" width="120" height="41"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
@@ -131,6 +131,7 @@
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
+                                    <action selector="LevelBackButton:" destination="7m5-N1-3SW" eventType="touchUpInside" id="T76-sH-y0b"/>
                                     <segue destination="X32-sL-gdi" kind="unwind" unwindAction="unwindToMainMenuWithUnwindSegue:" id="RWN-DF-RTI"/>
                                 </connections>
                             </button>
@@ -146,6 +147,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="UoM-NK-XM8"/>
                     </view>
+                    <connections>
+                        <outlet property="LevelBackButton" destination="wnI-Ap-vHY" id="KXC-R0-r5G"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dLN-h6-PGV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="X32-sL-gdi" userLabel="Exit" sceneMemberID="exit"/>
@@ -203,7 +207,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="bcp-W1-DOp">
-                                <rect key="frame" x="48" y="158" width="1044" height="553"/>
+                                <rect key="frame" x="48" y="158" width="1043" height="553"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <viewLayoutGuide key="safeArea" id="9Gr-sy-ftE"/>
@@ -242,7 +246,7 @@
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="INH-Z3-Z0o" userLabel="Star View1">
-                                                    <rect key="frame" x="33" y="99" width="34" height="31"/>
+                                                    <rect key="frame" x="33" y="99" width="33" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </imageView>
@@ -264,7 +268,7 @@
                                     </collectionViewCell>
                                 </cells>
                                 <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="Header" id="Hh4-uL-Jr0">
-                                    <rect key="frame" x="0.0" y="132" width="1044" height="1"/>
+                                    <rect key="frame" x="0.0" y="132" width="1043" height="1"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionReusableView>
                                 <connections>
@@ -281,6 +285,11 @@
                                 <connections>
                                     <segue destination="I4C-gG-lhH" kind="unwind" unwindAction="unwindToMainMenuWithUnwindSegue:" id="xIa-Tf-BEN"/>
                                 </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0za-8a-AuA">
+                                <rect key="frame" x="962" y="20" width="130" height="130"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="Idle_000"/>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
