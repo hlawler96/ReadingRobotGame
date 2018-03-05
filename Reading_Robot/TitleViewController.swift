@@ -46,6 +46,19 @@ class TitleViewController: UIViewController {
         if sqlite3_exec(db, "create table if not exists LevelData (miniGame text , lvl int , stars int , wrongWords text , time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
+<<<<<<< HEAD
+=======
+        }
+        
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if pushAccount{
+            self.performSegue(withIdentifier: "AccountSegue", sender: self)
+            self.pushAccount = false
+>>>>>>> 4683a23d7edb2f34a5d7f4554718ad44ed4c2981
         }
         
         
