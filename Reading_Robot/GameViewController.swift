@@ -12,19 +12,18 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 // test
+    var levelNumber: Int!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        super.viewDidLoad()
         let scene = GameScene(size: view.bounds.size)
+        scene.levelNumber = levelNumber
         let skView = view as! SKView
         skView.showsFPS = true
         skView.showsNodeCount = true
         skView.ignoresSiblingOrder = true
         scene.scaleMode = .resizeFill
         skView.presentScene(scene)
-//        scene.runGame()
     }
 
     override var shouldAutorotate: Bool {
@@ -32,11 +31,7 @@ class GameViewController: UIViewController {
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
-        }
+        return .landscape
     }
 
     override func didReceiveMemoryWarning() {

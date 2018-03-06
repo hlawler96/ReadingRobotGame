@@ -21,7 +21,17 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         
     }
     override var shouldAutorotate: Bool {
-        return false;
+        return true;
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let tow = segue.destination as! GameViewController
+        tow.levelNumber = (sender as! UIButton).tag
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .landscape
     }
     
     
@@ -34,9 +44,9 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LevelCell", for: indexPath) as! CollectionViewCell
-
-        cell.LevelImage.image = UIImage(named: levels[indexPath.row])
         
+        cell.LevelImage.image = UIImage(named: levels[indexPath.row])
+        cell.LevelButton.tag = indexPath.row + 1
         //must add condition for scoring and retrieving from database
         //ex. if % > 33 1 star
         // if % > 66 2 star

@@ -41,13 +41,14 @@ class TitleViewController: UIViewController {
         }
         
         loadWords(db: db)
-//        printDB(db: db)
     
         // checking for LevelData table, creating if not found
         if sqlite3_exec(db, "create table if not exists LevelData (miniGame text , lvl int , stars int , wrongWords text , time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
+        
+        // checking for
         
         
         
@@ -64,11 +65,7 @@ class TitleViewController: UIViewController {
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
-        }
+            return .landscape
     }
     
     override func didReceiveMemoryWarning() {

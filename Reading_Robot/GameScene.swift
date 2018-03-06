@@ -3,16 +3,15 @@ import SpriteKit
 import SQLite3
 
 //TODO:
-// 1) Fix the scoreboard to center circles better and include the scores on the board itself - Hayden
 // 2) Add labels to players and scores at the top - ??
-// 3) Change the timing of clouds dissappearing/reappearing to go off of variable time instead of using mod - Hayden
 // 4) Animate the tug of war during the game - ??
 // 5) Add an end game animation based on the number of stars - ??
 // 6) Have the phoneme spoken at the beginning of the mini game with possible time delay / "Start" popup message - ??
-// 7) change the constructor to take in parameters to allow for multiple levels using the same GameScene object type - Hayden
 // 8) Add an extra frame to the rope pulling animation to make animation cleaner - ??
 // 9) Figure out way to center text on clouds with varying device screen size - Hayden
 // 10) Read in words from project db file and not the db file stored on the local machine - Hayden
+// 11) issue when clicking cloud before word appears, I think this will be fixed with timing change? - Hayden
+// 12) Figure out the best way to present the score to the user - Diane/Derek
 
 class GameScene: SKScene {
     
@@ -44,6 +43,12 @@ class GameScene: SKScene {
     var homePoints = 0
     var awayPoints = 0
     
+    var levelNumber: Int!
+    
+    var cloudPeriod = 2.0
+    var previousTime = 0.0
+    var phaseOne = false
+    var phaseTwo = false
     
     var correctWords = [String]()
     var Words = [String]()
@@ -61,6 +66,7 @@ class GameScene: SKScene {
     var startSecond = 0
     var startMinute = 0
     var startHour = 0
+    var startNS = 0
     var secondsSinceStart = 0
     
     var gameOver = false
@@ -98,12 +104,15 @@ class GameScene: SKScene {
         startHour = calendar.component(.hour, from: date)
         startSecond = calendar.component(.second, from: date)
         startMinute = calendar.component(.minute, from: date)
+        startNS = calendar.component(.nanosecond, from: date)
         
         scoreboard.position = CGPoint(x: frame.size.width/2, y: 15*frame.size.height/16)
         scoreboard.size.width = size.width / 2
         scoreboard.size.height = size.height / 8
         scoreboard.zPosition = 2
         addChild(scoreboard)
+        
+        //Currently showing scores below, if we want to show these in the final design we will update the top scoreboard so that they fit, not worrying about this until decision is made
         
         homeScore.position = CGPoint(x: scoreboard.position.x - scoreboard.size.width/2 - frame.size.width / 16, y: 15*frame.size.height/16)
         homeScore.zPosition = 2
@@ -119,18 +128,23 @@ class GameScene: SKScene {
         awayScore.fontColor = UIColor.black
         addChild(awayScore)
         
+        //Info below is for rectangle -1, keeping in here for later but we might not end up using it based on scoring decision.
+        //scoreboard width is 7*size.width/12
+        //roughly 1760 / 2600 roughly 68%
         
         let buffer = scoreboard.size.width / 64
-        let radius = (scoreboard.size.width - 6*buffer) / 16
+        let numCircles = CGFloat(1+correctWords.count)
+        let radius = (scoreboard.size.width - numCircles * buffer) / 14
+        let diameter = 2.0 * radius
+        let startX = (scoreboard.position.x - scoreboard.size.width / 2 ) + 2.0 * radius + buffer
         
-        for i in 1 ... 6 {
+        for i in 0 ... correctWords.count - 1 {
             
             let circle = SKShapeNode(circleOfRadius: radius)
-            //MAKE THIS MATH MORE BETTER
-            circle.position.x = (scoreboard.position.x - scoreboard.size.width / 2 ) + 1.8 * CGFloat(radius) + 2.0*buffer + CGFloat(2*(i-1)) * CGFloat(buffer + radius)
+            circle.position.x = startX + CGFloat(i) * (diameter + buffer)
             circle.position.y = scoreboard.position.y
             circle.zPosition = 3
-            circle.name = "circle-\(i)"
+            circle.name = "circle-\(i+1)"
             circles.append(circle)
             addChild(circle)
         }
@@ -152,62 +166,60 @@ class GameScene: SKScene {
         insertCloud(x: size.width * 0.5, y: size.height * 0.7, count: 2)
         insertCloud(x: size.width * 0.8 , y: size.height * 0.7 ,count: 3)
 
-        
-        
     }
     override func update(_ currentTime: TimeInterval){
-       
-        let seconds = getSecondsSinceStart()
+        let time = getSecondsSinceStart()
+        let dTime = time - previousTime
         //only update words/ clouds until game is over
-        if wordCounter < 18 {
-            // only run once per second, not per frame
-            if secondsSinceStart != seconds{
-                homeScore.text = String(homePoints)
-                awayScore.text = String(awayPoints)
-                secondsSinceStart = seconds
-                if secondsSinceStart <= 9 {
-                    //grow cloud a second before the text appears
-                    if secondsSinceStart % 3 == 2 {
-                        cloudArray[cloudCounter].run( SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: 0.8))
-                    }else if secondsSinceStart % 3 == 0 {
-                        wordsShownArray[cloudCounter].text = Words[wordCounter]
-                        wordCounter = wordCounter + 1
-                        cloudCounter = cloudCounter + 1
-                        if cloudCounter == 3 {
-                            cloudCounter = 0
-                        }
+        if wordCounter < Words.count {
+            if wordCounter < 3 {
+                if !phaseTwo && dTime >= 2*cloudPeriod/3 {
+                    phaseTwo = true
+                    cloudArray[cloudCounter].run( SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: cloudPeriod/3.0))
+                }else if dTime >= cloudPeriod {
+                    previousTime = time
+                    phaseTwo = false
+                    wordsShownArray[cloudCounter].text = Words[wordCounter]
+                    wordCounter = wordCounter + 1
+                    cloudCounter = cloudCounter + 1
+                    if cloudCounter == 3 {
+                        cloudCounter = 0
                     }
-                }else {
-                    if secondsSinceStart % 3 == 1 {
-                        if cloudArray[cloudCounter].size.width != 0 {
-                            var word: String!
-                            word = wordsShownArray[cloudCounter].text
-                            if correctWords.contains(word){
-                                circles[circleCounter].fillColor = UIColor.red
-                                circleCounter = circleCounter + 1
-                            }
-                            wordsShownArray[cloudCounter].text = ""
-                            cloudArray[cloudCounter].run(SKAction.resize(toWidth: 0, height: 0, duration: 0.8))
+                }
+            } else {
+                if !phaseOne && dTime >= cloudPeriod/3 {
+                    phaseOne = true
+                    if cloudArray[cloudCounter].size.width != 0 {
+                        let word = wordsShownArray[cloudCounter].text!
+                        if correctWords.contains(word){
+                            circles[circleCounter].fillColor = UIColor.red
+                            circleCounter = circleCounter + 1
+                            wrongAnswers.append(word)
                         }
-                    } else if secondsSinceStart % 3 == 2 {
-                         cloudArray[cloudCounter].run(SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: 0.8))
-                        
-                    } else if secondsSinceStart % 3 == 0 {
-                        wordsShownArray[textCounter].text = Words[wordCounter]
-                        wordCounter = wordCounter + 1
-                        textCounter = textCounter + 1
-                        if textCounter == 3 {
-                            textCounter = 0
-                        }
-                        cloudCounter = cloudCounter + 1
-                        if cloudCounter == 3 {
-                            cloudCounter = 0
-                        }
-                        
+                        wordsShownArray[cloudCounter].text = ""
+                        cloudArray[cloudCounter].run(SKAction.resize(toWidth: 0, height: 0, duration: cloudPeriod/3.0))
+                    }
+                }else if !phaseTwo && dTime >= 2*cloudPeriod/3 {
+                    phaseTwo = true
+                     cloudArray[cloudCounter].run(SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: cloudPeriod / 3.0))
+                    
+                }else if dTime >= cloudPeriod {
+                    previousTime = time
+                    phaseOne = false
+                    phaseTwo = false
+                    wordsShownArray[textCounter].text = Words[wordCounter]
+                    wordCounter = wordCounter + 1
+                    textCounter = textCounter + 1
+                    if textCounter == 3 {
+                        textCounter = 0
+                    }
+                    cloudCounter = cloudCounter + 1
+                    if cloudCounter == 3 {
+                        cloudCounter = 0
                     }
                 }
             }
-        }else if getSecondsSinceStart() >= (Words.count+1) * 3{
+        }else if getSecondsSinceStart() >= Double(Words.count+1) * cloudPeriod{
             // end game
             // update db with data, asserting gameOver, printing most recent data
             if !gameOver {
@@ -280,16 +292,18 @@ class GameScene: SKScene {
                         // if word is correct score the home 10 points
                         if correctWords.contains(word){
                             homePoints = homePoints + 10
+                            homeScore.text = String(homePoints)
                             circles[circleCounter].fillColor = UIColor.green
                             circleCounter = circleCounter + 1
                             
                         //if the word is incorrect give the oppenent 10 points and store the word missed
                         }else if !wrongAnswers.contains(word) {
                             awayPoints = awayPoints + 10
+                            awayScore.text = String(awayPoints)
                             wrongAnswers.append(word)
                         }
                         wordsShownArray[i-1].text = ""
-                        cloudArray[i-1].run( SKAction.resize(toWidth: 0, height: 0, duration: 0.8))
+                        cloudArray[i-1].run( SKAction.resize(toWidth: 0, height: 0, duration: cloudPeriod/3.0))
                         
                     }
                 }
@@ -390,12 +404,13 @@ class GameScene: SKScene {
         return wordArray
     }
     
-    func getSecondsSinceStart() -> Int {
+    func getSecondsSinceStart() -> Double {
         let currentDate = Date()
-        let currentSecond = calendar.component(.second, from: currentDate)
-        let currentMinute = calendar.component(.minute, from: currentDate)
-        let currentHour = calendar.component(.hour, from: currentDate)
-        return (currentHour - startHour) * 3600 + (currentMinute - startMinute) * 60 + (currentSecond - startSecond)
+        let dSec = Double(calendar.component(.second, from: currentDate) -  startSecond)
+        let dMinute = Double((calendar.component(.minute, from: currentDate) - startMinute) * 60)
+        let dHour = Double((calendar.component(.hour, from: currentDate) - startHour) * 3600)
+        let dNS = Double(calendar.component(.nanosecond, from: currentDate) - startNS) * 0.000000001
+        return dSec + dMinute + dHour + dNS
     }
  
     func getStars() -> Int {

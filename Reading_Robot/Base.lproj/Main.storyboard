@@ -228,7 +228,7 @@
                                                         <color key="titleColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <segue destination="Z4S-wT-u8j" kind="show" id="jkr-AB-I75"/>
+                                                        <segue destination="Z4S-wT-u8j" kind="show" id="apl-SM-HxO"/>
                                                     </connections>
                                                 </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eo3-eT-VHY">
