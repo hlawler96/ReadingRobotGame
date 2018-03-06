@@ -18,8 +18,6 @@ class TitleViewController: UIViewController {
     let wrongWordsArray = ["Hill","Still","Must","Pass","Sin","Pig","Wig","Thin","Make","Wag","Pox","Box","Fox","Zen","Cake","Frog","Step","Slip","Prom","Chin","Chill","Shell","Ship","Fish","Rush","Wish","Shin","Take","Rope","Tap","Clam","Sing","Wing","Chop","Thing",]
     
     @IBAction func unwindToMainMenu(unwindSegue: UIStoryboardSegue){}
-
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +29,10 @@ class TitleViewController: UIViewController {
         if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
             print("error opening database")
         }
-       dropDB(db: db)
+        
+        dropDB(db: db, table: "Words")
+        dropDB(db: db, table: "LevelData")
+        dropDB(db: db, table: "UserData")
         
         if sqlite3_exec(db, "create table if not exists Words (phoneme text , word text)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
@@ -40,20 +41,19 @@ class TitleViewController: UIViewController {
         
         loadWords(db: db)
     
-        // checking for LevelData table, creating if not found
-        if sqlite3_exec(db, "create table if not exists LevelData (miniGame text , lvl int , stars int , wrongWords text , time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
+        // checking for UserData table, creating if not found
+        if sqlite3_exec(db, "create table if not exists UserData (miniGame text , lvl int , stars int , wrongWords text , time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
-
+        }
         
-        // checking for
+        //checking for LevelData table, creating if not found
+        if sqlite3_exec(db, "create table if not exists LevelData (number int, phoneme text, numWords int, speed text)", nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error creating table: \(errmsg)")
+        }
         
-        
-        
-    }
-
-        
-        
+        loadLevels(db: db)
         
     }
     
@@ -75,12 +75,12 @@ class TitleViewController: UIViewController {
         return true
     }
     
-    func dropDB(db: OpaquePointer?){
+    func dropDB(db: OpaquePointer?, table: String){
         //creating a statement
         var stmt: OpaquePointer?
         
         //the insert query
-        let queryString = "Drop table Words"
+        let queryString = "Drop table \(table)"
         
         //preparing the query
         if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
@@ -95,41 +95,11 @@ class TitleViewController: UIViewController {
             print("failure dropping Words: \(errmsg)")
             return
         }
-        
-        //displaying a success message
-        print("Words dropped")
-    }
-    
-    func printDB(db: OpaquePointer?){
-        var wordList = [Word]()
-        
-        let queryString = "select phoneme, word from Words"
-        
-        //statement pointer
-        var stmt:OpaquePointer?
-        
-        //preparing the query
-        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("error preparing insert: \(errmsg)")
-            return
-        }
-        
-        //traversing through all the records
-        while(sqlite3_step(stmt) == SQLITE_ROW){
-            let phoneme = String(cString: sqlite3_column_text(stmt, 0))
-            let word = String(cString: sqlite3_column_text(stmt, 1))
-            
-            //adding values to list
-            wordList.append(Word(phoneme: phoneme, word: word))
-            print("Phoneme: " + phoneme + " , Word: " + word)
-        }
     }
     
     func insertWord(phoneme: String, word: String, db: OpaquePointer?){
         //the insert query
         let queryString = "INSERT INTO Words VALUES ('" + phoneme + "','" + word + "');"
-//        print(queryString)
         
         //executing the query to insert values
         if sqlite3_exec(db, queryString, nil, nil, nil) != SQLITE_OK {
@@ -137,9 +107,6 @@ class TitleViewController: UIViewController {
             print("failure inserting Words: \(errmsg)")
             return
         }
-        
-        //displaying a success message
-//        print("Words inserted into successfully")
     }
     
     func loadWords(db: OpaquePointer?){
@@ -148,6 +115,27 @@ class TitleViewController: UIViewController {
         }
         for wrongWord in wrongWordsArray {
             insertWord(phoneme: "not-ck", word: wrongWord, db: db)
+        }
+    }
+    
+    func loadLevels(db: OpaquePointer?){
+        
+        var queryString = "INSERT INTO LevelData VALUES (1,'-ck',6,'slow');"
+        
+        //executing the query to insert values
+        if sqlite3_exec(db, queryString, nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("failure inserting LevelData: \(errmsg)")
+            return
+        }
+        
+        queryString = "INSERT INTO LevelData VALUES (2,'-ck',7,'fast');"
+        
+        //executing the query to insert values
+        if sqlite3_exec(db, queryString, nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("failure inserting LevelData: \(errmsg)")
+            return
         }
     }
     

@@ -43,9 +43,9 @@ class GameScene: SKScene {
     var homePoints = 0
     var awayPoints = 0
     
-    var levelNumber: Int!
+    var levelNumber = 0
     
-    var cloudPeriod = 2.0
+    var cloudPeriod: Double!
     var previousTime = 0.0
     var phaseOne = false
     var phaseTwo = false
@@ -60,7 +60,6 @@ class GameScene: SKScene {
     var cloudCounter = 0
     var circleCounter = 0
     
-    let numWords = 18
     let calendar = Calendar.current
     let date = Date()
     var startSecond = 0
@@ -73,6 +72,10 @@ class GameScene: SKScene {
     
     var cloudArray = [SKSpriteNode]()
     var wordsShownArray = [SKLabelNode] ()
+    
+    var phoneme = ""
+    var numWords = 0
+    var gameSpeed = "slow"
     
     override func didMove(to view: SKView) {
         
@@ -127,14 +130,24 @@ class GameScene: SKScene {
         awayScore.fontSize = 32
         awayScore.fontColor = UIColor.black
         addChild(awayScore)
+
+        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            .appendingPathComponent("test.sqlite")
+        // open database
+       
+        if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
+            print("error opening database")
+        }
         
-        //Info below is for rectangle -1, keeping in here for later but we might not end up using it based on scoring decision.
-        //scoreboard width is 7*size.width/12
-        //roughly 1760 / 2600 roughly 68%
+        getLevelData()
+        
+        insertCloud(x: size.width * 0.2, y: size.height * 0.7, count: 1)
+        insertCloud(x: size.width * 0.5, y: size.height * 0.7, count: 2)
+        insertCloud(x: size.width * 0.8 , y: size.height * 0.7 ,count: 3)
         
         let buffer = scoreboard.size.width / 64
         let numCircles = CGFloat(1+correctWords.count)
-        let radius = (scoreboard.size.width - numCircles * buffer) / 14
+        let radius = (scoreboard.size.width - numCircles * buffer) / (numCircles * 2)
         let diameter = 2.0 * radius
         let startX = (scoreboard.position.x - scoreboard.size.width / 2 ) + 2.0 * radius + buffer
         
@@ -148,23 +161,6 @@ class GameScene: SKScene {
             circles.append(circle)
             addChild(circle)
         }
-        
-        
-        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent("test.sqlite")
-        // open database
-       
-        if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
-            print("error opening database")
-        }
-        correctWords = getRandomCorrectWords(phoneme: "-ck", db: db)
-        Words = getRandomWrongWords(phoneme: "not-ck", db: db)
-        Words.append(contentsOf: correctWords)
-        Words.shuffle()
-        
-        insertCloud(x: size.width * 0.2, y: size.height * 0.7, count: 1)
-        insertCloud(x: size.width * 0.5, y: size.height * 0.7, count: 2)
-        insertCloud(x: size.width * 0.8 , y: size.height * 0.7 ,count: 3)
 
     }
     override func update(_ currentTime: TimeInterval){
@@ -219,7 +215,7 @@ class GameScene: SKScene {
                     }
                 }
             }
-        }else if getSecondsSinceStart() >= Double(Words.count+1) * cloudPeriod{
+        }else if getSecondsSinceStart() >= Double(Words.count+2) * cloudPeriod{
             // end game
             // update db with data, asserting gameOver, printing most recent data
             if !gameOver {
@@ -235,7 +231,7 @@ class GameScene: SKScene {
                 var stmt: OpaquePointer?
                 let numStars = getStars()
                 let wrong_words = wrongAnswers.joined(separator: ", ")
-                let insert_query = "insert into LevelData VALUES('TOW' , 1 , \(numStars) , '\(wrong_words)', CURRENT_TIMESTAMP)"
+                let insert_query = "insert into UserData VALUES('TOW' , 1 , \(numStars) , '\(wrong_words)', CURRENT_TIMESTAMP)"
                 
                 //preparing query
                 if sqlite3_prepare(db, insert_query, -1, &stmt, nil) != SQLITE_OK{
@@ -250,7 +246,7 @@ class GameScene: SKScene {
                 }
     
                 gameOver = true
-                print(getLastPlayData()) // printing out the data from the last play, retrieving from db
+//                print(getLastPlayData()) // printing out the data from the last play, retrieving from db
                 
             }
            // convert scores to stars, display an end-game screen or toast
@@ -281,37 +277,40 @@ class GameScene: SKScene {
        
         
         //choose one of the touches to work with
-        if let touch = touches.first {
-            let currentPoint = touch.location(in: self)
-            let touchedNodes = self.nodes(at: currentPoint)
-            for node in touchedNodes {
-                // check and see if node touched was one of the clouds
-                for i in 1...3 {
-                    if node.name == "cloud-\(i)" {
-                        let word =  wordsShownArray[i-1].text!
-                        // if word is correct score the home 10 points
-                        if correctWords.contains(word){
-                            homePoints = homePoints + 10
-                            homeScore.text = String(homePoints)
-                            circles[circleCounter].fillColor = UIColor.green
-                            circleCounter = circleCounter + 1
+        if !gameOver{
+            if let touch = touches.first {
+                let currentPoint = touch.location(in: self)
+                let touchedNodes = self.nodes(at: currentPoint)
+                for node in touchedNodes {
+                    // check and see if node touched was one of the clouds
+                    for i in 1...3 {
+                        if node.name == "cloud-\(i)" {
+                            let word =  wordsShownArray[i-1].text!
+                            // if word is correct score the home 10 points
+                            if correctWords.contains(word){
+                                homePoints = homePoints + 10
+                                homeScore.text = String(homePoints)
+                                circles[circleCounter].fillColor = UIColor.green
+                                circleCounter = circleCounter + 1
+                                
+                            //if the word is incorrect give the oppenent 10 points and store the word missed
+                            }else if !wrongAnswers.contains(word) {
+                                awayPoints = awayPoints + 10
+                                awayScore.text = String(awayPoints)
+                                wrongAnswers.append(word)
+                            }
+                            wordsShownArray[i-1].text = ""
+                            cloudArray[i-1].run( SKAction.resize(toWidth: 0, height: 0, duration: cloudPeriod/3.0))
                             
-                        //if the word is incorrect give the oppenent 10 points and store the word missed
-                        }else if !wrongAnswers.contains(word) {
-                            awayPoints = awayPoints + 10
-                            awayScore.text = String(awayPoints)
-                            wrongAnswers.append(word)
                         }
-                        wordsShownArray[i-1].text = ""
-                        cloudArray[i-1].run( SKAction.resize(toWidth: 0, height: 0, duration: cloudPeriod/3.0))
-                        
                     }
                 }
-            }
 
+            }
         }
         return
     }
+        
     
     func walkingRobot(){
         let walking = [walk0, walk1, walk2, walk3, walk4, walk5, walk6, walk7, walk8, walk9]
@@ -364,7 +363,7 @@ class GameScene: SKScene {
         //preparing the query
         if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
             let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("error preparing insert: \(errmsg)")
+            print("error preparing select: \(errmsg)")
             return []
         }
         
@@ -375,7 +374,7 @@ class GameScene: SKScene {
             wordArray.append(word)
         }
         wordArray.shuffle();
-        wordArray = Array(wordArray.prefix(numWords/3))
+        wordArray = Array(wordArray.prefix(numWords))
         return wordArray
     }
     
@@ -400,7 +399,7 @@ class GameScene: SKScene {
             wordArray.append(word)
         }
         wordArray.shuffle();
-        wordArray = Array(wordArray.prefix(2*numWords/3))
+        wordArray = Array(wordArray.prefix(2*numWords))
         return wordArray
     }
     
@@ -435,7 +434,7 @@ class GameScene: SKScene {
     }
     
     func getLastPlayData() -> String {
-        let queryString =  "select * from LevelData L where L.time in (select MAX(time) from LevelData)"
+        let queryString =  "select * from UserData L where L.time in (select MAX(time) from UserData)"
         
         //statement pointer
         var stmt:OpaquePointer?
@@ -458,6 +457,38 @@ class GameScene: SKScene {
         }
         
         return "no record returned"
+        
+    }
+    func getLevelData() {
+        let levelQuery = "SELECT * FROM LevelData L WHERE L.number=\(levelNumber)"
+        //statement pointer
+        var stmt:OpaquePointer?
+        
+        //preparing the query
+        if sqlite3_prepare(db, levelQuery, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error preparing select: \(errmsg)")
+        }
+        
+        //traversing through all the records
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            phoneme = String(cString: sqlite3_column_text(stmt, 1))
+            numWords = Int(sqlite3_column_int(stmt, 2))
+            gameSpeed = String(cString: sqlite3_column_text(stmt, 3))
+        }
+        
+        if(gameSpeed == "slow"){
+            cloudPeriod = 3.0
+        }else if(gameSpeed == "fast"){
+            cloudPeriod = 2.0
+        }else {
+            cloudPeriod = 1.5
+        }
+        
+        correctWords = getRandomCorrectWords(phoneme: phoneme, db: db)
+        Words = getRandomWrongWords(phoneme: "not\(phoneme)", db: db)
+        Words.append(contentsOf: correctWords)
+        Words.shuffle()
         
     }
     
