@@ -11,15 +11,13 @@ import SpriteKit
 import GameplayKit
 
 
-class AccountViewController: UIViewController {
-
-    
+class AccountViewController: UIViewController {    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
     }
-    
+
     
     override var shouldAutorotate: Bool {
         return true;

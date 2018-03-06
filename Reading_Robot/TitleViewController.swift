@@ -13,13 +13,11 @@ import GameplayKit
 import SQLite3
 
 class TitleViewController: UIViewController {
-    var pushAccount = false
     let correctWordsArray =  ["Sick","Sock","Lock","Luck","Click","Clock","Frock","Smack","Tuck","Tack","Tock","Dock","Duck","Mack","Nick","Truck","Sack","Stack","Rack","Hack","Shack","Thick","Pack","Pick","Rick","Crack","Chuck","Wick","Shuck","Shock","Lack","Struck","Chick","Slick","Slack"]
     
     let wrongWordsArray = ["Hill","Still","Must","Pass","Sin","Pig","Wig","Thin","Make","Wag","Pox","Box","Fox","Zen","Cake","Frog","Step","Slip","Prom","Chin","Chill","Shell","Ship","Fish","Rush","Wish","Shin","Take","Rope","Tap","Clam","Sing","Wing","Chop","Thing",]
     
     @IBAction func unwindToMainMenu(unwindSegue: UIStoryboardSegue){}
-    @IBAction func unwindToAccountMenu(unwindSegue: UIStoryboardSegue){pushAccount = true}
 
     
     
@@ -46,20 +44,20 @@ class TitleViewController: UIViewController {
         if sqlite3_exec(db, "create table if not exists LevelData (miniGame text , lvl int , stars int , wrongWords text , time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
-        }
+
         
         // checking for
         
         
         
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        if pushAccount{
-            self.performSegue(withIdentifier: "AccountSegue", sender: self)
-            self.pushAccount = false
-        }
+
+        
+        
+        
     }
+    
+
     override var shouldAutorotate: Bool {
         return true
     }
