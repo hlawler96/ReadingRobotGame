@@ -8,13 +8,14 @@ import SQLite3
 // 5) Add an end game animation based on the number of stars - ??
 // 6) Have the phoneme spoken at the beginning of the mini game with possible time delay / "Start" popup message - ??
 // 8) Add an extra frame to the rope pulling animation to make animation cleaner - ??
-// 9) Figure out way to center text on clouds with varying device screen size - Hayden
 // 10) Read in words from project db file and not the db file stored on the local machine - Hayden
-// 12) Figure out the best way to present the score to the user - Diane/Derek
+
+
 
 class GameScene: SKScene {
     
-     var db: OpaquePointer?
+    var db: OpaquePointer?
+    var db2: OpaquePointer?
     // 1
     let rope = SKSpriteNode(imageNamed: "rope")
     let background = SKSpriteNode(imageNamed: "LevelBackground1")
@@ -112,12 +113,17 @@ class GameScene: SKScene {
         scoreboard.zPosition = 2
         addChild(scoreboard)
         
-
+        //open database on ios machine
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             .appendingPathComponent("test.sqlite")
-        // open database
        
         if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
+            print("error opening database")
+        }
+        
+        //open project database
+        let filePath = Bundle.main.path(forResource: "ReadingRobot", ofType: "db")
+        if sqlite3_open(filePath, &db2) != SQLITE_OK {
             print("error opening database")
         }
         
@@ -221,7 +227,6 @@ class GameScene: SKScene {
                     print("failure inserting User Data: \(errmsg)")
                 
                 }
-    
                 gameOver = true
                 
                 // convert scores to stars, display an end-game screen or toast
@@ -449,7 +454,7 @@ class GameScene: SKScene {
         var stmt:OpaquePointer?
         
         //preparing the query
-        if sqlite3_prepare(db, levelQuery, -1, &stmt, nil) != SQLITE_OK{
+        if sqlite3_prepare(db2, levelQuery, -1, &stmt, nil) != SQLITE_OK{
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error preparing select: \(errmsg)")
         }
@@ -469,8 +474,8 @@ class GameScene: SKScene {
             cloudPeriod = 1.5
         }
         
-        correctWords = getRandomCorrectWords(phoneme: phoneme, db: db)
-        Words = getRandomWrongWords(phoneme: "not\(phoneme)", db: db)
+        correctWords = getRandomCorrectWords(phoneme: phoneme, db: db2)
+        Words = getRandomWrongWords(phoneme: "not\(phoneme)", db: db2)
         Words.append(contentsOf: correctWords)
         Words.shuffle()
         sqlite3_finalize(stmt)

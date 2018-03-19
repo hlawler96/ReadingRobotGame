@@ -13,9 +13,6 @@ import GameplayKit
 import SQLite3
 
 class TitleViewController: UIViewController {
-    let correctWordsArray =  ["Sick","Sock","Lock","Luck","Click","Clock","Frock","Smack","Tuck","Tack","Tock","Dock","Duck","Mack","Nick","Truck","Sack","Stack","Rack","Hack","Shack","Thick","Pack","Pick","Rick","Crack","Chuck","Wick","Shuck","Shock","Lack","Struck","Chick","Slick","Slack"]
-    
-    let wrongWordsArray = ["Hill","Still","Must","Pass","Sin","Pig","Wig","Thin","Make","Wag","Pox","Box","Fox","Zen","Cake","Frog","Step","Slip","Prom","Chin","Chill","Shell","Ship","Fish","Rush","Wish","Shin","Take","Rope","Tap","Clam","Sing","Wing","Chop","Thing",]
     
     var db: OpaquePointer?
     
@@ -26,40 +23,19 @@ class TitleViewController: UIViewController {
         
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             .appendingPathComponent("test.sqlite")
-        // open database
         
         if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
             print("error opening database")
         }
-        
-        dropDB(db: db, table: "Words")
-        dropDB(db: db, table: "LevelData")
+
         dropDB(db: db, table: "UserData")
-        
-        if sqlite3_exec(db, "create table if not exists Words (phoneme text , word text)", nil, nil, nil) != SQLITE_OK {
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("error creating table: \(errmsg)")
-        }
-        
-        loadWords(db: db)
     
         // checking for UserData table, creating if not found
         if sqlite3_exec(db, "create table if not exists UserData (miniGame text , lvl int , stars int , wrongWords text , time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
-        
-        //checking for LevelData table, creating if not found
-        if sqlite3_exec(db, "create table if not exists LevelData (number int, phoneme text, numWords int, speed text)", nil, nil, nil) != SQLITE_OK {
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("error creating table: \(errmsg)")
-        }
-        
-        loadLevels(db: db)
-        
-       
-        
-        
+  
     }
     
 
@@ -104,62 +80,34 @@ class TitleViewController: UIViewController {
         return
     }
     
-    func insertWord(phoneme: String, word: String, db: OpaquePointer?){
-        //the insert query
-        let queryString = "INSERT INTO Words VALUES ('" + phoneme + "','" + word + "');"
-        
-        //executing the query to insert values
-        if sqlite3_exec(db, queryString, nil, nil, nil) != SQLITE_OK {
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("failure inserting Words: \(errmsg)")
-            return
-        }
-        return
-    }
     
-    func loadWords(db: OpaquePointer?){
-        for correctWord in correctWordsArray {
-            insertWord(phoneme: "-ck", word: correctWord, db: db)
+    func testNewDB(){
+        var db2: OpaquePointer?
+        print("testing db connection")
+        let filePath = Bundle.main.path(forResource: "ReadingRobot", ofType: "db")
+        if sqlite3_open(filePath, &db2) != SQLITE_OK {
+            print("error opening database")
         }
-        for wrongWord in wrongWordsArray {
-            insertWord(phoneme: "not-ck", word: wrongWord, db: db)
-        }
-    }
-    
-    func loadLevels(db: OpaquePointer?){
         
-        var queryString = "INSERT INTO LevelData VALUES (1,'-ck',6,'fast');"
+        let queryString = "Select * from Words"
         
-        //executing the query to insert values
-        if sqlite3_exec(db, queryString, nil, nil, nil) != SQLITE_OK {
+        //statement pointer
+        var stmt:OpaquePointer?
+        
+        //preparing the query
+        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
             let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("failure inserting LevelData: \(errmsg)")
-            return
+            print("error preparing select: \(errmsg)")
         }
         
-        queryString = "INSERT INTO LevelData VALUES (2,'-ck',7,'fast');"
-        
-        //executing the query to insert values
-        if sqlite3_exec(db, queryString, nil, nil, nil) != SQLITE_OK {
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("failure inserting LevelData: \(errmsg)")
-            return
+        //traversing through all the records
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            let phoneme = String(cString: sqlite3_column_text(stmt, 0))
+            let word = String(cString: sqlite3_column_text(stmt, 1))
+            print("Phoneme: \(phoneme) , Word: \(word) ")
         }
-        
-        return
         
     }
-    
-    
     
 }
 
-class Word {
-    var phoneme: String
-    var word: String
-    
-    init(phoneme: String, word: String){
-        self.phoneme = phoneme
-        self.word = word
-    }
-}
