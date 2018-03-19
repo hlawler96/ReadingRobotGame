@@ -11,7 +11,7 @@ import UIKit
 class CollectionViewCell: UICollectionViewCell {
     
     
-    
+    var levelName: String!
     @IBOutlet weak var StarView2: UIImageView!
     @IBOutlet weak var StarView1: UIImageView!
     @IBOutlet weak var StarView: UIImageView!
