@@ -212,7 +212,7 @@ class GameScene: SKScene {
                 }
                 let numStars = getStars()
                 let wrong_words = wrongAnswers.joined(separator: ", ")
-                let insert_query = "insert into UserData VALUES('TOW' , 1 , \(numStars) , '\(wrong_words)', CURRENT_TIMESTAMP)"
+                let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) , \(numStars) , '\(wrong_words)', CURRENT_TIMESTAMP)"
                 
                 //executing the query to insert values
                 
