@@ -11,6 +11,7 @@ import UIKit
 import SpriteKit
 import GameplayKit
 import SQLite3
+import AVKit
 
 class TitleViewController: UIViewController {
     
@@ -35,6 +36,8 @@ class TitleViewController: UIViewController {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
+        
+        playBackgroundMusic(filename: "music")
   
     }
     
@@ -109,5 +112,38 @@ class TitleViewController: UIViewController {
         
     }
     
+}
+
+
+var backgroundMusicPlayer: AVAudioPlayer!
+
+func playBackgroundMusic(filename: String) {
+    
+    //The location of the file and its type
+    let filepath = Bundle.main.path(forResource: filename, ofType: "mp3")
+    
+    //Returns an error if it can't find the file name
+    if (filepath == nil) {
+        print("Could not find the file \(filename)")
+    }
+    
+    let url = URL(fileURLWithPath: filepath!)
+    
+    //Assigns the actual music to the music player
+    do{
+    backgroundMusicPlayer =  try AVAudioPlayer(contentsOf: url)
+    }catch{
+        print("Could not create audio player")
+    }
+    
+    //A negative means it loops forever
+    backgroundMusicPlayer.numberOfLoops = -1
+    backgroundMusicPlayer.volume = 0.7
+    backgroundMusicPlayer.prepareToPlay()
+    backgroundMusicPlayer.play()
+}
+
+func pauseBackgroundMusic(){
+    backgroundMusicPlayer.stop()
 }
 

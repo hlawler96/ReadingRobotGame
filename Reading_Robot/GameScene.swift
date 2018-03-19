@@ -77,6 +77,8 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
+        pauseBackgroundMusic()
+        
         background.size.width = size.width
         background.size.height = size.height
         background.position = CGPoint(x: size.width/2, y: size.height/2)

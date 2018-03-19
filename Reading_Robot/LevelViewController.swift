@@ -17,6 +17,9 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.LevelCollectionView.reloadData()
+        if !backgroundMusicPlayer.isPlaying {
+            playBackgroundMusic(filename: "music")
+        }
     }
     
     override func viewDidLoad() {
