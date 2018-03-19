@@ -14,6 +14,11 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.LevelCollectionView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     LevelCollectionView.delegate = self

@@ -123,9 +123,9 @@ class GameScene: SKScene {
         
         getLevelData()
         
-        insertCloud(x: size.width * 0.2, y: size.height * 0.7, count: 1)
-        insertCloud(x: size.width * 0.5, y: size.height * 0.7, count: 2)
-        insertCloud(x: size.width * 0.8 , y: size.height * 0.7 ,count: 3)
+        insertCloud(x: size.width * 0.2, y: size.height * 0.65, count: 1)
+        insertCloud(x: size.width * 0.5, y: size.height * 0.65, count: 2)
+        insertCloud(x: size.width * 0.8 , y: size.height * 0.65 ,count: 3)
         
         let buffer = scoreboard.size.width / 64
         let numCircles = CGFloat(1+correctWords.count)
