@@ -10,7 +10,6 @@ import SQLite3
 // 8) Add an extra frame to the rope pulling animation to make animation cleaner - ??
 // 9) Figure out way to center text on clouds with varying device screen size - Hayden
 // 10) Read in words from project db file and not the db file stored on the local machine - Hayden
-// 11) issue when clicking cloud before word appears, I think this will be fixed with timing change? - Hayden
 // 12) Figure out the best way to present the score to the user - Diane/Derek
 
 class GameScene: SKScene {
@@ -37,13 +36,10 @@ class GameScene: SKScene {
     let pull3 = SKTexture(imageNamed: "Attack_006")
     let pull4 = SKTexture(imageNamed: "Attack_007")
     let scoreboard = SKSpriteNode(imageNamed: "rectangle")
-    let homeScore = SKLabelNode()
-    let awayScore = SKLabelNode()
-    
-    var homePoints = 0
-    var awayPoints = 0
     
     var levelNumber = 0
+    var homePoints = 0
+    var awayPoints = 0
     
     var cloudPeriod: Double!
     var previousTime = 0.0
@@ -59,6 +55,7 @@ class GameScene: SKScene {
     var textCounter = 0
     var cloudCounter = 0
     var circleCounter = 0
+    var xCounter = CGFloat(0)
     
     let calendar = Calendar.current
     let date = Date()
@@ -115,21 +112,6 @@ class GameScene: SKScene {
         scoreboard.zPosition = 2
         addChild(scoreboard)
         
-        //Currently showing scores below, if we want to show these in the final design we will update the top scoreboard so that they fit, not worrying about this until decision is made
-        
-        homeScore.position = CGPoint(x: scoreboard.position.x - scoreboard.size.width/2 - frame.size.width / 16, y: 15*frame.size.height/16)
-        homeScore.zPosition = 2
-        homeScore.text = "0"
-        homeScore.fontSize = 32
-        homeScore.fontColor = UIColor.black
-        addChild(homeScore)
-        
-        awayScore.position = CGPoint(x: scoreboard.position.x + scoreboard.size.width/2 + frame.size.width / 16, y: 15*frame.size.height/16)
-        awayScore.zPosition = 2
-        awayScore.text = "0"
-        awayScore.fontSize = 32
-        awayScore.fontColor = UIColor.black
-        addChild(awayScore)
 
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             .appendingPathComponent("test.sqlite")
@@ -215,7 +197,7 @@ class GameScene: SKScene {
                     }
                 }
             }
-        }else if getSecondsSinceStart() >= Double(Words.count+2) * cloudPeriod{
+        }else if time >= Double(Words.count+2) * cloudPeriod{
             // end game
             // update db with data, asserting gameOver, printing most recent data
             if !gameOver {
@@ -228,45 +210,40 @@ class GameScene: SKScene {
                         wrongAnswers.append(word)
                     }
                 }
-                var stmt: OpaquePointer?
                 let numStars = getStars()
                 let wrong_words = wrongAnswers.joined(separator: ", ")
                 let insert_query = "insert into UserData VALUES('TOW' , 1 , \(numStars) , '\(wrong_words)', CURRENT_TIMESTAMP)"
                 
-                //preparing query
-                if sqlite3_prepare(db, insert_query, -1, &stmt, nil) != SQLITE_OK{
-                    let errmsg = String(cString: sqlite3_errmsg(db)!)
-                    print("error preparing insert: \(errmsg)")
-                }
+                //executing the query to insert values
                 
-                // executing insert
-                if sqlite3_step(stmt) != SQLITE_DONE {
+                if sqlite3_exec(db, insert_query, nil, nil, nil) != SQLITE_OK {
                     let errmsg = String(cString: sqlite3_errmsg(db)!)
-                    print("failure inserting level data: \(errmsg)")
+                    print("failure inserting User Data: \(errmsg)")
+                
                 }
     
                 gameOver = true
-//                print(getLastPlayData()) // printing out the data from the last play, retrieving from db
                 
+                // convert scores to stars, display an end-game screen or toast
+                let stars = getStars()
+                
+                let popup = SKSpriteNode(imageNamed: "rounded-square")
+                popup.position = CGPoint(x: 50, y: 50)
+                popup.size.width = size.width/1.3
+                popup.size.height = size.height/1.3
+                popup.position = CGPoint(x: size.width/2, y: size.height/2)
+                popup.zPosition = 4
+                addChild(popup)
+                
+                let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                text.text = "End-Game Message Placeholder, you got \(stars) stars!"
+                text.fontSize = 32
+                text.fontColor = SKColor.black
+                text.position = CGPoint(x: 500, y: 350)
+                text.zPosition = 5
+                addChild(text)
             }
-           // convert scores to stars, display an end-game screen or toast
-            let stars = getStars()
-            
-            let popup = SKSpriteNode(imageNamed: "rounded-square")
-            popup.position = CGPoint(x: 50, y: 50)
-            popup.size.width = size.width/1.3
-            popup.size.height = size.height/1.3
-            popup.position = CGPoint(x: size.width/2, y: size.height/2)
-            popup.zPosition = 4
-            addChild(popup)
-            
-            let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
-            text.text = "End-Game Message Placeholder, you got \(stars) stars!"
-            text.fontSize = 32
-            text.fontColor = SKColor.black
-            text.position = CGPoint(x: 500, y: 350)
-            text.zPosition = 5
-            addChild(text)
+           
             
 
         }
@@ -274,7 +251,6 @@ class GameScene: SKScene {
 
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-       
         
         //choose one of the touches to work with
         if !gameOver{
@@ -289,14 +265,20 @@ class GameScene: SKScene {
                             // if word is correct score the home 10 points
                             if correctWords.contains(word){
                                 homePoints = homePoints + 10
-                                homeScore.text = String(homePoints)
                                 circles[circleCounter].fillColor = UIColor.green
                                 circleCounter = circleCounter + 1
                                 
                             //if the word is incorrect give the oppenent 10 points and store the word missed
-                            }else if !wrongAnswers.contains(word) {
+                            }else if !wrongAnswers.contains(word) && word != "" {
+                                let x = SKSpriteNode(imageNamed: "X")
+                                x.size.height = circles[0].frame.height
+                                x.size.width = circles[0].frame.width
+                                let cloudDX = CGFloat(xCounter*(circles[1].position.x - circles[0].position.x))
+                                x.position = CGPoint(x: circles[0].position.x + cloudDX, y: circles[0].position.y - scoreboard.size.height)
+                                x.zPosition = 2
+                                addChild(x)
+                                xCounter = xCounter + 1
                                 awayPoints = awayPoints + 10
-                                awayScore.text = String(awayPoints)
                                 wrongAnswers.append(word)
                             }
                             wordsShownArray[i-1].text = ""
@@ -375,6 +357,8 @@ class GameScene: SKScene {
         }
         wordArray.shuffle();
         wordArray = Array(wordArray.prefix(numWords))
+        
+        sqlite3_finalize(stmt)
         return wordArray
     }
     
@@ -399,7 +383,8 @@ class GameScene: SKScene {
             wordArray.append(word)
         }
         wordArray.shuffle();
-        wordArray = Array(wordArray.prefix(2*numWords))
+        wordArray = Array(wordArray.prefix(numWords + numWords % 3))
+        sqlite3_finalize(stmt)
         return wordArray
     }
     
@@ -433,32 +418,31 @@ class GameScene: SKScene {
         }
     }
     
-    func getLastPlayData() -> String {
-        let queryString =  "select * from UserData L where L.time in (select MAX(time) from UserData)"
-        
-        //statement pointer
-        var stmt:OpaquePointer?
-        
-        //preparing the query
-        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("error preparing select : \(errmsg)")
-            return " no record returned: error preparing query"
-        }
-        
-        //traversing through all the records. should be just one, since I'm selecting only the most recent play
-        while(sqlite3_step(stmt) == SQLITE_ROW){
-            let game = String(cString: sqlite3_column_text(stmt, 0))
-            let lvl = String(sqlite3_column_int(stmt, 1))
-            let star = String(sqlite3_column_int(stmt, 2))
-            let wrongs = String(cString: sqlite3_column_text(stmt, 3))
-            let time = String(cString: sqlite3_column_text(stmt, 4))
-            return "\(game), \(lvl), \(star), [\(wrongs)], \(time)"
-        }
-        
-        return "no record returned"
-        
-    }
+//    func getLastPlayData() -> String {
+//        let queryString =  "select * from UserData L where L.time in (select MAX(time) from UserData)"
+//
+//        //statement pointer
+//        var stmt:OpaquePointer?
+//
+//        //preparing the query
+//        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+//            let errmsg = String(cString: sqlite3_errmsg(db)!)
+//            print("error preparing select : \(errmsg)")
+//            return " no record returned: error preparing query"
+//        }
+//
+//        //traversing through all the records. should be just one, since I'm selecting only the most recent play
+//        while(sqlite3_step(stmt) == SQLITE_ROW){
+//            let game = String(cString: sqlite3_column_text(stmt, 0))
+//            let lvl = String(sqlite3_column_int(stmt, 1))
+//            let star = String(sqlite3_column_int(stmt, 2))
+//            let wrongs = String(cString: sqlite3_column_text(stmt, 3))
+//            let time = String(cString: sqlite3_column_text(stmt, 4))
+//            return "\(game), \(lvl), \(star), [\(wrongs)], \(time)"
+//        }
+//        return "no record returned"
+//    }
+    
     func getLevelData() {
         let levelQuery = "SELECT * FROM LevelData L WHERE L.number=\(levelNumber)"
         //statement pointer
@@ -489,12 +473,11 @@ class GameScene: SKScene {
         Words = getRandomWrongWords(phoneme: "not\(phoneme)", db: db)
         Words.append(contentsOf: correctWords)
         Words.shuffle()
+        sqlite3_finalize(stmt)
         
     }
     
 }
-
-
 
 //following two extensions allow to call .shuffle() on arrays to make life simpler when choosing words
 

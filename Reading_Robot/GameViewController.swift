@@ -11,7 +11,6 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController {
-// test
     var levelNumber: Int!
 
     override func viewDidLoad() {

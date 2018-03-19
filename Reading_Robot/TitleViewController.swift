@@ -17,6 +17,8 @@ class TitleViewController: UIViewController {
     
     let wrongWordsArray = ["Hill","Still","Must","Pass","Sin","Pig","Wig","Thin","Make","Wag","Pox","Box","Fox","Zen","Cake","Frog","Step","Slip","Prom","Chin","Chill","Shell","Ship","Fish","Rush","Wish","Shin","Take","Rope","Tap","Clam","Sing","Wing","Chop","Thing",]
     
+    var db: OpaquePointer?
+    
     @IBAction func unwindToMainMenu(unwindSegue: UIStoryboardSegue){}
     
     override func viewDidLoad() {
@@ -25,7 +27,7 @@ class TitleViewController: UIViewController {
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             .appendingPathComponent("test.sqlite")
         // open database
-        var db: OpaquePointer?
+        
         if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
             print("error opening database")
         }
@@ -54,6 +56,9 @@ class TitleViewController: UIViewController {
         }
         
         loadLevels(db: db)
+        
+       
+        
         
     }
     
@@ -95,6 +100,8 @@ class TitleViewController: UIViewController {
             print("failure dropping Words: \(errmsg)")
             return
         }
+        sqlite3_finalize(stmt)
+        return
     }
     
     func insertWord(phoneme: String, word: String, db: OpaquePointer?){
@@ -107,6 +114,7 @@ class TitleViewController: UIViewController {
             print("failure inserting Words: \(errmsg)")
             return
         }
+        return
     }
     
     func loadWords(db: OpaquePointer?){
@@ -120,7 +128,7 @@ class TitleViewController: UIViewController {
     
     func loadLevels(db: OpaquePointer?){
         
-        var queryString = "INSERT INTO LevelData VALUES (1,'-ck',6,'slow');"
+        var queryString = "INSERT INTO LevelData VALUES (1,'-ck',6,'fast');"
         
         //executing the query to insert values
         if sqlite3_exec(db, queryString, nil, nil, nil) != SQLITE_OK {
@@ -137,6 +145,9 @@ class TitleViewController: UIViewController {
             print("failure inserting LevelData: \(errmsg)")
             return
         }
+        
+        return
+        
     }
     
     
