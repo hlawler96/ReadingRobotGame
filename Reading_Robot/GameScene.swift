@@ -8,7 +8,6 @@ import SQLite3
 // 5) Add an end game animation based on the number of stars - ??
 // 6) Have the phoneme spoken at the beginning of the mini game with possible time delay / "Start" popup message - ??
 // 8) Add an extra frame to the rope pulling animation to make animation cleaner - ??
-// 10) Read in words from project db file and not the db file stored on the local machine - Hayden
 
 
 
@@ -67,9 +66,9 @@ class GameScene: SKScene {
     var cloudArray = [SKSpriteNode]()
     var wordsShownArray = [SKLabelNode] ()
     
-    var phoneme = ""
-    var numWords = 0
-    var gameSpeed = "slow"
+    var phoneme : String!
+    var numWords : Int!
+    var gameSpeed : String!
     
     override func didMove(to view: SKView) {
         

@@ -68,6 +68,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         cell.LevelButton.tag = indexPath.row + 1
         cell.LevelLabel.text = String(indexPath.row + 1)
         
+        
         let queryString = "SELECT max(U.stars) from UserData U where U.lvl = \(cell.LevelButton.tag)"
         var stmt:OpaquePointer?
         var numStars = 0
