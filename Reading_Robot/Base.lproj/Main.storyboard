@@ -9,6 +9,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="MarkerFeltWide.ttf">
+            <string>MarkerFelt-Wide</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Title View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -229,10 +234,6 @@
                                                         <segue destination="Z4S-wT-u8j" kind="show" identifier="Game_Segue" id="apl-SM-HxO"/>
                                                     </connections>
                                                 </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eo3-eT-VHY">
-                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </imageView>
                                                 <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xrs-N0-5E9">
                                                     <rect key="frame" x="0.0" y="99" width="33" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
@@ -249,12 +250,20 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oU6-Lo-29b" userLabel="Level Label">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" red="0.21126267552170153" green="0.73720008341767884" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <fontDescription key="fontDescription" name="MarkerFelt-Wide" family="Marker Felt" pointSize="45"/>
+                                                    <color key="textColor" red="0.9991812657383734" green="1" blue="0.98205626381328703" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </view>
                                         <viewLayoutGuide key="safeArea" id="40r-TN-xSD"/>
                                         <connections>
                                             <outlet property="LevelButton" destination="96q-AD-Mjv" id="99a-EW-T28"/>
-                                            <outlet property="LevelImage" destination="eo3-eT-VHY" id="30v-63-PZP"/>
+                                            <outlet property="LevelLabel" destination="oU6-Lo-29b" id="FiZ-hw-18J"/>
                                             <outlet property="StarView" destination="Xrs-N0-5E9" id="cnn-CG-bRZ"/>
                                             <outlet property="StarView1" destination="INH-Z3-Z0o" id="x92-Ax-fod"/>
                                             <outlet property="StarView2" destination="XtD-fl-Epu" id="QpA-PM-SUy"/>
