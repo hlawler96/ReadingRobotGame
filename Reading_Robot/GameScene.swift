@@ -327,6 +327,7 @@ class GameScene: SKScene {
         var wordArray = [String]()
         let queryString = "select word from Words where phoneme = '" + phoneme + "'"
         
+        
         //statement pointer
         var stmt:OpaquePointer?
         
@@ -341,6 +342,7 @@ class GameScene: SKScene {
         while(sqlite3_step(stmt) == SQLITE_ROW){
             let word = String(cString: sqlite3_column_text(stmt, 0))
             //adding values to list
+            
             wordArray.append(word)
         }
         wordArray.shuffle();
@@ -357,6 +359,8 @@ class GameScene: SKScene {
         //statement pointer
         var stmt:OpaquePointer?
         
+        print(queryString)
+        
         //preparing the query
         if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
             let errmsg = String(cString: sqlite3_errmsg(db)!)
@@ -368,6 +372,7 @@ class GameScene: SKScene {
         while(sqlite3_step(stmt) == SQLITE_ROW){
             let word = String(cString: sqlite3_column_text(stmt, 0))
             //adding values to list
+            print(word)
             wordArray.append(word)
         }
         wordArray.shuffle();
@@ -436,7 +441,7 @@ class GameScene: SKScene {
         }
         
         correctWords = getRandomCorrectWords(phoneme: phoneme, db: db2)
-        Words = getRandomWrongWords(phoneme: "not\(phoneme)", db: db2)
+        Words = getRandomWrongWords(phoneme: "not\(phoneme!)", db: db2)
         Words.append(contentsOf: correctWords)
         Words.shuffle()
         sqlite3_finalize(stmt)
