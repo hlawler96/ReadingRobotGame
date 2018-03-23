@@ -17,6 +17,7 @@ class CollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var StarView: UIImageView!
     @IBOutlet weak var LevelButton: UIButton!
     @IBOutlet weak var LevelImage: UIImageView!
+    @IBOutlet weak var LevelLabel: UILabel!
 
     
     

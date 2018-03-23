@@ -8,14 +8,10 @@ import SQLite3
 // 5) Add an end game animation based on the number of stars - ??
 // 6) Have the phoneme spoken at the beginning of the mini game with possible time delay / "Start" popup message - ??
 // 8) Add an extra frame to the rope pulling animation to make animation cleaner - ??
-// 9) Figure out way to center text on clouds with varying device screen size - Hayden
-// 10) Read in words from project db file and not the db file stored on the local machine - Hayden
-// 12) Figure out the best way to present the score to the user - Diane/Derek
+
+
 
 class GameScene: SKScene {
-    
-     var db: OpaquePointer?
-    // 1
     let rope = SKSpriteNode(imageNamed: "rope")
     let background = SKSpriteNode(imageNamed: "LevelBackground1")
     let player = SKSpriteNode(imageNamed: "Attack_005")
@@ -70,11 +66,13 @@ class GameScene: SKScene {
     var cloudArray = [SKSpriteNode]()
     var wordsShownArray = [SKLabelNode] ()
     
-    var phoneme = ""
-    var numWords = 0
-    var gameSpeed = "slow"
+    var phoneme : String!
+    var numWords : Int!
+    var gameSpeed : String!
     
     override func didMove(to view: SKView) {
+        
+        pauseBackgroundMusic()
         
         background.size.width = size.width
         background.size.height = size.height
@@ -111,15 +109,6 @@ class GameScene: SKScene {
         scoreboard.size.height = size.height / 8
         scoreboard.zPosition = 2
         addChild(scoreboard)
-        
-
-        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent("test.sqlite")
-        // open database
-       
-        if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
-            print("error opening database")
-        }
         
         getLevelData()
         
@@ -221,7 +210,6 @@ class GameScene: SKScene {
                     print("failure inserting User Data: \(errmsg)")
                 
                 }
-    
                 gameOver = true
                 
                 // convert scores to stars, display an end-game screen or toast
@@ -418,38 +406,13 @@ class GameScene: SKScene {
         }
     }
     
-//    func getLastPlayData() -> String {
-//        let queryString =  "select * from UserData L where L.time in (select MAX(time) from UserData)"
-//
-//        //statement pointer
-//        var stmt:OpaquePointer?
-//
-//        //preparing the query
-//        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
-//            let errmsg = String(cString: sqlite3_errmsg(db)!)
-//            print("error preparing select : \(errmsg)")
-//            return " no record returned: error preparing query"
-//        }
-//
-//        //traversing through all the records. should be just one, since I'm selecting only the most recent play
-//        while(sqlite3_step(stmt) == SQLITE_ROW){
-//            let game = String(cString: sqlite3_column_text(stmt, 0))
-//            let lvl = String(sqlite3_column_int(stmt, 1))
-//            let star = String(sqlite3_column_int(stmt, 2))
-//            let wrongs = String(cString: sqlite3_column_text(stmt, 3))
-//            let time = String(cString: sqlite3_column_text(stmt, 4))
-//            return "\(game), \(lvl), \(star), [\(wrongs)], \(time)"
-//        }
-//        return "no record returned"
-//    }
-    
     func getLevelData() {
         let levelQuery = "SELECT * FROM LevelData L WHERE L.number=\(levelNumber)"
         //statement pointer
         var stmt:OpaquePointer?
         
         //preparing the query
-        if sqlite3_prepare(db, levelQuery, -1, &stmt, nil) != SQLITE_OK{
+        if sqlite3_prepare(db2, levelQuery, -1, &stmt, nil) != SQLITE_OK{
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error preparing select: \(errmsg)")
         }
@@ -459,18 +422,21 @@ class GameScene: SKScene {
             phoneme = String(cString: sqlite3_column_text(stmt, 1))
             numWords = Int(sqlite3_column_int(stmt, 2))
             gameSpeed = String(cString: sqlite3_column_text(stmt, 3))
+            print("Phoneme: \(phoneme) , Number of Words: \(numWords) , Game Speed: \(gameSpeed)")
         }
         
         if(gameSpeed == "slow"){
             cloudPeriod = 3.0
         }else if(gameSpeed == "fast"){
             cloudPeriod = 2.0
-        }else {
+        }else if(gameSpeed == "very_fast"){
             cloudPeriod = 1.5
+        }else {
+            cloudPeriod = 1.0
         }
         
-        correctWords = getRandomCorrectWords(phoneme: phoneme, db: db)
-        Words = getRandomWrongWords(phoneme: "not\(phoneme)", db: db)
+        correctWords = getRandomCorrectWords(phoneme: phoneme, db: db2)
+        Words = getRandomWrongWords(phoneme: "not\(phoneme)", db: db2)
         Words.append(contentsOf: correctWords)
         Words.shuffle()
         sqlite3_finalize(stmt)
