@@ -6,7 +6,7 @@ import SQLite3
 // 2) Add labels to players and scores at the top - ??
 // 4) Animate the tug of war during the game - ??
 // 5) Add an end game animation based on the number of stars - ??
-// 6) Have the phoneme spoken at the beginning of the mini game with possible time delay / "Start" popup message - ??
+// 6) Have the pattern spoken at the beginning of the mini game with possible time delay / "Start" popup message - ??
 // 8) Add an extra frame to the rope pulling animation to make animation cleaner - ??
 
 
@@ -66,7 +66,7 @@ class GameScene: SKScene {
     var cloudArray = [SKSpriteNode]()
     var wordsShownArray = [SKLabelNode] ()
     
-    var phoneme : String!
+    var pattern : String!
     var numWords : Int!
     var gameSpeed : String!
     
@@ -190,7 +190,7 @@ class GameScene: SKScene {
             // end game
             // update db with data, asserting gameOver, printing most recent data
             if !gameOver {
-                //add any remaining words in phoneme to wrongAnswers and color remaining circles in red
+                //add any remaining words in pattern to wrongAnswers and color remaining circles in red
                 for i in 0...2 {
                     let word = wordsShownArray[i].text!
                     if correctWords.contains(word){
@@ -323,10 +323,9 @@ class GameScene: SKScene {
         
     }
     
-    func getRandomCorrectWords(phoneme: String, db: OpaquePointer?) -> [String] {
+    func getRandomCorrectWords(pattern: String, db: OpaquePointer?) -> [String] {
         var wordArray = [String]()
-        let queryString = "select word from Words where phoneme = '" + phoneme + "'"
-        
+        let queryString = "select word from Words where pattern = '" + pattern + "' and hasPattern = 1"
         
         //statement pointer
         var stmt:OpaquePointer?
@@ -352,9 +351,9 @@ class GameScene: SKScene {
         return wordArray
     }
     
-    func getRandomWrongWords(phoneme: String, db: OpaquePointer?) -> [String] {
+    func getRandomWrongWords(pattern: String, db: OpaquePointer?) -> [String] {
         var wordArray = [String]()
-        let queryString = "select word from Words where phoneme = '" + phoneme + "'"
+        let queryString = "select word from Words where pattern = '" + pattern + "' and hasPattern = 0"
         
         //statement pointer
         var stmt:OpaquePointer?
@@ -424,10 +423,10 @@ class GameScene: SKScene {
         
         //traversing through all the records
         while(sqlite3_step(stmt) == SQLITE_ROW){
-            phoneme = String(cString: sqlite3_column_text(stmt, 1))
+            pattern = String(cString: sqlite3_column_text(stmt, 1))
             numWords = Int(sqlite3_column_int(stmt, 2))
             gameSpeed = String(cString: sqlite3_column_text(stmt, 3))
-            print("Phoneme: \(phoneme) , Number of Words: \(numWords) , Game Speed: \(gameSpeed)")
+            print("Pattern: \(pattern) , Number of Words: \(numWords) , Game Speed: \(gameSpeed)")
         }
         
         if(gameSpeed == "slow"){
@@ -440,8 +439,8 @@ class GameScene: SKScene {
             cloudPeriod = 1.0
         }
         
-        correctWords = getRandomCorrectWords(phoneme: phoneme, db: db2)
-        Words = getRandomWrongWords(phoneme: "not\(phoneme!)", db: db2)
+        correctWords = getRandomCorrectWords(pattern: pattern, db: db2)
+        Words = getRandomWrongWords(pattern: pattern, db: db2)
         Words.append(contentsOf: correctWords)
         Words.shuffle()
         sqlite3_finalize(stmt)
