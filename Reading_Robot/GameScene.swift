@@ -33,6 +33,7 @@ class GameScene: SKScene {
     let pull4 = SKTexture(imageNamed: "Attack_007")
     let scoreboard = SKSpriteNode(imageNamed: "rectangle")
     
+    var timeToPull = true
     var levelNumber = 0
     var homePoints = 0
     var awayPoints = 0
@@ -61,6 +62,9 @@ class GameScene: SKScene {
     var startNS = 0
     var secondsSinceStart = 0
     
+    var playerOneStartX: CGFloat!
+    var playerTwoStartX: CGFloat!
+    
     var gameOver = false
     
     var cloudArray = [SKSpriteNode]()
@@ -80,16 +84,18 @@ class GameScene: SKScene {
         background.zPosition = 0
         addChild(background)
         
+        playerOneStartX = size.width * 0.8
         player.size.width = size.width / 3.1
         player.size.height = size.height / 2
-        player.position = CGPoint(x: size.width * 0.8 , y: size.height * 0.33)
+        player.position = CGPoint(x: playerOneStartX , y: size.height * 0.33)
         player.zPosition = 2
         addChild(player)
         
         
+        playerTwoStartX = size.width * 0.2
         player2.size.width = size.width / 3.1
         player2.size.height = size.height / 2
-        player2.position = CGPoint(x: size.width * 0.2 , y: size.height * 0.33)
+        player2.position = CGPoint(x: playerTwoStartX , y: size.height * 0.33)
         player2.zPosition = 2
         player2.xScale = player2.xScale * -1
         addChild(player2)
@@ -136,9 +142,31 @@ class GameScene: SKScene {
     }
     override func update(_ currentTime: TimeInterval){
         let time = getSecondsSinceStart()
+        
+       
+        
         let dTime = time - previousTime
         //only update words/ clouds until game is over
         if wordCounter < Words.count {
+            //Move Players back and forth
+            let pulling = [pull2, pull1, pull0, pull1, pull2]
+            print(time.truncatingRemainder(dividingBy: 8.0))
+            let remainder = time.truncatingRemainder(dividingBy: 8.0)
+            let action = SKAction.animate(with: pulling, timePerFrame: 0.15)
+            if  remainder > 2.95 && remainder <  3.05  && timeToPull{
+                player2.run(action, withKey: "pulling")
+                timeToPull = false
+                print("Hit 1")
+            }else if remainder > 6.95 && remainder <  7.05 && !timeToPull {
+                timeToPull = true
+                print("Hit 2")
+                player.run(action, withKey: "pulling")
+            }
+            let sinApprox = CGFloat(sin(Double.pi * time / 4) + 0.33333*sin(3.0 * Double.pi * time / 4.0))
+            let deltaX = (size.width * 0.1) * (2 / CGFloat.pi) * sinApprox
+            player.position = CGPoint(x: playerOneStartX + deltaX, y: size.height*0.33)
+            player2.position = CGPoint(x: playerTwoStartX + deltaX, y: size.height*0.33)
+            rope.position = CGPoint(x: size.width/2 + deltaX, y: frame.size.height / 4  - player.size.height/4 + size.height * 0.08)
             if wordCounter < 3 {
                 if !phaseTwo && dTime >= 2*cloudPeriod/3 {
                     phaseTwo = true
@@ -191,6 +219,7 @@ class GameScene: SKScene {
             // update db with data, asserting gameOver, printing most recent data
             if !gameOver {
                 //add any remaining words in pattern to wrongAnswers and color remaining circles in red
+               
                 for i in 0...2 {
                     let word = wordsShownArray[i].text!
                     if correctWords.contains(word){
@@ -202,6 +231,22 @@ class GameScene: SKScene {
                 let numStars = getStars()
                 let wrong_words = wrongAnswers.joined(separator: ", ")
                 let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) , \(numStars) , '\(wrong_words)', CURRENT_TIMESTAMP)"
+               
+                //Move players to one side or the other
+                let speed = size.width/15.0
+                if numStars > 0 {
+                    
+                    let distance = abs(player2.position.x - size.width * 0.05)
+                    player.run(SKAction.moveTo(x: size.width * 0.65, duration: Double(distance/speed)))
+                    player2.run(SKAction.moveTo(x: size.width * 0.05, duration: Double(distance/speed)))
+                    rope.run(SKAction.moveTo(x: size.width * 0.35, duration: Double(distance/speed)))
+                    
+                }else{
+                    let distance = abs(player.position.x - size.width * 0.95)
+                    player.run(SKAction.moveTo(x: size.width * 0.95, duration: Double(distance/speed)))
+                    player2.run(SKAction.moveTo(x: size.width * 0.35, duration: Double(distance/speed)))
+                    rope.run(SKAction.moveTo(x: size.width * 0.65, duration: Double(distance/speed)))
+                }
                 
                 //executing the query to insert values
                 
