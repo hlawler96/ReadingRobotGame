@@ -442,6 +442,12 @@ class GameScene: SKScene {
             oppColor = String(cString: sqlite3_column_text(stmt, 4))
 //            print("Pattern: \(pattern) , Number of Words: \(numWords) , Game Speed: \(gameSpeed)")
         }
+        var i = Int(arc4random_uniform(6))
+        while(oppColor == userColor){
+            oppColor = colors[i]
+            i = Int(arc4random_uniform(6))
+        }
+        
         
         if(gameSpeed == "slow"){
             cloudPeriod = 3.0

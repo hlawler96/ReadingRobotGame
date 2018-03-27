@@ -10,11 +10,12 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
+let colors = ["Red","Grey","Blue","Yellow","Turquoise","Green"]
 
 class AccountViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate{
   
     
-    let colors = ["Red","Grey","Blue","Yellow","Turquoise","Green"]
+    
     @IBOutlet weak var character: UIImageView!
     @IBOutlet weak var dropDown: UIPickerView!
     

@@ -10,10 +10,7 @@ import SpriteKit
 
 class TappingGame: SKScene {
     
-    let player = SKSpriteNode(imageNamed: "Attack_005")
-    let pull0 = SKTexture(imageNamed: "Attack_007")
-    let pull1 = SKTexture(imageNamed: "Attack_006")
-    let pull2 = SKTexture(imageNamed: "Attack_005")
+    let player = SKSpriteNode(imageNamed: userColor + "_Attack_005")
     
     
     override func didMove(to view: SKView) {
@@ -23,7 +20,6 @@ class TappingGame: SKScene {
         player.zPosition = 2
         addChild(player)
         
-        let pulling = [pull2, pull1, pull0, pull1, pull2]
-        player.run(SKAction.animate(with: pulling, timePerFrame: 0.5))
+
     }
 }
