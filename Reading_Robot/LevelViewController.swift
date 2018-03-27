@@ -5,6 +5,7 @@ import SQLite3
 
 class LevelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     var numLevels: Int!
+    final var CHARACTER_CUSTOM_TAG = 1000
     
     @IBOutlet weak var LevelCollectionView: UICollectionView!
     
@@ -14,15 +15,16 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     @IBAction func buttonClick(_ sender: UIButton) {
-        if sender.tag != numLevels + 1 {
-            performSegue(withIdentifier: "TOW_SEGUE", sender: sender)
-            
+        if sender.tag == numLevels + 1 {
+             performSegue(withIdentifier: "TAPPING_SEGUE", sender: sender)
+        }else if sender.tag == CHARACTER_CUSTOM_TAG {
+            performSegue(withIdentifier: "CHARACTER_CUSTOM_SEGUE", sender: sender)
         }else{
-            performSegue(withIdentifier: "TAPPING_SEGUE", sender: sender)
+            performSegue(withIdentifier: "TOW_SEGUE", sender: sender)
         }
         
-        
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.LevelCollectionView.reloadData()
@@ -83,7 +85,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
             cell.LevelLabel.backgroundColor = UIColor.yellow
         }else{
         cell.LevelLabel.text = String(indexPath.item + 1)
-        cell.LevelLabel.backgroundColor = UIColor.blue
+        cell.LevelLabel.backgroundColor = UIColor.cyan
         let queryString = "SELECT max(U.stars) from UserData U where U.lvl = \(cell.LevelButton.tag)"
         var stmt:OpaquePointer?
         var numStars = 0
