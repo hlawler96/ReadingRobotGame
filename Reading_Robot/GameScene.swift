@@ -139,8 +139,7 @@ class GameScene: SKScene {
         let time = getSecondsSinceStart()
         let dTime = time - previousTime
         //only update words/ clouds until game is over
-        if wordCounter < Words.count {
-            //Move Players back and forth
+        if time < Double(Words.count+2) * cloudPeriod{
             let pulling = [pull2, pull1, pull0, pull1, pull2]
             let oppPulling = [oppPull2, oppPull1, oppPull0, oppPull1, oppPull2]
             let remainder = time.truncatingRemainder(dividingBy: 8.0)
@@ -158,6 +157,10 @@ class GameScene: SKScene {
             player.position = CGPoint(x: playerOneStartX + deltaX, y: size.height*0.33)
             player2.position = CGPoint(x: playerTwoStartX + deltaX, y: size.height*0.33)
             rope.position = CGPoint(x: size.width/2 + deltaX, y: frame.size.height / 4  - player.size.height/4 + size.height * 0.08)
+        }
+        
+        if wordCounter < Words.count {
+            //Move Players back and forth
             if wordCounter < 3 {
                 if !phaseTwo && dTime >= 2*cloudPeriod/3 {
                     phaseTwo = true

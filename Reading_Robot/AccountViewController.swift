@@ -9,6 +9,7 @@
 import UIKit
 import SpriteKit
 import GameplayKit
+import SQLite3
 
 let colors = ["Red","Grey","Blue","Yellow","Turquoise","Green"]
 
@@ -43,6 +44,10 @@ class AccountViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         userColor = colors[row]
         updateImage()
+        if sqlite3_exec(db, "UPDATE CharacterData SET color = '" + userColor + "' WHERE user = 1", nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error inserting into table: \(errmsg)")
+        }
     }
 
     

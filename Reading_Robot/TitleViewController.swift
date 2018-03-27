@@ -28,7 +28,7 @@ class TitleViewController: UIViewController {
         openLocalDB()
         openProjectDB()
         
-        dropDB(db: db, table: "UserData")
+//        dropDB(db: db, table: "UserData")
         // checking for UserData table, creating if not found
         if sqlite3_exec(db, "create table if not exists UserData (miniGame text , lvl int , stars int , wrongWords text , time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
@@ -41,11 +41,8 @@ class TitleViewController: UIViewController {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
+        //Not working right
         
-        if sqlite3_exec(db, "Insert into CharacterData(user,color,accessory) SELECT 1, 'Blue', 'none' WHERE NOT EXISTS (SELECT * FROM CharacterData)", nil, nil, nil) != SQLITE_OK {
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("error inserting into table: \(errmsg)")
-        }
         
         let queryString = "select color from CharacterData WHERE user = 1"
         var stmt:OpaquePointer?
@@ -53,7 +50,13 @@ class TitleViewController: UIViewController {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error preparing select: \(errmsg)")
         }
-        while(sqlite3_step(stmt) == SQLITE_ROW){
+        
+        if(sqlite3_step(stmt) != SQLITE_ROW){
+            if sqlite3_exec(db, "Insert into CharacterData(user,color,accessory) SELECT 1, 'Blue', 'none' WHERE NOT EXISTS (SELECT * FROM CharacterData)", nil, nil, nil) != SQLITE_OK {
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("error inserting into table: \(errmsg)")
+            }
+        }else{
             userColor = String(cString: sqlite3_column_text(stmt, 0))
         }
         sqlite3_finalize(stmt)
