@@ -11,11 +11,37 @@ import SpriteKit
 import GameplayKit
 
 
-class AccountViewController: UIViewController {    
+class AccountViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate{
+  
+    
+    let colors = ["Red","Grey","Blue","Yellow","Turquoise","Green"]
+    @IBOutlet weak var character: UIImageView!
+    @IBOutlet weak var dropDown: UIPickerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        dropDown.delegate = self
+        dropDown.dataSource = self
+        updateImage()
         
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+        
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return colors.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return colors[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        userColor = colors[row]
+        updateImage()
     }
 
     
@@ -27,13 +53,13 @@ class AccountViewController: UIViewController {
         return .landscape
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
-    }
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    func updateImage(){
+         character.image = UIImage(named: userColor + "_Idle_000")
     }
 
 

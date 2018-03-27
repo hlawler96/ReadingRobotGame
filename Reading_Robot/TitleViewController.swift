@@ -15,6 +15,7 @@ import AVKit
 
 var db: OpaquePointer?
 var db2: OpaquePointer?
+var userColor: String!
 
 class TitleViewController: UIViewController {
     
@@ -34,6 +35,28 @@ class TitleViewController: UIViewController {
             print("error creating table: \(errmsg)")
         }
         
+        
+        
+        if sqlite3_exec(db, "create table if not exists CharacterData (user int, color text, accessory text)", nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error creating table: \(errmsg)")
+        }
+        
+        if sqlite3_exec(db, "Insert into CharacterData(user,color,accessory) SELECT 1, 'Blue', 'none' WHERE NOT EXISTS (SELECT * FROM CharacterData)", nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error inserting into table: \(errmsg)")
+        }
+        
+        let queryString = "select color from CharacterData WHERE user = 1"
+        var stmt:OpaquePointer?
+        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error preparing select: \(errmsg)")
+        }
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            userColor = String(cString: sqlite3_column_text(stmt, 0))
+        }
+        sqlite3_finalize(stmt)
         playBackgroundMusic(filename: "music")
     }
     

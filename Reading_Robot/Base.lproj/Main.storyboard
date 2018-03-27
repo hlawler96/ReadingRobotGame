@@ -78,10 +78,6 @@
                                 <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Idle_000" translatesAutoresizingMaskIntoConstraints="NO" id="MHV-IV-HEA">
-                                <rect key="frame" x="472" y="145" width="650" height="650"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            </imageView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o2r-Og-Hpa">
                                 <rect key="frame" x="20" y="145" width="444" height="484"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -92,10 +88,6 @@
                                     </switch>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="4mH-AH-7LQ">
                                         <rect key="frame" x="328" y="182" width="49" height="31"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </switch>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="vNY-yJ-bdt">
-                                        <rect key="frame" x="328" y="268" width="49" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hat" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cMx-Lp-w2D">
@@ -112,8 +104,12 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Necklace" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zjc-7Y-8xw">
-                                        <rect key="frame" x="61" y="263" width="120" height="41"/>
+                                    <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F3i-wb-WoG">
+                                        <rect key="frame" x="281" y="248" width="141" height="82"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    </pickerView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Color" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="un0-YI-s18">
+                                        <rect key="frame" x="61" y="269" width="120" height="41"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
@@ -132,23 +128,23 @@
                                     <segue destination="X32-sL-gdi" kind="unwind" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="OzX-Ug-lhQ"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Character Customization Coming Soon!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hS5-kK-ESj">
-                                <rect key="frame" x="20" y="167" width="1072" height="500"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.2635648545" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="63"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fxg-9v-ajH">
+                                <rect key="frame" x="472" y="52" width="576" height="600"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="UoM-NK-XM8"/>
                     </view>
+                    <connections>
+                        <outlet property="character" destination="Fxg-9v-ajH" id="mRf-2X-lEu"/>
+                        <outlet property="dropDown" destination="F3i-wb-WoG" id="hcC-P6-L1S"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dLN-h6-PGV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="X32-sL-gdi" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="960" y="131"/>
+            <point key="canvasLocation" x="959.89208633093529" y="130.93525179856115"/>
         </scene>
         <!--Progress View Controller-->
         <scene sceneID="9WL-xZ-VXf">
@@ -289,7 +285,7 @@
                             <button opaque="NO" tag="1000" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0za-8a-AuA">
                                 <rect key="frame" x="962" y="20" width="130" height="130"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="Idle_000"/>
+                                <state key="normal" image="Blue_Idle_000"/>
                                 <connections>
                                     <action selector="buttonClick:" destination="Rdv-CE-vUu" eventType="touchUpInside" id="W93-Ux-aS3"/>
                                 </connections>
@@ -301,6 +297,7 @@
                     <navigationItem key="navigationItem" id="lyX-xa-OOk"/>
                     <connections>
                         <outlet property="LevelCollectionView" destination="bcp-W1-DOp" id="0ea-r5-Xyl"/>
+                        <outlet property="charButton" destination="0za-8a-AuA" id="Lh7-8h-huF"/>
                         <segue destination="hW7-wa-qBw" kind="show" identifier="TAPPING_SEGUE" id="VtS-Ka-4kV"/>
                         <segue destination="Z4S-wT-u8j" kind="show" identifier="TOW_SEGUE" id="ddh-sx-Owm"/>
                         <segue destination="7m5-N1-3SW" kind="show" identifier="CHARACTER_CUSTOM_SEGUE" id="AAs-IL-fq7"/>
@@ -367,7 +364,7 @@
     </scenes>
     <resources>
         <image name="Back" width="225" height="225"/>
-        <image name="Idle_000" width="600" height="600"/>
+        <image name="Blue_Idle_000" width="600" height="600"/>
         <image name="Idle_000_Right" width="600" height="600"/>
         <image name="LevelsBackground" width="4267" height="3200"/>
         <image name="Title_Screen-1" width="871" height="939"/>

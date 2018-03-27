@@ -14,24 +14,16 @@ import SQLite3
 class GameScene: SKScene {
     let rope = SKSpriteNode(imageNamed: "rope")
     let background = SKSpriteNode(imageNamed: "LevelBackground1")
-    let player = SKSpriteNode(imageNamed: "Attack_005")
-    let player2 = SKSpriteNode(imageNamed: "Attack_005")
-    let walk0 = SKTexture(imageNamed: "Walk_000")
-    let walk1 = SKTexture(imageNamed: "Walk_001")
-    let walk2 = SKTexture(imageNamed: "Walk_002")
-    let walk3 = SKTexture(imageNamed: "Walk_003")
-    let walk4 = SKTexture(imageNamed: "Walk_004")
-    let walk5 = SKTexture(imageNamed: "Walk_005")
-    let walk6 = SKTexture(imageNamed: "Walk_006")
-    let walk7 = SKTexture(imageNamed: "Walk_007")
-    let walk8 = SKTexture(imageNamed: "Walk_008")
-    let walk9 = SKTexture(imageNamed: "Walk_009")
-    let pull0 = SKTexture(imageNamed: "Attack_007")
-    let pull1 = SKTexture(imageNamed: "Attack_006")
-    let pull2 = SKTexture(imageNamed: "Attack_005")
-    let pull3 = SKTexture(imageNamed: "Attack_006")
-    let pull4 = SKTexture(imageNamed: "Attack_007")
+    var player = SKSpriteNode(imageNamed: userColor + "_Attack_005")
+    let player2 = SKSpriteNode(imageNamed: userColor + "_Attack_005")
+    let pull0 = SKTexture(imageNamed: userColor + "_Attack_007")
+    let pull1 = SKTexture(imageNamed: userColor + "_Attack_006")
+    let pull2 = SKTexture(imageNamed: userColor + "_Attack_005")
+    var oppPull0 = SKTexture(imageNamed: userColor + "_Attack_007")
+    var oppPull1 = SKTexture(imageNamed: userColor + "_Attack_006")
+    var oppPull2 = SKTexture(imageNamed: userColor + "_Attack_005")
     let scoreboard = SKSpriteNode(imageNamed: "rectangle")
+    var oppColor = "Blue"
     
     var timeToPull = true
     var levelNumber = 0
@@ -84,13 +76,18 @@ class GameScene: SKScene {
         background.zPosition = 0
         addChild(background)
         
+        getLevelData()
+        
+        oppPull0 = SKTexture(imageNamed: oppColor + "_Attack_007")
+        oppPull1 = SKTexture(imageNamed: oppColor + "_Attack_006")
+        oppPull2 = SKTexture(imageNamed: oppColor + "_Attack_005")
+        
         playerOneStartX = size.width * 0.8
         player.size.width = size.width / 3.1
         player.size.height = size.height / 2
         player.position = CGPoint(x: playerOneStartX , y: size.height * 0.33)
         player.zPosition = 2
         addChild(player)
-        
         
         playerTwoStartX = size.width * 0.2
         player2.size.width = size.width / 3.1
@@ -116,8 +113,6 @@ class GameScene: SKScene {
         scoreboard.zPosition = 2
         addChild(scoreboard)
         
-        getLevelData()
-        
         insertCloud(x: size.width * 0.2, y: size.height * 0.65, count: 1)
         insertCloud(x: size.width * 0.5, y: size.height * 0.65, count: 2)
         insertCloud(x: size.width * 0.8 , y: size.height * 0.65 ,count: 3)
@@ -142,25 +137,21 @@ class GameScene: SKScene {
     }
     override func update(_ currentTime: TimeInterval){
         let time = getSecondsSinceStart()
-        
-       
-        
         let dTime = time - previousTime
         //only update words/ clouds until game is over
         if wordCounter < Words.count {
             //Move Players back and forth
             let pulling = [pull2, pull1, pull0, pull1, pull2]
-            print(time.truncatingRemainder(dividingBy: 8.0))
+            let oppPulling = [oppPull2, oppPull1, oppPull0, oppPull1, oppPull2]
             let remainder = time.truncatingRemainder(dividingBy: 8.0)
             let action = SKAction.animate(with: pulling, timePerFrame: 0.15)
+            let oppAction = SKAction.animate(with: oppPulling, timePerFrame: 0.15)
             if  remainder > 2.95 && remainder <  3.05  && timeToPull{
                 player2.run(action, withKey: "pulling")
                 timeToPull = false
-                print("Hit 1")
             }else if remainder > 6.95 && remainder <  7.05 && !timeToPull {
                 timeToPull = true
-                print("Hit 2")
-                player.run(action, withKey: "pulling")
+                player.run(oppAction, withKey: "pulling")
             }
             let sinApprox = CGFloat(sin(Double.pi * time / 4) + 0.33333*sin(3.0 * Double.pi * time / 4.0))
             let deltaX = (size.width * 0.1) * (2 / CGFloat.pi) * sinApprox
@@ -325,23 +316,7 @@ class GameScene: SKScene {
         }
         return
     }
-        
     
-    func walkingRobot(){
-        let walking = [walk0, walk1, walk2, walk3, walk4, walk5, walk6, walk7, walk8, walk9]
-        let walkAnimation = SKAction.animate(with: walking, timePerFrame: 0.1)
-        player.run(SKAction.repeatForever(walkAnimation), withKey:"walkingRobot")
-    }
-    
-    func idleRobot(){
-        player.removeAction(forKey: "walkingRobot")
-    }
-    
-    func pullingRobot(){
-        let pulling = [pull0, pull1, pull2, pull3, pull4]
-        let pullAnimation = SKAction.animate(with: pulling, timePerFrame: 0.15)
-        player.run(pullAnimation)
-    }
     
     
     func insertCloud(x: CGFloat, y: CGFloat, count: Int){
@@ -364,14 +339,11 @@ class GameScene: SKScene {
         text.zPosition = 2
         addChild(text)
         wordsShownArray.append(text)
-        
-        
     }
     
     func getRandomCorrectWords(pattern: String, db: OpaquePointer?) -> [String] {
         var wordArray = [String]()
         let queryString = "select word from Words where pattern = '" + pattern + "' and hasPattern = 1"
-//        print(queryString)
         //statement pointer
         var stmt:OpaquePointer?
         
@@ -385,8 +357,6 @@ class GameScene: SKScene {
         //traversing through all the records
         while(sqlite3_step(stmt) == SQLITE_ROW){
             let word = String(cString: sqlite3_column_text(stmt, 0))
-            //adding values to list
-            
             wordArray.append(word)
         }
         wordArray.shuffle();
@@ -402,8 +372,6 @@ class GameScene: SKScene {
         
         //statement pointer
         var stmt:OpaquePointer?
-        
-//        print(queryString)
         
         //preparing the query
         if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
@@ -471,6 +439,7 @@ class GameScene: SKScene {
             pattern = String(cString: sqlite3_column_text(stmt, 1))
             numWords = Int(sqlite3_column_int(stmt, 2))
             gameSpeed = String(cString: sqlite3_column_text(stmt, 3))
+            oppColor = String(cString: sqlite3_column_text(stmt, 4))
 //            print("Pattern: \(pattern) , Number of Words: \(numWords) , Game Speed: \(gameSpeed)")
         }
         
@@ -484,6 +453,7 @@ class GameScene: SKScene {
             cloudPeriod = 1.0
         }
         
+        player = SKSpriteNode(imageNamed: oppColor + "_Attack_005")
         correctWords = getRandomCorrectWords(pattern: pattern, db: db2)
         Words = getRandomWrongWords(pattern: pattern, db: db2)
         Words.append(contentsOf: correctWords)

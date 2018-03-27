@@ -7,6 +7,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     var numLevels: Int!
     final var CHARACTER_CUSTOM_TAG = 1000
     
+    @IBOutlet weak var charButton: UIButton!
     @IBOutlet weak var LevelCollectionView: UICollectionView!
     
     @IBAction func unwindToLevelMenu(unwindSegue: UIStoryboardSegue)
@@ -27,6 +28,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        charButton.setImage(UIImage(named: userColor + "_Idle_000"), for: .normal)
         self.LevelCollectionView.reloadData()
         if !backgroundMusicPlayer.isPlaying {
             playBackgroundMusic(filename: "music")
@@ -35,6 +37,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        charButton.setImage(UIImage(named: userColor + "_Idle_000"), for: .normal)
         LevelCollectionView.delegate = self
         LevelCollectionView.dataSource = self
        
