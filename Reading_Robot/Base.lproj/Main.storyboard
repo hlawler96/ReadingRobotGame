@@ -64,7 +64,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="32.374100719424462" y="31.654676258992808"/>
+            <point key="canvasLocation" x="717" y="-1763"/>
         </scene>
         <!--Account View Controller-->
         <scene sceneID="ceE-5z-BLZ">
@@ -144,7 +144,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dLN-h6-PGV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="X32-sL-gdi" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="959.89208633093529" y="130.93525179856115"/>
+            <point key="canvasLocation" x="46" y="473"/>
         </scene>
         <!--Progress View Controller-->
         <scene sceneID="9WL-xZ-VXf">
@@ -182,7 +182,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lv1-Cn-wah" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="xgD-6X-1XN" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="968.52517985611519" y="887.05035971223026"/>
+            <point key="canvasLocation" x="46" y="-750"/>
         </scene>
         <!--Level View Controller-->
         <scene sceneID="sQj-DK-F0T">
@@ -333,7 +333,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fyg-1e-ODo" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="rHw-tu-PAZ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2038" y="-749"/>
+            <point key="canvasLocation" x="1032" y="473"/>
         </scene>
         <!--Tapping Game View Controller-->
         <scene sceneID="dqP-7e-lqV">
@@ -359,7 +359,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iQM-oe-PLM" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Wwy-fq-qO6" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1877" y="-1572"/>
+            <point key="canvasLocation" x="2140" y="473"/>
         </scene>
     </scenes>
     <resources>
