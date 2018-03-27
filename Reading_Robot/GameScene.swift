@@ -326,7 +326,7 @@ class GameScene: SKScene {
     func getRandomCorrectWords(pattern: String, db: OpaquePointer?) -> [String] {
         var wordArray = [String]()
         let queryString = "select word from Words where pattern = '" + pattern + "' and hasPattern = 1"
-        
+//        print(queryString)
         //statement pointer
         var stmt:OpaquePointer?
         
@@ -358,7 +358,7 @@ class GameScene: SKScene {
         //statement pointer
         var stmt:OpaquePointer?
         
-        print(queryString)
+//        print(queryString)
         
         //preparing the query
         if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
@@ -371,7 +371,7 @@ class GameScene: SKScene {
         while(sqlite3_step(stmt) == SQLITE_ROW){
             let word = String(cString: sqlite3_column_text(stmt, 0))
             //adding values to list
-            print(word)
+//            print(word)
             wordArray.append(word)
         }
         wordArray.shuffle();
@@ -426,7 +426,7 @@ class GameScene: SKScene {
             pattern = String(cString: sqlite3_column_text(stmt, 1))
             numWords = Int(sqlite3_column_int(stmt, 2))
             gameSpeed = String(cString: sqlite3_column_text(stmt, 3))
-            print("Pattern: \(pattern) , Number of Words: \(numWords) , Game Speed: \(gameSpeed)")
+//            print("Pattern: \(pattern) , Number of Words: \(numWords) , Game Speed: \(gameSpeed)")
         }
         
         if(gameSpeed == "slow"){

@@ -6,7 +6,6 @@ import SQLite3
 class LevelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     var numLevels: Int!
     
-    
     @IBOutlet weak var LevelCollectionView: UICollectionView!
     
     @IBAction func unwindToLevelMenu(unwindSegue: UIStoryboardSegue)
@@ -14,6 +13,16 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         
     }
     
+    @IBAction func buttonClick(_ sender: UIButton) {
+        if sender.tag != numLevels + 1 {
+            performSegue(withIdentifier: "TOW_SEGUE", sender: sender)
+            
+        }else{
+            performSegue(withIdentifier: "TAPPING_SEGUE", sender: sender)
+        }
+        
+        
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.LevelCollectionView.reloadData()
@@ -33,7 +42,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if(segue.identifier == "Game_Segue"){
+        if(segue.identifier == "TOW_SEGUE"){
             let tow = segue.destination as! GameViewController
             tow.levelNumber = (sender as! UIButton).tag
         }
@@ -59,16 +68,22 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
             break;
         }
         sqlite3_finalize(stmt)
-        return numLevels
+        return numLevels + 1
     }
+    
+
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LevelCell", for: indexPath) as! CollectionViewCell
-        cell.LevelButton.tag = indexPath.row + 1
-        cell.LevelLabel.text = String(indexPath.row + 1)
+        cell.LevelButton.tag = indexPath.item + 1
         
-        
+        if (indexPath.item) == (numLevels!){
+            cell.LevelLabel.text = "test"
+            cell.LevelLabel.backgroundColor = UIColor.yellow
+        }else{
+        cell.LevelLabel.text = String(indexPath.item + 1)
+        cell.LevelLabel.backgroundColor = UIColor.blue
         let queryString = "SELECT max(U.stars) from UserData U where U.lvl = \(cell.LevelButton.tag)"
         var stmt:OpaquePointer?
         var numStars = 0
@@ -96,6 +111,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
             numStars = 0
         }
         sqlite3_finalize(stmt)
+        }
         return cell
     }
     
