@@ -25,6 +25,7 @@ class TitleViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // open db variables for project and local databases
         openLocalDB()
         openProjectDB()
         
@@ -41,7 +42,6 @@ class TitleViewController: UIViewController {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
-        //Not working right
         
         
         let queryString = "select color from CharacterData WHERE user = 1"
