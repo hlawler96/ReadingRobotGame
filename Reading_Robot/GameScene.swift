@@ -275,37 +275,49 @@ class GameScene: SKScene {
                 popup.zPosition = 4
                 addChild(popup)
                 
-                let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                let text1 = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                let text2 = SKLabelNode(fontNamed: "MarkerFelt-Thin")
                 
                 if stars == 1 {
-                    text.text = "You got 1 star!\nTap the bucket to soak your opponent in mud!"
+                    text1.text = "You got 1 star!"
+                    text2.text = "Tap the bucket to soak your opponent in mud!"
                 }
                 else if stars > 0 {
-                    text.text = "You got \(stars) stars!\nTap the bucket to soak your opponent in mud!"
+                    text1.text = "You got \(stars) stars!"
+                    text2.text = "Tap the bucket to soak your opponent in mud!"
                 }
                 else {
-                    text.text = "You got 0 stars. Try again!"
+                    text1.text = "You got 0 stars. Try again!"
+                    text2.text = ""
                 }
                 
-                text.fontSize = 32
-                text.fontColor = SKColor.black
-                text.position = CGPoint(x: 0, y: 0)
-                text.zPosition = 5
-                popup.addChild(text)
+                text1.fontSize = 32
+                text1.fontColor = SKColor.black
+                text1.position = CGPoint(x: 0, y: 0)
+                text1.zPosition = 5
+                popup.addChild(text1)
+                text2.fontSize = 32
+                text2.fontColor = SKColor.black
+                text2.position = CGPoint(x: 0, y: -50)
+                text2.zPosition = 5
+                popup.addChild(text2)
+                
                 
                 
                 //button to remove results prompt and clouds to make room for the bucket game
                 ok_button.size.width = size.width/6.3
                 ok_button.size.height = size.height/8.3
-                ok_button.position = CGPoint(x: size.width/2, y: size.height/6)
+                ok_button.position = CGPoint(x: size.width/2, y: size.height/6 + 30)
                 ok_button.zPosition = 6
-                ok_button.color = SKColor.blue
+                ok_button.colorBlendFactor = 1.0
+                ok_button.color = UIColor(red: 0, green: 0.6784, blue: 0.949, alpha: 1.0) /* #00adf2 */
                 addChild(ok_button)
+                //"OK" text on the button
                 let ok_text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
                 ok_text.text = "OK"
                 ok_text.fontSize = 32
                 ok_text.fontColor = SKColor.black
-                ok_text.position = CGPoint(x: 0, y: 0)
+                ok_text.position = CGPoint(x: 0, y: -15)
                 ok_text.zPosition = 7
                 ok_button.addChild(ok_text)
                 
@@ -316,11 +328,11 @@ class GameScene: SKScene {
                 var bucketPosX : CGFloat!
                 
                 if(stars == 0){
-                    bucketPosX = size.width * 0.3
+                    bucketPosX = size.width * 0.4
                     bucket_direction = 2 //bucket goes left, onto user's robot
                 }
                 else{
-                    bucketPosX = size.width * 0.7
+                    bucketPosX = size.width * 0.45
                     bucket_direction = 1 //bucket goes right, onto cpu's robot
                 }
                 bucket.size.width = size.width / 5
