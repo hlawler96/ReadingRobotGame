@@ -6,6 +6,7 @@ import SQLite3
 class LevelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     var numLevels: Int!
     final var CHARACTER_CUSTOM_TAG = 1000
+    var userColor = "Yellow"
     
     @IBOutlet weak var charButton: UIButton!
     @IBOutlet weak var LevelCollectionView: UICollectionView!
