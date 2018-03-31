@@ -16,6 +16,9 @@ class GameScene: SKScene {
     let background = SKSpriteNode(imageNamed: "LevelBackground1")
     var player = SKSpriteNode(imageNamed: userColor + "_Attack_005")
     let player2 = SKSpriteNode(imageNamed: userColor + "_Attack_005")
+    let bucket = SKSpriteNode(imageNamed: "bucket")
+    let ok_button = SKSpriteNode(imageNamed: "rounded-square")
+    let popup = SKSpriteNode(imageNamed: "rounded-square")
     let pull0 = SKTexture(imageNamed: userColor + "_Attack_007")
     let pull1 = SKTexture(imageNamed: userColor + "_Attack_006")
     let pull2 = SKTexture(imageNamed: userColor + "_Attack_005")
@@ -66,7 +69,13 @@ class GameScene: SKScene {
     var numWords : Int!
     var gameSpeed : String!
     
+    var bucket_direction : Int!
+    var bucket_taps = 0
+    
     override func didMove(to view: SKView) {
+        
+        bucket_direction = 0
+        bucket_taps = 0
         
         pauseBackgroundMusic()
         
@@ -251,10 +260,14 @@ class GameScene: SKScene {
                 }
                 gameOver = true
                 
+                
+                
                 // convert scores to stars, display an end-game screen or toast
                 let stars = getStars()
                 
-                let popup = SKSpriteNode(imageNamed: "rounded-square")
+                
+                
+                //endgame message, showing number of stars earned
                 popup.position = CGPoint(x: 50, y: 50)
                 popup.size.width = size.width/1.3
                 popup.size.height = size.height/1.3
@@ -263,12 +276,64 @@ class GameScene: SKScene {
                 addChild(popup)
                 
                 let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
-                text.text = "End-Game Message Placeholder, you got \(stars) stars!"
+                
+                if stars == 1 {
+                    text.text = "You got 1 star!\nTap the bucket to soak your opponent in mud!"
+                }
+                else if stars > 0 {
+                    text.text = "You got \(stars) stars!\nTap the bucket to soak your opponent in mud!"
+                }
+                else {
+                    text.text = "You got 0 stars. Try again!"
+                }
+                
                 text.fontSize = 32
                 text.fontColor = SKColor.black
-                text.position = CGPoint(x: 500, y: 350)
+                text.position = CGPoint(x: 0, y: 0)
                 text.zPosition = 5
-                addChild(text)
+                popup.addChild(text)
+                
+                
+                //button to remove results prompt and clouds to make room for the bucket game
+                ok_button.size.width = size.width/6.3
+                ok_button.size.height = size.height/8.3
+                ok_button.position = CGPoint(x: size.width/2, y: size.height/6)
+                ok_button.zPosition = 6
+                ok_button.color = SKColor.blue
+                addChild(ok_button)
+                let ok_text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                ok_text.text = "OK"
+                ok_text.fontSize = 32
+                ok_text.fontColor = SKColor.black
+                ok_text.position = CGPoint(x: 0, y: 0)
+                ok_text.zPosition = 7
+                ok_button.addChild(ok_text)
+                
+                
+                
+                
+                // positioning bucket based on result. loss = over user, win = over cpu
+                var bucketPosX : CGFloat!
+                
+                if(stars == 0){
+                    bucketPosX = size.width * 0.3
+                    bucket_direction = 2 //bucket goes left, onto user's robot
+                }
+                else{
+                    bucketPosX = size.width * 0.7
+                    bucket_direction = 1 //bucket goes right, onto cpu's robot
+                }
+                bucket.size.width = size.width / 5
+                bucket.size.height = size.height / 4
+                bucket.position = CGPoint(x: bucketPosX , y: size.height * 0.6)
+                bucket.zPosition = 2
+                addChild(bucket)
+                
+                
+            }
+            else{
+                //end-game mudbath game starts
+                bucket.zPosition = 2
             }
            
             
@@ -315,6 +380,50 @@ class GameScene: SKScene {
                     }
                 }
 
+            }
+        }
+        else{
+            if let touch = touches.first {
+                let currentPoint = touch.location(in: self)
+                let touchedNodes = self.nodes(at: currentPoint)
+                for node in touchedNodes {
+                    // check and see if node touched was ok_button
+                    if node == ok_button{ // if it is, we clear the screen of end-game message and clouds
+                        
+                        popup.removeAllActions()
+                        popup.removeAllChildren()
+                        popup.removeFromParent()
+                        
+                        for i in 0...2{
+                            cloudArray[i].removeAllActions()
+                            cloudArray[i].removeAllChildren()
+                            cloudArray[i].removeFromParent()
+                        }
+                        
+                        for word in wordsShownArray {
+                            word.removeAllActions()
+                            word.removeFromParent()
+                        }
+                        
+                        ok_button.removeAllActions()
+                        ok_button.removeAllChildren()
+                        ok_button.removeFromParent()
+                    }
+                    if node == bucket {
+                        bucket_taps += 1
+                        if bucket_taps > 75 {
+                            return
+                            // spill the mud (TODO)
+                        }
+                        
+                        if bucket_direction == 1 { // rotating right, onto cpu
+                            bucket.zRotation = -(CGFloat((Double.pi / 4) / 45) * (CGFloat(bucket_taps)))
+                        }
+                        else if bucket_direction == 2 { //rotating left, onto user
+                            bucket.zRotation = (CGFloat((Double.pi / 4) / 45) * (CGFloat(bucket_taps)))
+                        }
+                    }
+                }
             }
         }
         return

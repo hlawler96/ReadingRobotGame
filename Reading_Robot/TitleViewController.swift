@@ -56,6 +56,7 @@ class TitleViewController: UIViewController {
                 let errmsg = String(cString: sqlite3_errmsg(db)!)
                 print("error inserting into table: \(errmsg)")
             }
+            userColor = "Blue"
         }else{
             userColor = String(cString: sqlite3_column_text(stmt, 0))
         }
