@@ -285,95 +285,96 @@ class GameScene: SKScene {
                         player.run(SKAction.moveTo(x: size.width * 0.65, duration: Double(distance/speed)))
                         player2.run(SKAction.moveTo(x: size.width * 0.05, duration: Double(distance/speed)))
                         rope.run(SKAction.moveTo(x: size.width * 0.35, duration: Double(distance/speed)))
-                    }else{
-                        let distance = abs(player.position.x - size.width * 0.95)
-                        player.run(SKAction.moveTo(x: size.width * 0.95, duration: Double(distance/speed)))
-                        player2.run(SKAction.moveTo(x: size.width * 0.35, duration: Double(distance/speed)))
-                        rope.run(SKAction.moveTo(x: size.width * 0.65, duration: Double(distance/speed)))
-                    }
-                    
-                    //executing the query to insert values
-                    
-                    if sqlite3_exec(db, insert_query, nil, nil, nil) != SQLITE_OK {
-                        let errmsg = String(cString: sqlite3_errmsg(db)!)
-                        print("failure inserting User Data: \(errmsg)")
-                    
-                    }
-                    gameOver = true
-                    
-                    
-                    
-                    // convert scores to stars, display an end-game screen or toast
-                    let stars = getStars()
-                    
-                    
-                    
-                    //endgame message, showing number of stars earned
-                    popup.position = CGPoint(x: 50, y: 50)
-                    popup.size.width = size.width/1.5
-                    popup.size.height = size.height/1.5
-                    popup.color = UIColor.red
-                    popup.position = CGPoint(x: size.width/2, y: size.height/2)
-                    popup.zPosition = 4
-                    addChild(popup)
-                    
-                    //set popup text based on the outcome of the game. 
-                    let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
-                    if stars == 1 {
-                        text.text = "You got 1 star!\nTap the bucket to soak your opponent in mud!"
-                    }
-                    else if stars > 0 {
-                        text.text = "You got \(stars) stars!\nTap the bucket to soak your opponent in mud!"
-                    }
-                    else {
-                        text.text = "You got 0 stars. Try again!"
-                    }
-                    
-                    text.fontSize = 32
-                    text.fontColor = SKColor.black
-                    text.position = CGPoint(x: 0, y: 0)
-                    text.zPosition = 5
-                    popup.addChild(text)
-                    
-                    
-                    //button to remove results prompt and clouds to make room for the bucket game
-                    ok_button.size.width = size.width/6.3
-                    ok_button.size.height = size.height/8.3
-                    ok_button.position = CGPoint(x: size.width/2, y: size.height/6)
-                    ok_button.zPosition = 6
-                    ok_button.color = UIColor.green
-                    addChild(ok_button)
-                    
-                    
-                    let ok_text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
-                    ok_text.text = "OK"
-                    ok_text.fontSize = 32
-                    ok_text.fontColor = SKColor.black
-                    ok_text.position = CGPoint(x: 0, y: 0)
-                    ok_text.zPosition = 5
-                    ok_button.addChild(ok_text)
-                    
-                    
-                    
-                    
-                    // positioning bucket based on result. loss = over user, win = over cpu
-                    var bucketPosX : CGFloat!
-                    
-                    if(stars == 0){
-                        bucketPosX = size.width * 0.3
-                        bucket_direction = 2 //bucket goes left, onto user's robot
-                    }
-                    else{
-                        bucketPosX = size.width * 0.7
-                        bucket_direction = 1 //bucket goes right, onto cpu's robot
-                    }
-                    bucket.size.width = size.width / 5
-                    bucket.size.height = size.height / 4
-                    bucket.position = CGPoint(x: bucketPosX , y: size.height * 0.6)
-                    bucket.zPosition = 2
-                    addChild(bucket)
-                    
-                    
+                }else{
+                    let distance = abs(player.position.x - size.width * 0.95)
+                    player.run(SKAction.moveTo(x: size.width * 0.95, duration: Double(distance/speed)))
+                    player2.run(SKAction.moveTo(x: size.width * 0.35, duration: Double(distance/speed)))
+                    rope.run(SKAction.moveTo(x: size.width * 0.65, duration: Double(distance/speed)))
+                }
+                
+                //executing the query to insert values
+                
+                if sqlite3_exec(db, insert_query, nil, nil, nil) != SQLITE_OK {
+                    let errmsg = String(cString: sqlite3_errmsg(db)!)
+                    print("failure inserting User Data: \(errmsg)")
+                
+                }
+                gameOver = true
+                
+                
+                
+                // convert scores to stars, display an end-game screen or toast
+                let stars = getStars()
+                
+                
+                
+                //endgame message, showing number of stars earned
+                popup.position = CGPoint(x: 50, y: 50)
+                popup.size.width = size.width/1.3
+                popup.size.height = size.height/1.3
+                popup.position = CGPoint(x: size.width/2, y: size.height/2)
+                popup.zPosition = 4
+                addChild(popup)
+                
+                let text1 = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                let text2 = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                
+                if stars == 1 {
+                    text1.text = "You got 1 star!"
+                    text2.text = "Tap the bucket to soak your opponent in mud!"
+                }
+                else if stars > 0 {
+                    text1.text = "You got \(stars) stars!"
+                    text2.text = "Tap the bucket to soak your opponent in mud!"
+                }
+                else {
+                    text1.text = "You got 0 stars. Try again!"
+                    text2.text = ""
+                }
+                
+                text1.fontSize = 32
+                text1.fontColor = SKColor.black
+                text1.position = CGPoint(x: 0, y: 0)
+                text1.zPosition = 5
+                popup.addChild(text1)
+                text2.fontSize = 32
+                text2.fontColor = SKColor.black
+                text2.position = CGPoint(x: 0, y: -50)
+                text2.zPosition = 5
+                popup.addChild(text2)
+                
+                
+                
+                //button to remove results prompt and clouds to make room for the bucket game
+                ok_button.size.width = size.width/6.3
+                ok_button.size.height = size.height/8.3
+                ok_button.position = CGPoint(x: size.width/2, y: size.height/6 + 30)
+                ok_button.zPosition = 6
+                ok_button.colorBlendFactor = 1.0
+                ok_button.color = UIColor(red: 0, green: 0.6784, blue: 0.949, alpha: 1.0) /* #00adf2 */
+                addChild(ok_button)
+                //"OK" text on the button
+                let ok_text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                ok_text.text = "OK"
+                ok_text.fontSize = 32
+                ok_text.fontColor = SKColor.black
+                ok_text.position = CGPoint(x: 0, y: -15)
+                ok_text.zPosition = 7
+                ok_button.addChild(ok_text)
+                
+                
+                
+                
+                // positioning bucket based on result. loss = over user, win = over cpu
+                var bucketPosX : CGFloat!
+                
+                if(stars == 0){
+                    bucketPosX = size.width * 0.4
+                    bucket_direction = 2 //bucket goes left, onto user's robot
+                }
+                else{
+                    bucketPosX = size.width * 0.45
+                    bucket_direction = 1 //bucket goes right, onto cpu's robot
                 }
                 else{
                     //end-game mudbath game starts
