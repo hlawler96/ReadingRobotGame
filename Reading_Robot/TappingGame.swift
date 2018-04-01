@@ -7,8 +7,9 @@
 //
 
 import SpriteKit
-
+//playground level used for testing, currently not planning on using this for prod
 class TappingGame: SKScene {
+
     
     let player = SKSpriteNode(imageNamed: "Blue_Attack_005")
     let player2 = SKSpriteNode(imageNamed: "Red_Attack_005")
@@ -80,18 +81,6 @@ class TappingGame: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         let time = getSecondsSinceStart()
-//        let pulling = [pull2, pull1, pull0, pull1, pull2]
-//        let oppPulling = [oppPull2, oppPull1, oppPull0, oppPull1, oppPull2]
-//        let remainder = time.truncatingRemainder(dividingBy: 8.0)
-//        let action = SKAction.animate(with: pulling, timePerFrame: 0.15)
-//        let oppAction = SKAction.animate(with: oppPulling, timePerFrame: 0.15)
-//        if  remainder > 2.95 && remainder <  3.05  && timeToPull{
-//            player.run(action, withKey: "pulling")
-//            timeToPull = false
-//        }else if remainder > 6.95 && remainder <  7.05 && !timeToPull {
-//            timeToPull = true
-//            player2.run(oppAction, withKey: "pulling")
-//        }
         let sinApprox = CGFloat(sin(Double.pi * time / 4) + 0.33333*sin(3.0 * Double.pi * time / 4.0))
         let deltaX = (size.width * 0.1) * (2 / CGFloat.pi) * sinApprox
         player.position = CGPoint(x: playerOneStartX + deltaX, y: size.height*0.33)

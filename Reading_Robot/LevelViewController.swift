@@ -16,6 +16,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     @IBAction func buttonClick(_ sender: UIButton) {
+        // uses tag of button to perform proper segue
         if sender.tag == numLevels + 1 {
              performSegue(withIdentifier: "TAPPING_SEGUE", sender: sender)
         }else if sender.tag == CHARACTER_CUSTOM_TAG {
@@ -25,7 +26,8 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
         
     }
-    
+    // on load sets the proper robot in top right and makes sure the music is still playing,
+    // also fixes the level cells if user just finished a level and now has more stars
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         charButton.setImage(UIImage(named: userColor + "_Idle_000"), for: .normal)
@@ -35,6 +37,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
     
+    //sets correct robot picture in top right corner and sets self as datasource/delegate for the level cells
     override func viewDidLoad() {
         super.viewDidLoad()
         charButton.setImage(UIImage(named: userColor + "_Idle_000"), for: .normal)
@@ -46,6 +49,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         return true;
     }
     
+    // if going to tug of war game it sets the corresponding class variable to the level number that was clicked
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "TOW_SEGUE"){
             let tow = segue.destination as! GameViewController
@@ -61,7 +65,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
-        
+        //sets the number of cells to the number of levels in the database + 1 for a playground level
         let queryString = "SELECT COUNT(L.number) from LevelData L"
         var stmt:OpaquePointer?
         if sqlite3_prepare(db2, queryString, -1, &stmt, nil) != SQLITE_OK{
@@ -80,6 +84,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
+        //for each cell gives the corresponding level number, the highest number of stars earned on that level and sets the right tag which is used for segues
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LevelCell", for: indexPath) as! CollectionViewCell
         cell.LevelButton.tag = indexPath.item + 1
         
