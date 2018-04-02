@@ -65,12 +65,11 @@ class TitleViewController: UIViewController {
         sqlite3_finalize(stmt)
         if(music == 1)
         {
-        playBackgroundMusic(filename: "music")
-<<<<<<< HEAD
+            playBackgroundMusic(filename: "music")
         }
-=======
+
         oppColor = "Blue"
->>>>>>> 1168a6f4c4f422c6d9d647cf35599a4321875b0d
+
     }
 
 

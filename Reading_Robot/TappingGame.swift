@@ -27,7 +27,7 @@ class TappingGame: SKScene {
     var bucket_taps = 0.0
     
     override func didMove(to view: SKView) {
-        backgroundMusicPlayer.stop()
+        //backgroundMusicPlayer.stop()
         
         player.size.width = size.width / 5
         player.size.height = size.height / 3.2
