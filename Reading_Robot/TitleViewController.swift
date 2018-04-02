@@ -59,6 +59,7 @@ class TitleViewController: UIViewController {
         }
         sqlite3_finalize(stmt)
         playBackgroundMusic(filename: "music")
+        oppColor = "Blue"
     }
     
 

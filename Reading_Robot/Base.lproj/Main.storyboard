@@ -321,7 +321,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <state key="normal" backgroundImage="Back"/>
                                 <connections>
-                                    <segue destination="rHw-tu-PAZ" kind="unwind" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="6Zz-jT-gtb"/>
+                                    <segue destination="rHw-tu-PAZ" kind="unwind" identifier="UNWIND_TO_LEVEL_MENU" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="6Zz-jT-gtb"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -329,6 +329,9 @@
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="XR6-tf-XBO"/>
                     </view>
+                    <connections>
+                        <segue destination="hW7-wa-qBw" kind="show" identifier="TAPPING_GAME" id="wEG-A6-ncr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fyg-1e-ODo" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="rHw-tu-PAZ" userLabel="Exit" sceneMemberID="exit"/>
@@ -370,4 +373,7 @@
         <image name="Title_Screen-1" width="871" height="939"/>
         <image name="play" width="301" height="88"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="wEG-A6-ncr"/>
+    </inferredMetricsTieBreakers>
 </document>

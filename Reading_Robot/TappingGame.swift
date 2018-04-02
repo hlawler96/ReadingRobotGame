@@ -10,7 +10,7 @@ import SpriteKit
 //playground level used for testing, currently not planning on using this for prod
 class TappingGame: SKScene {
     
-    let player = SKSpriteNode(imageNamed:"Blue_Idle_000")
+    let player = SKSpriteNode(imageNamed:oppColor + "_Idle_000")
     let bucket = SKSpriteNode(imageNamed: "bucket")
     let background = SKSpriteNode(imageNamed: "LevelBackground1")
     let rectangle = SKSpriteNode(imageNamed: "rectangle")
@@ -33,7 +33,6 @@ class TappingGame: SKScene {
         player.size.height = size.height / 3.2
         player.position = CGPoint(x: size.width/2, y: size.height * 0.26)
         player.zPosition = 1
-        player.xScale = player.xScale * -1;
         addChild(player)
         
         bucket.size.width = size.width / 4
