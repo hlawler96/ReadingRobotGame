@@ -123,7 +123,7 @@ class GameScene: SKScene {
         bottom.position = CGPoint(x: frame.size.width/2, y:frame.size.height*0.08)
         bottom.size.height = frame.size.height * 0.16
         bottom.size.width  = frame.size.width
-        print("Height \(bottom.size.height) , Width \(bottom.size.width)")
+//        print("Height \(bottom.size.height) , Width \(bottom.size.width)")
         bottom.zPosition = 3
         addChild(bottom)
         
@@ -173,6 +173,7 @@ class GameScene: SKScene {
         }
 
     }
+    
     override func update(_ currentTime: TimeInterval){
         //get time since the start of the game
         //t is used to determine the start of the game then time is used throughout the rest of the update code
@@ -301,12 +302,8 @@ class GameScene: SKScene {
                 }
                 gameOver = true
                 
-                
-                
                 // convert scores to stars, display an end-game screen or toast
                 let stars = getStars()
-                
-                
                 
                 //endgame message, showing number of stars earned
                 popup.position = CGPoint(x: 50, y: 50)
@@ -343,8 +340,6 @@ class GameScene: SKScene {
                 text2.zPosition = 5
                 popup.addChild(text2)
                 
-                
-                
                 //button to remove results prompt and clouds to make room for the bucket game
                 ok_button.size.width = size.width/6.3
                 ok_button.size.height = size.height/8.3
@@ -362,27 +357,30 @@ class GameScene: SKScene {
                 ok_text.zPosition = 7
                 ok_button.addChild(ok_text)
                 
-                
-                
-                
                 // positioning bucket based on result. loss = over user, win = over cpu
                 var bucketPosX : CGFloat!
                 
                 if(stars == 0){
                     bucketPosX = size.width * 0.4
-                    bucket_direction = 2 //bucket goes left, onto user's robot
-                }
-                else{
+                    bucket_direction = 2 //bucket goes left, onto user's robotˆ
+                }else{
                     bucketPosX = size.width * 0.45
                     bucket_direction = 1 //bucket goes right, onto cpu's robot
                 }
-                else{
+                    bucket.size.width = size.width / 5
+                    bucket.size.height = size.height / 4
+                    bucket.position = CGPoint(x: bucketPosX , y: size.height * 0.6)
+                    bucket.zPosition = 2
+                    addChild(bucket)
+               
+                }else{
                     //end-game mudbath game starts
                     bucket.zPosition = 2
                 }
             }
         }
     }
+    
 
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -422,7 +420,6 @@ class GameScene: SKScene {
                         }
                     }
                 }
-
             }
         }
         else{

@@ -13,13 +13,10 @@ import GameplayKit
 import SQLite3
 import AVKit
 
-var db: OpaquePointer?
-var db2: OpaquePointer?
-var userColor: String!
+var db, db2: OpaquePointer?
+var userColor, oppColor: String!
 
 class TitleViewController: UIViewController {
-    
-   
     
     @IBAction func unwindToMainMenu(unwindSegue: UIStoryboardSegue){}
     

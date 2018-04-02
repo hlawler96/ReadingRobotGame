@@ -9,91 +9,96 @@
 import SpriteKit
 //playground level used for testing, currently not planning on using this for prod
 class TappingGame: SKScene {
-
     
-    let player = SKSpriteNode(imageNamed: "Blue_Attack_005")
-    let player2 = SKSpriteNode(imageNamed: "Red_Attack_005")
-    let rope = SKSpriteNode(imageNamed: "rope")
-    let bottom = SKSpriteNode(imageNamed: "rectangle")
+    let player = SKSpriteNode(imageNamed:"Blue_Idle_000")
+    let bucket = SKSpriteNode(imageNamed: "bucket")
+    let background = SKSpriteNode(imageNamed: "LevelBackground1")
+    let upperBackground = SKSpriteNode(imageNamed: "LevelBackground1")
+    let cropNode = SKCropNode()
+    let mud = SKSpriteNode(imageNamed: "mud")
+    var mudStartY : CGFloat!
+    var numOfFrames : CGFloat!
+    var midMudPos : CGFloat!
     
-    let pull0 = SKTexture(imageNamed: "Blue_Attack_007")
-    let pull1 = SKTexture(imageNamed: "Blue_Attack_006")
-    let pull2 = SKTexture(imageNamed: "Blue_Attack_005")
-    var oppPull0 = SKTexture(imageNamed: "Red_Attack_007")
-    var oppPull1 = SKTexture(imageNamed: "Red_Attack_006")
-    var oppPull2 = SKTexture(imageNamed: "Red_Attack_005")
-    
-    var startSecond, startMinute, startHour, startNS : Int!
-    let calendar = Calendar.current
-    let date = Date()
-    var timeToPull = true
-    var playerOneStartX, playerTwoStartX: CGFloat!
-    
-    
+    var spillingMud = false
+    var bucket_taps = 0
     
     override func didMove(to view: SKView) {
         backgroundMusicPlayer.stop()
         
-        playerOneStartX = size.width * 0.2
-        playerTwoStartX = size.width * 0.8
-        
-        player2.size.width = size.width / 2.5
-        player2.size.height = size.height / 1.6
-        player2.position = CGPoint(x: playerTwoStartX , y: size.height * 0.33)
-        player2.zPosition = 2
-        addChild(player2)
-        
-        player.size.width = size.width / 2.5
-        player.size.height = size.height / 1.6
-        player.position = CGPoint(x: playerOneStartX , y: size.height * 0.33)
-        player.zPosition = 2
+        player.size.width = size.width / 5
+        player.size.height = size.height / 3.2
+        player.position = CGPoint(x: size.width/2, y: size.height * 0.28)
+        player.zPosition = 1
         player.xScale = player.xScale * -1;
         addChild(player)
         
-        rope.position = CGPoint(x: frame.size.width / 2, y: frame.size.height * 0.35  - player.size.height/4 )
-        rope.size.width = size.width * 0.46
-        rope.size.height = player.size.height / 10
-        rope.zPosition = 1
-        addChild(rope)
+        bucket.size.width = size.width / 4
+        bucket.size.height = size.height / 3.2
+        bucket.position = CGPoint(x: size.width/2 , y: size.height * 0.7)
+        bucket.zPosition = 2
+        addChild(bucket)
         
-        startHour = calendar.component(.hour, from: date)
-        startSecond = calendar.component(.second, from: date)
-        startMinute = calendar.component(.minute, from: date)
-        startNS = calendar.component(.nanosecond, from: date)
+        // add background to view
+        background.size.width = size.width
+        background.size.height = size.height
+        background.position = CGPoint(x: size.width/2, y: size.height/2)
+        background.zPosition = 0
+        addChild(background)
         
-        bottom.position = CGPoint(x: frame.size.width/2, y:frame.size.height*0.08)
-        bottom.size.height = frame.size.height * 0.16
-        bottom.size.width  = frame.size.width
-        bottom.zPosition = 3
-        bottom.yScale = bottom.yScale * -1
-        addChild(bottom)
+        upperBackground.size.width = size.width
+        background.size.height = size.height
         
-        let label = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
-        label.text = "Your Pattern is: CK"
-        label.position = CGPoint(x: frame.size.width/2, y: frame.size.height*0.04)
-        label.fontSize = 100
-        label.zPosition = 4
-        label.fontColor = UIColor.white
-        addChild(label)
+        mud.size.width = player.size.width
+        mud.size.height = frame.size.height*1.3
+        mudStartY = bucket.position.y - bucket.size.height/2 + mud.size.height/2
         
+        mud.position = CGPoint(x: bucket.position.x+15  , y: mudStartY)
+        mud.zPosition = 3
+        print(player.size.width * 1.3)
+        let rect = CGRect(x: bucket.position.x - bucket.size.width/2, y: bucket.position.y - bucket.size.height/2.5 - frame.size.height, width: player.size.width*1.2, height: frame.size.height)
+        let shapeNode = SKShapeNode(rect: rect)
+        shapeNode.fillColor = UIColor.white
+        cropNode.maskNode = shapeNode
+        cropNode.addChild(mud)
+        cropNode.zPosition = -1
+        addChild(cropNode)
+        
+        numOfFrames = mud.size.height / 5
+    }
+    
+    override func update(_ currentTime: TimeInterval){
+        if(spillingMud){
+            cropNode.zPosition = 3
+            mud.position.y = mud.position.y - 15
+            if (mudStartY - mud.position.y) / 5 < numOfFrames/2 + 1 && (mudStartY - mud.position.y) / 5 > numOfFrames/2 - 1 {
+                midMudPos = mud.position.y
+            }
+            if mud.position.y < mudStartY - mud.size.height + 25 {
+                mud.position.y = midMudPos
+            }
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first {
+            let currentPoint = touch.location(in: self)
+            let touchedNodes = self.nodes(at: currentPoint)
+            for node in touchedNodes {
+                if node == bucket {
+                    bucket_taps += 1
+                    if bucket_taps > 3 {
+                        spillingMud = true
+                        bucket_taps = 100
+                        bucket.zRotation = -(CGFloat((Double.pi / 4) / 25) * (CGFloat(bucket_taps)))
+                        return
+                        // spill the mud (TODO)
+                    }
+                    bucket.zRotation = -(CGFloat((Double.pi / 4) / 25) * (CGFloat(bucket_taps)))
+                   
+                }
+            }
+        }
+    }
 
-    }
-    
-    override func update(_ currentTime: TimeInterval) {
-        let time = getSecondsSinceStart()
-        let sinApprox = CGFloat(sin(Double.pi * time / 4) + 0.33333*sin(3.0 * Double.pi * time / 4.0))
-        let deltaX = (size.width * 0.1) * (2 / CGFloat.pi) * sinApprox
-        player.position = CGPoint(x: playerOneStartX + deltaX, y: size.height*0.33)
-        player2.position = CGPoint(x: playerTwoStartX + deltaX, y: size.height*0.33)
-        rope.position = CGPoint(x: size.width/2 + deltaX, y: frame.size.height * 0.35 - player.size.height/4 )
-    }
-    
-    func getSecondsSinceStart() -> Double {
-        let currentDate = Date()
-        let dSec = Double(calendar.component(.second, from: currentDate) -  startSecond)
-        let dMinute = Double((calendar.component(.minute, from: currentDate) - startMinute) * 60)
-        let dHour = Double((calendar.component(.hour, from: currentDate) - startHour) * 3600)
-        let dNS = Double(calendar.component(.nanosecond, from: currentDate) - startNS) * 0.000000001
-        return dSec + dMinute + dHour + dNS
-    }
 }
