@@ -458,7 +458,7 @@ class GameScene: SKScene {
         
         //traversing through all the records
         while(sqlite3_step(stmt) == SQLITE_ROW){
-            let word = String(cString: sqlite3_column_text(stmt, 0))
+            let word = String(cString: sqlite3_column_text(stmt, 0)).lowercased()
             wordArray.append(word)
         }
         wordArray.shuffle();
@@ -484,7 +484,7 @@ class GameScene: SKScene {
         
         //traversing through all the records
         while(sqlite3_step(stmt) == SQLITE_ROW){
-            let word = String(cString: sqlite3_column_text(stmt, 0))
+            let word = String(cString: sqlite3_column_text(stmt, 0)).lowercased()
             //adding values to list
 //            print(word)
             wordArray.append(word)
