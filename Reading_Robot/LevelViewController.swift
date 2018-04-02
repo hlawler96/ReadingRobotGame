@@ -6,7 +6,6 @@ import SQLite3
 class LevelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     var numLevels: Int!
     final var CHARACTER_CUSTOM_TAG = 1000
-    
     @IBOutlet weak var charButton: UIButton!
     @IBOutlet weak var LevelCollectionView: UICollectionView!
     
@@ -14,6 +13,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     {
         
     }
+
     
     @IBAction func buttonClick(_ sender: UIButton) {
         // uses tag of button to perform proper segue
@@ -32,9 +32,9 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         super.viewWillAppear(animated)
         charButton.setImage(UIImage(named: userColor + "_Idle_000"), for: .normal)
         self.LevelCollectionView.reloadData()
-        if !backgroundMusicPlayer.isPlaying {
-            playBackgroundMusic(filename: "music")
-        }
+        //if !backgroundMusicPlayer.isPlaying {
+          //  playBackgroundMusic(filename: "music")
+        //}
     }
     
     //sets correct robot picture in top right corner and sets self as datasource/delegate for the level cells

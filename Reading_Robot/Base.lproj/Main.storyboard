@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="ipad10_5" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="MarkerFeltWide.ttf">
-            <string>MarkerFelt-Wide</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Title View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -57,6 +52,16 @@
                                 <rect key="frame" x="0.0" y="195" width="600" height="600"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SrA-vm-Gmu">
+                                <rect key="frame" x="1012" y="20" width="80" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="Music" backgroundImage="rounded-square"/>
+                                <connections>
+                                    <action selector="MusicButton:" destination="BV1-FR-VrT" eventType="touchUpInside" id="aS9-MZ-29S"/>
+                                    <action selector="MusicButton:" destination="Rdv-CE-vUu" eventType="touchUpInside" id="rhA-Ar-B6d"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="4qk-I5-YsI"/>
@@ -149,7 +154,7 @@
         <!--Progress View Controller-->
         <scene sceneID="9WL-xZ-VXf">
             <objects>
-                <viewController title="Progress View Controller" id="KQe-ru-vFR" sceneMemberID="viewController">
+                <viewController title="Progress View Controller" id="KQe-ru-vFR" customClass="ProgressViewController" customModule="Reading_Robot" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="w0g-bq-yOO">
                         <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -166,23 +171,58 @@
                                     <segue destination="xgD-6X-1XN" kind="unwind" unwindAction="unwindToMainMenuWithUnwindSegue:" id="qD4-YM-qJd"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Progress Table Coming Soon!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vRl-Gz-JFn">
-                                <rect key="frame" x="20" y="158" width="1072" height="500"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.2635648544520548" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="63"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vL4-AA-sPQ">
+                                <rect key="frame" x="20" y="128" width="806" height="276"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ProgressTableViewCell" rowHeight="80" id="25t-62-BAl" customClass="ProgressTableViewCell" customModule="Reading_Robot" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="806" height="80"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="25t-62-BAl" id="gTy-3s-9pK" userLabel="TheView">
+                                            <rect key="frame" x="0.0" y="0.0" width="806" height="79.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Zpv-Eq-2TV">
+                                                    <rect key="frame" x="545" y="38" width="177" height="2"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </progressView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Default" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GGL-eB-KWO">
+                                                    <rect key="frame" x="7" y="29" width="113" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="PhonemeType" destination="GGL-eB-KWO" id="KcW-oq-KkQ"/>
+                                            <outlet property="ProgressBar" destination="Zpv-Eq-2TV" id="ylO-10-qpD"/>
+                                            <outlet property="TableViewCell" destination="gTy-3s-9pK" id="GdB-q4-gcd"/>
+                                            <outlet property="TheView" destination="gTy-3s-9pK" id="QbK-Mh-xeQ"/>
+                                            <outlet property="f" destination="gTy-3s-9pK" id="TY5-bC-fyf"/>
+                                            <outlet property="theView" destination="gTy-3s-9pK" id="u1Q-SI-Ger"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="KQe-ru-vFR" id="eMI-jV-BeA"/>
+                                    <outlet property="delegate" destination="KQe-ru-vFR" id="2Nn-sP-mZs"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Bgl-av-ZIE"/>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="vL4-AA-sPQ" id="2H3-LV-SCr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lv1-Cn-wah" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="xgD-6X-1XN" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="46" y="-750"/>
+            <point key="canvasLocation" x="45.863309352517987" y="-750.35971223021591"/>
         </scene>
         <!--Level View Controller-->
         <scene sceneID="sQj-DK-F0T">
@@ -232,7 +272,7 @@
                                                     <color key="tintColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="INH-Z3-Z0o" userLabel="Star View1">
-                                                    <rect key="frame" x="33" y="99" width="33" height="31"/>
+                                                    <rect key="frame" x="33" y="99" width="34" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -306,7 +346,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="czJ-GG-1Dd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="I4C-gG-lhH" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1032" y="-750"/>
+            <point key="canvasLocation" x="1031.6546762589928" y="-750.35971223021591"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="X16-D9-nV6">
@@ -369,5 +409,6 @@
         <image name="LevelsBackground" width="4267" height="3200"/>
         <image name="Title_Screen-1" width="871" height="939"/>
         <image name="play" width="301" height="88"/>
+        <image name="rounded-square" width="300" height="300"/>
     </resources>
 </document>

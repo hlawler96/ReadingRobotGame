@@ -78,7 +78,7 @@ class GameScene: SKScene {
         bucket_direction = 0
         bucket_taps = 0
         
-        pauseBackgroundMusic()
+        //pauseBackgroundMusic()
         
         // add background to view
         background.size.width = size.width
