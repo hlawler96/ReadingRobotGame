@@ -18,6 +18,8 @@
 		BCB8E805203F12FA00C12886 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BCB8E801203F12FA00C12886 /* Main.storyboard */; };
 		BCB8E806203F12FA00C12886 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BCB8E803203F12FA00C12886 /* LaunchScreen.storyboard */; };
 		D5150C97203F6A8200D75CD0 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5150C96203F6A8200D75CD0 /* CollectionViewCell.swift */; };
+		D5873E4520729542008B3263 /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5873E4420729542008B3263 /* ProgressViewController.swift */; };
+		D5873E492072AA5B008B3263 /* ProgressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5873E482072AA5B008B3263 /* ProgressTableViewCell.swift */; };
 		D5909FB0203F3F0000C9BEF1 /* TitleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5909FAF203F3F0000C9BEF1 /* TitleViewController.swift */; };
 		D5909FB2203F40F300C9BEF1 /* LevelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5909FB1203F40F300C9BEF1 /* LevelViewController.swift */; };
 		D5FFB68F2046321800619A1D /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5FFB68E2046321800619A1D /* AccountViewController.swift */; };
@@ -37,6 +39,8 @@
 		BCB8E802203F12FA00C12886 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BCB8E804203F12FA00C12886 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5150C96203F6A8200D75CD0 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		D5873E4420729542008B3263 /* ProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
+		D5873E482072AA5B008B3263 /* ProgressTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTableViewCell.swift; sourceTree = "<group>"; };
 		D5909FAF203F3F0000C9BEF1 /* TitleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleViewController.swift; sourceTree = "<group>"; };
 		D5909FB1203F40F300C9BEF1 /* LevelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelViewController.swift; sourceTree = "<group>"; };
 		D5FFB68E2046321800619A1D /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +80,8 @@
 				BC1A717F2038E71E00B2ECE6 /* AppDelegate.swift */,
 				D5909FAF203F3F0000C9BEF1 /* TitleViewController.swift */,
 				D5909FB1203F40F300C9BEF1 /* LevelViewController.swift */,
+				D5873E4420729542008B3263 /* ProgressViewController.swift */,
+				D5873E482072AA5B008B3263 /* ProgressTableViewCell.swift */,
 				D5150C96203F6A8200D75CD0 /* CollectionViewCell.swift */,
 				BCA9603C2060733700451BC8 /* music.mp3 */,
 				BC1A71872038E71E00B2ECE6 /* GameViewController.swift */,
@@ -118,7 +124,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Hayden Lawler";
 				TargetAttributes = {
 					BC1A717B2038E71E00B2ECE6 = {
@@ -167,9 +173,11 @@
 			files = (
 				BC1A71882038E71E00B2ECE6 /* GameViewController.swift in Sources */,
 				BC1A4A782069B7AA00ED7463 /* TappingGame.swift in Sources */,
+				D5873E492072AA5B008B3263 /* ProgressTableViewCell.swift in Sources */,
 				D5909FB2203F40F300C9BEF1 /* LevelViewController.swift in Sources */,
 				D5FFB68F2046321800619A1D /* AccountViewController.swift in Sources */,
 				D5150C97203F6A8200D75CD0 /* CollectionViewCell.swift in Sources */,
+				D5873E4520729542008B3263 /* ProgressViewController.swift in Sources */,
 				D5909FB0203F3F0000C9BEF1 /* TitleViewController.swift in Sources */,
 				BCB8E7F7203F109500C12886 /* GameScene.swift in Sources */,
 				BC1A4A7A2069B8D500ED7463 /* TappingGameViewController.swift in Sources */,
@@ -213,6 +221,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -220,6 +229,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -270,6 +280,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -277,6 +288,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

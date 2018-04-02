@@ -74,7 +74,7 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         
         
-        pauseBackgroundMusic()
+        //pauseBackgroundMusic()
         
         // add background to view
         background.size.width = size.width

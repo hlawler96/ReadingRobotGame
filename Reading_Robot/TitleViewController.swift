@@ -15,10 +15,15 @@ import AVKit
 
 var db, db2: OpaquePointer?
 var userColor, oppColor: String!
+var music = 1
 
 class TitleViewController: UIViewController {
     
     @IBAction func unwindToMainMenu(unwindSegue: UIStoryboardSegue){}
+    @IBAction func MusicButton(_ sender: Any) {
+        if(music == 1){pauseBackgroundMusic()}
+        else{resumeBackgroundMusic()}
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,10 +63,15 @@ class TitleViewController: UIViewController {
             userColor = String(cString: sqlite3_column_text(stmt, 0))
         }
         sqlite3_finalize(stmt)
-        playBackgroundMusic(filename: "music")
+        if(music == 1)
+        {
+            playBackgroundMusic(filename: "music")
+        }
+
         oppColor = "Blue"
+
     }
-    
+
 
     override var shouldAutorotate: Bool {
         return true
@@ -154,5 +164,11 @@ func playBackgroundMusic(filename: String) {
 
 func pauseBackgroundMusic(){
     backgroundMusicPlayer.stop()
+    music = 0
 }
+func resumeBackgroundMusic(){
+    playBackgroundMusic(filename: "music")
+    music = 1
+}
+
 
