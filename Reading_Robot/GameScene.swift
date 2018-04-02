@@ -4,9 +4,7 @@ import SQLite3
 
 //TODO:
 // 2) Add labels to players and scores at the top - ??
-// 4) Animate the tug of war during the game - ??
 // 5) Add an end game animation based on the number of stars - ??
-// 6) Have the phoneme spoken at the beginning of the mini game with possible time delay / "Start" popup message - ??
 // 8) Add an extra frame to the rope pulling animation to make animation cleaner - ??
 
 
@@ -14,25 +12,23 @@ import SQLite3
 class GameScene: SKScene {
     let rope = SKSpriteNode(imageNamed: "rope")
     let background = SKSpriteNode(imageNamed: "LevelBackground1")
-    let player = SKSpriteNode(imageNamed: "Attack_005")
-    let player2 = SKSpriteNode(imageNamed: "Attack_005")
-    let walk0 = SKTexture(imageNamed: "Walk_000")
-    let walk1 = SKTexture(imageNamed: "Walk_001")
-    let walk2 = SKTexture(imageNamed: "Walk_002")
-    let walk3 = SKTexture(imageNamed: "Walk_003")
-    let walk4 = SKTexture(imageNamed: "Walk_004")
-    let walk5 = SKTexture(imageNamed: "Walk_005")
-    let walk6 = SKTexture(imageNamed: "Walk_006")
-    let walk7 = SKTexture(imageNamed: "Walk_007")
-    let walk8 = SKTexture(imageNamed: "Walk_008")
-    let walk9 = SKTexture(imageNamed: "Walk_009")
-    let pull0 = SKTexture(imageNamed: "Attack_007")
-    let pull1 = SKTexture(imageNamed: "Attack_006")
-    let pull2 = SKTexture(imageNamed: "Attack_005")
-    let pull3 = SKTexture(imageNamed: "Attack_006")
-    let pull4 = SKTexture(imageNamed: "Attack_007")
+    var player = SKSpriteNode(imageNamed: userColor + "_Attack_005")
+    let player2 = SKSpriteNode(imageNamed: userColor + "_Attack_005")
+    let bottom = SKSpriteNode(imageNamed: "rectangle-2")
+    let bucket = SKSpriteNode(imageNamed: "bucket")
+    let ok_button = SKSpriteNode(imageNamed: "rounded-square")
+    let popup = SKSpriteNode(imageNamed: "rounded-square")
+    let pull0 = SKTexture(imageNamed: userColor + "_Attack_007")
+    let pull1 = SKTexture(imageNamed: userColor + "_Attack_006")
+    let pull2 = SKTexture(imageNamed: userColor + "_Attack_005")
+    var oppPull0 = SKTexture(imageNamed: userColor + "_Attack_007")
+    var oppPull1 = SKTexture(imageNamed: userColor + "_Attack_006")
+    var oppPull2 = SKTexture(imageNamed: userColor + "_Attack_005")
     let scoreboard = SKSpriteNode(imageNamed: "rectangle")
+    let label = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
+    var oppColor = "Blue"
     
+    var timeToPull = true
     var levelNumber = 0
     var homePoints = 0
     var awayPoints = 0
@@ -61,67 +57,110 @@ class GameScene: SKScene {
     var startNS = 0
     var secondsSinceStart = 0
     
+    var playerOneStartX: CGFloat!
+    var playerTwoStartX: CGFloat!
+    
     var gameOver = false
     
     var cloudArray = [SKSpriteNode]()
     var wordsShownArray = [SKLabelNode] ()
     
-    var phoneme : String!
+    var pattern : String!
     var numWords : Int!
     var gameSpeed : String!
     
+    var bucket_direction : Int!
+    var bucket_taps = 0
+    
+    // function called at start of game
     override func didMove(to view: SKView) {
+        
+        bucket_direction = 0
+        bucket_taps = 0
         
         pauseBackgroundMusic()
         
+        // add background to view
         background.size.width = size.width
         background.size.height = size.height
         background.position = CGPoint(x: size.width/2, y: size.height/2)
         background.zPosition = 0
         addChild(background)
         
-        player.size.width = size.width / 3.1
-        player.size.height = size.height / 2
-        player.position = CGPoint(x: size.width * 0.8 , y: size.height * 0.33)
+        // get level specific data and assign to instance fields (pattern, numWords, and speed)
+        getLevelData()
+        
+        oppPull0 = SKTexture(imageNamed: oppColor + "_Attack_007")
+        oppPull1 = SKTexture(imageNamed: oppColor + "_Attack_006")
+        oppPull2 = SKTexture(imageNamed: oppColor + "_Attack_005")
+        
+        playerOneStartX = size.width * 0.8
+        playerTwoStartX = size.width * 0.2
+        
+        //add right player to the game
+        player.size.width = size.width / 2.5
+        player.size.height = size.height / 1.6
+        player.position = CGPoint(x: playerOneStartX , y: size.height * 0.31)
         player.zPosition = 2
         addChild(player)
         
-        
-        player2.size.width = size.width / 3.1
-        player2.size.height = size.height / 2
-        player2.position = CGPoint(x: size.width * 0.2 , y: size.height * 0.33)
+        //add left player to the game
+        player2.size.width = size.width / 2.5
+        player2.size.height = size.height / 1.6
+        player2.position = CGPoint(x: playerTwoStartX , y: size.height * 0.31)
         player2.zPosition = 2
-        player2.xScale = player2.xScale * -1
+        player2.xScale = player.xScale * -1;
         addChild(player2)
         
-        rope.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 4  - player.size.height/4 + size.height * 0.08)
-        rope.size.width = size.width * 0.6
-        rope.size.height = player.size.height / 3
+        //add rope to the game
+        rope.position = CGPoint(x: frame.size.width / 2, y: frame.size.height * 0.35  - player.size.height/4 )
+        rope.size.width = size.width * 0.46
+        rope.size.height = player.size.height / 10
         rope.zPosition = 1
         addChild(rope)
+        
+        //add bottom board to the game
+        bottom.position = CGPoint(x: frame.size.width/2, y:frame.size.height*0.08)
+        bottom.size.height = frame.size.height * 0.16
+        bottom.size.width  = frame.size.width
+//        print("Height \(bottom.size.height) , Width \(bottom.size.width)")
+        bottom.zPosition = 3
+        addChild(bottom)
+        
+        //add label for the bottom board, initialize with the pattern and then changed to ready, set , tug of war through first 5 seconds
+        label.text = "Your Pattern is: \(pattern!)"
+        label.position = CGPoint(x: frame.size.width/2, y: frame.size.height*0.04)
+        label.fontSize = 100
+        label.zPosition = 4
+        label.fontColor = UIColor.white
+        addChild(label)
+        
+        //intialize time values, used for updating the game
         startHour = calendar.component(.hour, from: date)
         startSecond = calendar.component(.second, from: date)
         startMinute = calendar.component(.minute, from: date)
         startNS = calendar.component(.nanosecond, from: date)
         
+        //add scoreboard at top of screen to the game
         scoreboard.position = CGPoint(x: frame.size.width/2, y: 15*frame.size.height/16)
         scoreboard.size.width = size.width / 2
         scoreboard.size.height = size.height / 8
         scoreboard.zPosition = 2
         addChild(scoreboard)
         
-        getLevelData()
-        
+        // Adds 3 clouds to the game. Cloud nodes are resized and have the text changed throughout the game but only 3 objects are ever created
         insertCloud(x: size.width * 0.2, y: size.height * 0.65, count: 1)
         insertCloud(x: size.width * 0.5, y: size.height * 0.65, count: 2)
         insertCloud(x: size.width * 0.8 , y: size.height * 0.65 ,count: 3)
         
+        //set circle parameters for scoreboard to scale with numWords
         let buffer = scoreboard.size.width / 64
         let numCircles = CGFloat(1+correctWords.count)
         let radius = (scoreboard.size.width - numCircles * buffer) / (numCircles * 2)
         let diameter = 2.0 * radius
         let startX = (scoreboard.position.x - scoreboard.size.width / 2 ) + 2.0 * radius + buffer
         
+        // add properly scaled circles to the scoreboard
         for i in 0 ... correctWords.count - 1 {
             
             let circle = SKShapeNode(circleOfRadius: radius)
@@ -134,74 +173,125 @@ class GameScene: SKScene {
         }
 
     }
+    
     override func update(_ currentTime: TimeInterval){
-        let time = getSecondsSinceStart()
+        //get time since the start of the game
+        //t is used to determine the start of the game then time is used throughout the rest of the update code
+        let t = getSecondsSinceStart()
+        let time = t - 5
         let dTime = time - previousTime
-        //only update words/ clouds until game is over
-        if wordCounter < Words.count {
-            if wordCounter < 3 {
-                if !phaseTwo && dTime >= 2*cloudPeriod/3 {
-                    phaseTwo = true
-                    cloudArray[cloudCounter].run( SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: cloudPeriod/3.0))
-                }else if dTime >= cloudPeriod {
-                    previousTime = time
-                    phaseTwo = false
-                    wordsShownArray[cloudCounter].text = Words[wordCounter]
-                    wordCounter = wordCounter + 1
-                    cloudCounter = cloudCounter + 1
-                    if cloudCounter == 3 {
-                        cloudCounter = 0
+        // beginning
+        if t > 3 && t < 4 {
+            label.text = "Ready!"
+        } else if t > 4 && t < 5 {
+            label.text = "Set!"
+        } else if t > 5 {
+            label.text = "Tug Of War!"
+            // if the game is still going on then have the two robots pull the rope back and forth
+            if time < Double(Words.count+2) * cloudPeriod{
+                let pulling = [pull2, pull1, pull0, pull1, pull2]
+                let oppPulling = [oppPull2, oppPull1, oppPull0, oppPull1, oppPull2]
+                let remainder = time.truncatingRemainder(dividingBy: 8.0)
+                let action = SKAction.animate(with: pulling, timePerFrame: 0.15)
+                let oppAction = SKAction.animate(with: oppPulling, timePerFrame: 0.15)
+                if  remainder > 2.95 && remainder <  3.05  && timeToPull{
+                    player2.run(action, withKey: "pulling")
+                    timeToPull = false
+                }else if remainder > 6.95 && remainder <  7.05 && !timeToPull {
+                    timeToPull = true
+                    player.run(oppAction, withKey: "pulling")
+                }
+                //  2 term fourier series used to create non basic back and forth motion, used to find the delta x value for the current frame
+                let sinApprox = CGFloat(sin(Double.pi * time / 4) + 0.33333*sin(3.0 * Double.pi * time / 4.0))
+                let deltaX = (size.width * 0.1) * (2 / CGFloat.pi) * sinApprox
+                player.position = CGPoint(x: playerOneStartX + deltaX, y: size.height*0.31)
+                player2.position = CGPoint(x: playerTwoStartX + deltaX, y: size.height*0.31)
+                rope.position = CGPoint(x: size.width/2 + deltaX, y: frame.size.height * 0.35  - player.size.height/4)
+           
+            }
+            // if there are still words to go, then modify the clouds/words every cloud Period (assigned based on speed instance variable
+            if wordCounter < Words.count {
+                if wordCounter < 3 {
+                    if !phaseTwo && dTime >= 2*cloudPeriod/3 {
+                        phaseTwo = true
+                        cloudArray[cloudCounter].run( SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: cloudPeriod/3.0))
+                    }else if dTime >= cloudPeriod {
+                        previousTime = time
+                        phaseTwo = false
+                        wordsShownArray[cloudCounter].text = Words[wordCounter]
+                        wordCounter = wordCounter + 1
+                        cloudCounter = cloudCounter + 1
+                        if cloudCounter == 3 {
+                            cloudCounter = 0
+                        }
+                    }
+                } else {
+                    if !phaseOne && dTime >= cloudPeriod/3 {
+                        // Phase one is to make cloud text empty and to make cloud shrink
+                        phaseOne = true
+                        if cloudArray[cloudCounter].size.width != 0 {
+                            let word = wordsShownArray[cloudCounter].text!
+                            if correctWords.contains(word){
+                                circles[circleCounter].fillColor = UIColor.red
+                                circleCounter = circleCounter + 1
+                                wrongAnswers.append(word)
+                            }
+                            wordsShownArray[cloudCounter].text = ""
+                            cloudArray[cloudCounter].run(SKAction.resize(toWidth: 0, height: 0, duration: cloudPeriod/3.0))
+                        }
+                    }else if !phaseTwo && dTime >= 2*cloudPeriod/3 {
+                        //phase two is to make the cloud reappear
+                        phaseTwo = true
+                         cloudArray[cloudCounter].run(SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: cloudPeriod / 3.0))
+                        
+                    }else if dTime >= cloudPeriod {
+                        //phase 3 is to add the new word to the cloud the just reappeared
+                        previousTime = time
+                        phaseOne = false
+                        phaseTwo = false
+                        wordsShownArray[textCounter].text = Words[wordCounter]
+                        wordCounter = wordCounter + 1
+                        textCounter = textCounter + 1
+                        if textCounter == 3 {
+                            textCounter = 0
+                        }
+                        cloudCounter = cloudCounter + 1
+                        if cloudCounter == 3 {
+                            cloudCounter = 0
+                        }
                     }
                 }
-            } else {
-                if !phaseOne && dTime >= cloudPeriod/3 {
-                    phaseOne = true
-                    if cloudArray[cloudCounter].size.width != 0 {
-                        let word = wordsShownArray[cloudCounter].text!
+            }else if time >= Double(Words.count+2) * cloudPeriod{
+                // end game
+                // update db with data, asserting gameOver, printing most recent data
+                if !gameOver {
+                    //add any remaining words in pattern to wrongAnswers and color remaining circles in red
+                   
+                    for i in 0...2 {
+                        let word = wordsShownArray[i].text!
                         if correctWords.contains(word){
                             circles[circleCounter].fillColor = UIColor.red
                             circleCounter = circleCounter + 1
                             wrongAnswers.append(word)
                         }
-                        wordsShownArray[cloudCounter].text = ""
-                        cloudArray[cloudCounter].run(SKAction.resize(toWidth: 0, height: 0, duration: cloudPeriod/3.0))
                     }
-                }else if !phaseTwo && dTime >= 2*cloudPeriod/3 {
-                    phaseTwo = true
-                     cloudArray[cloudCounter].run(SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: cloudPeriod / 3.0))
-                    
-                }else if dTime >= cloudPeriod {
-                    previousTime = time
-                    phaseOne = false
-                    phaseTwo = false
-                    wordsShownArray[textCounter].text = Words[wordCounter]
-                    wordCounter = wordCounter + 1
-                    textCounter = textCounter + 1
-                    if textCounter == 3 {
-                        textCounter = 0
-                    }
-                    cloudCounter = cloudCounter + 1
-                    if cloudCounter == 3 {
-                        cloudCounter = 0
-                    }
+                    let numStars = getStars()
+                    let wrong_words = wrongAnswers.joined(separator: ", ")
+                    let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) , \(numStars) , '\(wrong_words)', CURRENT_TIMESTAMP)"
+                   
+                    //Move players to one side or the other
+                    let speed = size.width/15.0
+                    if numStars > 0 {
+                        let distance = abs(player2.position.x - size.width * 0.05)
+                        player.run(SKAction.moveTo(x: size.width * 0.65, duration: Double(distance/speed)))
+                        player2.run(SKAction.moveTo(x: size.width * 0.05, duration: Double(distance/speed)))
+                        rope.run(SKAction.moveTo(x: size.width * 0.35, duration: Double(distance/speed)))
+                }else{
+                    let distance = abs(player.position.x - size.width * 0.95)
+                    player.run(SKAction.moveTo(x: size.width * 0.95, duration: Double(distance/speed)))
+                    player2.run(SKAction.moveTo(x: size.width * 0.35, duration: Double(distance/speed)))
+                    rope.run(SKAction.moveTo(x: size.width * 0.65, duration: Double(distance/speed)))
                 }
-            }
-        }else if time >= Double(Words.count+2) * cloudPeriod{
-            // end game
-            // update db with data, asserting gameOver, printing most recent data
-            if !gameOver {
-                //add any remaining words in phoneme to wrongAnswers and color remaining circles in red
-                for i in 0...2 {
-                    let word = wordsShownArray[i].text!
-                    if correctWords.contains(word){
-                        circles[circleCounter].fillColor = UIColor.red
-                        circleCounter = circleCounter + 1
-                        wrongAnswers.append(word)
-                    }
-                }
-                let numStars = getStars()
-                let wrong_words = wrongAnswers.joined(separator: ", ")
-                let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) , \(numStars) , '\(wrong_words)', CURRENT_TIMESTAMP)"
                 
                 //executing the query to insert values
                 
@@ -215,7 +305,7 @@ class GameScene: SKScene {
                 // convert scores to stars, display an end-game screen or toast
                 let stars = getStars()
                 
-                let popup = SKSpriteNode(imageNamed: "rounded-square")
+                //endgame message, showing number of stars earned
                 popup.position = CGPoint(x: 50, y: 50)
                 popup.size.width = size.width/1.3
                 popup.size.height = size.height/1.3
@@ -223,19 +313,74 @@ class GameScene: SKScene {
                 popup.zPosition = 4
                 addChild(popup)
                 
-                let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
-                text.text = "End-Game Message Placeholder, you got \(stars) stars!"
-                text.fontSize = 32
-                text.fontColor = SKColor.black
-                text.position = CGPoint(x: 500, y: 350)
-                text.zPosition = 5
-                addChild(text)
+                let text1 = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                let text2 = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                
+                if stars == 1 {
+                    text1.text = "You got 1 star!"
+                    text2.text = "Tap the bucket to soak your opponent in mud!"
+                }
+                else if stars > 0 {
+                    text1.text = "You got \(stars) stars!"
+                    text2.text = "Tap the bucket to soak your opponent in mud!"
+                }
+                else {
+                    text1.text = "You got 0 stars. Try again!"
+                    text2.text = ""
+                }
+                
+                text1.fontSize = 32
+                text1.fontColor = SKColor.black
+                text1.position = CGPoint(x: 0, y: 0)
+                text1.zPosition = 5
+                popup.addChild(text1)
+                text2.fontSize = 32
+                text2.fontColor = SKColor.black
+                text2.position = CGPoint(x: 0, y: -50)
+                text2.zPosition = 5
+                popup.addChild(text2)
+                
+                //button to remove results prompt and clouds to make room for the bucket game
+                ok_button.size.width = size.width/6.3
+                ok_button.size.height = size.height/8.3
+                ok_button.position = CGPoint(x: size.width/2, y: size.height/6 + 30)
+                ok_button.zPosition = 6
+                ok_button.colorBlendFactor = 1.0
+                ok_button.color = UIColor(red: 0, green: 0.6784, blue: 0.949, alpha: 1.0) /* #00adf2 */
+                addChild(ok_button)
+                //"OK" text on the button
+                let ok_text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                ok_text.text = "OK"
+                ok_text.fontSize = 32
+                ok_text.fontColor = SKColor.black
+                ok_text.position = CGPoint(x: 0, y: -15)
+                ok_text.zPosition = 7
+                ok_button.addChild(ok_text)
+                
+                // positioning bucket based on result. loss = over user, win = over cpu
+                var bucketPosX : CGFloat!
+                
+                if(stars == 0){
+                    bucketPosX = size.width * 0.4
+                    bucket_direction = 2 //bucket goes left, onto user's robotˆ
+                }else{
+                    bucketPosX = size.width * 0.45
+                    bucket_direction = 1 //bucket goes right, onto cpu's robot
+                }
+                    bucket.size.width = size.width / 5
+                    bucket.size.height = size.height / 4
+                    bucket.position = CGPoint(x: bucketPosX , y: size.height * 0.6)
+                    bucket.zPosition = 2
+                    addChild(bucket)
+               
+                }else{
+                    //end-game mudbath game starts
+                    bucket.zPosition = 2
+                }
             }
-           
-            
-
         }
     }
+    
 
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -275,28 +420,55 @@ class GameScene: SKScene {
                         }
                     }
                 }
-
+            }
+        }
+        else{
+            if let touch = touches.first {
+                let currentPoint = touch.location(in: self)
+                let touchedNodes = self.nodes(at: currentPoint)
+                for node in touchedNodes {
+                    // check and see if node touched was ok_button
+                    if node == ok_button{ // if it is, we clear the screen of end-game message and clouds
+                        
+                        popup.removeAllActions()
+                        popup.removeAllChildren()
+                        popup.removeFromParent()
+                        
+                        for i in 0...2{
+                            cloudArray[i].removeAllActions()
+                            cloudArray[i].removeAllChildren()
+                            cloudArray[i].removeFromParent()
+                        }
+                        
+                        for word in wordsShownArray {
+                            word.removeAllActions()
+                            word.removeFromParent()
+                        }
+                        
+                        ok_button.removeAllActions()
+                        ok_button.removeAllChildren()
+                        ok_button.removeFromParent()
+                    }
+                    if node == bucket {
+                        bucket_taps += 1
+                        if bucket_taps > 75 {
+                            return
+                            // spill the mud (TODO)
+                        }
+                        
+                        if bucket_direction == 1 { // rotating right, onto cpu
+                            bucket.zRotation = -(CGFloat((Double.pi / 4) / 45) * (CGFloat(bucket_taps)))
+                        }
+                        else if bucket_direction == 2 { //rotating left, onto user
+                            bucket.zRotation = (CGFloat((Double.pi / 4) / 45) * (CGFloat(bucket_taps)))
+                        }
+                    }
+                }
             }
         }
         return
     }
-        
     
-    func walkingRobot(){
-        let walking = [walk0, walk1, walk2, walk3, walk4, walk5, walk6, walk7, walk8, walk9]
-        let walkAnimation = SKAction.animate(with: walking, timePerFrame: 0.1)
-        player.run(SKAction.repeatForever(walkAnimation), withKey:"walkingRobot")
-    }
-    
-    func idleRobot(){
-        player.removeAction(forKey: "walkingRobot")
-    }
-    
-    func pullingRobot(){
-        let pulling = [pull0, pull1, pull2, pull3, pull4]
-        let pullAnimation = SKAction.animate(with: pulling, timePerFrame: 0.15)
-        player.run(pullAnimation)
-    }
     
     
     func insertCloud(x: CGFloat, y: CGFloat, count: Int){
@@ -313,21 +485,17 @@ class GameScene: SKScene {
         
         let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
         text.text = ""
-        text.fontSize = 32
+        text.fontSize = 64
         text.fontColor = SKColor.black
-        text.position = CGPoint(x: x, y: y - frame.size.height/64 )
+        text.position = CGPoint(x: x, y: y - frame.size.height/32 )
         text.zPosition = 2
         addChild(text)
         wordsShownArray.append(text)
-        
-        
     }
     
-    func getRandomCorrectWords(phoneme: String, db: OpaquePointer?) -> [String] {
+    func getRandomCorrectWords(pattern: String, db: OpaquePointer?) -> [String] {
         var wordArray = [String]()
-        let queryString = "select word from Words where phoneme = '" + phoneme + "'"
-        
-        
+        let queryString = "select word from Words where pattern = '" + pattern + "' and hasPattern = 1"
         //statement pointer
         var stmt:OpaquePointer?
         
@@ -341,8 +509,6 @@ class GameScene: SKScene {
         //traversing through all the records
         while(sqlite3_step(stmt) == SQLITE_ROW){
             let word = String(cString: sqlite3_column_text(stmt, 0))
-            //adding values to list
-            
             wordArray.append(word)
         }
         wordArray.shuffle();
@@ -352,14 +518,12 @@ class GameScene: SKScene {
         return wordArray
     }
     
-    func getRandomWrongWords(phoneme: String, db: OpaquePointer?) -> [String] {
+    func getRandomWrongWords(pattern: String, db: OpaquePointer?) -> [String] {
         var wordArray = [String]()
-        let queryString = "select word from Words where phoneme = '" + phoneme + "'"
+        let queryString = "select word from Words where pattern = '" + pattern + "' and hasPattern = 0"
         
         //statement pointer
         var stmt:OpaquePointer?
-        
-        print(queryString)
         
         //preparing the query
         if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
@@ -372,7 +536,7 @@ class GameScene: SKScene {
         while(sqlite3_step(stmt) == SQLITE_ROW){
             let word = String(cString: sqlite3_column_text(stmt, 0))
             //adding values to list
-            print(word)
+//            print(word)
             wordArray.append(word)
         }
         wordArray.shuffle();
@@ -424,11 +588,18 @@ class GameScene: SKScene {
         
         //traversing through all the records
         while(sqlite3_step(stmt) == SQLITE_ROW){
-            phoneme = String(cString: sqlite3_column_text(stmt, 1))
+            pattern = String(cString: sqlite3_column_text(stmt, 1))
             numWords = Int(sqlite3_column_int(stmt, 2))
             gameSpeed = String(cString: sqlite3_column_text(stmt, 3))
-            print("Phoneme: \(phoneme) , Number of Words: \(numWords) , Game Speed: \(gameSpeed)")
+            oppColor = String(cString: sqlite3_column_text(stmt, 4))
+//            print("Pattern: \(pattern) , Number of Words: \(numWords) , Game Speed: \(gameSpeed)")
         }
+        var i = Int(arc4random_uniform(6))
+        while(oppColor == userColor){
+            oppColor = colors[i]
+            i = Int(arc4random_uniform(6))
+        }
+        
         
         if(gameSpeed == "slow"){
             cloudPeriod = 3.0
@@ -440,8 +611,9 @@ class GameScene: SKScene {
             cloudPeriod = 1.0
         }
         
-        correctWords = getRandomCorrectWords(phoneme: phoneme, db: db2)
-        Words = getRandomWrongWords(phoneme: "not\(phoneme!)", db: db2)
+        player = SKSpriteNode(imageNamed: oppColor + "_Attack_005")
+        correctWords = getRandomCorrectWords(pattern: pattern, db: db2)
+        Words = getRandomWrongWords(pattern: pattern, db: db2)
         Words.append(contentsOf: correctWords)
         Words.shuffle()
         sqlite3_finalize(stmt)

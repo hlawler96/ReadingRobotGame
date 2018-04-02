@@ -13,27 +13,51 @@ import GameplayKit
 import SQLite3
 import AVKit
 
-var db: OpaquePointer?
-var db2: OpaquePointer?
+var db, db2: OpaquePointer?
+var userColor, oppColor: String!
 
 class TitleViewController: UIViewController {
-    
-   
     
     @IBAction func unwindToMainMenu(unwindSegue: UIStoryboardSegue){}
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // open db variables for project and local databases
         openLocalDB()
         openProjectDB()
         
-        dropDB(db: db, table: "UserData")
+//        dropDB(db: db, table: "UserData")
         // checking for UserData table, creating if not found
         if sqlite3_exec(db, "create table if not exists UserData (miniGame text , lvl int , stars int , wrongWords text , time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
         
+        
+        
+        if sqlite3_exec(db, "create table if not exists CharacterData (user int, color text, accessory text)", nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error creating table: \(errmsg)")
+        }
+        
+        
+        let queryString = "select color from CharacterData WHERE user = 1"
+        var stmt:OpaquePointer?
+        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error preparing select: \(errmsg)")
+        }
+        
+        if(sqlite3_step(stmt) != SQLITE_ROW){
+            if sqlite3_exec(db, "Insert into CharacterData(user,color,accessory) SELECT 1, 'Blue', 'none' WHERE NOT EXISTS (SELECT * FROM CharacterData)", nil, nil, nil) != SQLITE_OK {
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("error inserting into table: \(errmsg)")
+            }
+            userColor = "Blue"
+        }else{
+            userColor = String(cString: sqlite3_column_text(stmt, 0))
+        }
+        sqlite3_finalize(stmt)
         playBackgroundMusic(filename: "music")
     }
     

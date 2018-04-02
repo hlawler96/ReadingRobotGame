@@ -64,7 +64,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="32.374100719424462" y="31.654676258992808"/>
+            <point key="canvasLocation" x="717" y="-1763"/>
         </scene>
         <!--Account View Controller-->
         <scene sceneID="ceE-5z-BLZ">
@@ -78,24 +78,12 @@
                                 <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Idle_000" translatesAutoresizingMaskIntoConstraints="NO" id="MHV-IV-HEA">
-                                <rect key="frame" x="472" y="145" width="650" height="650"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            </imageView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o2r-Og-Hpa">
                                 <rect key="frame" x="20" y="145" width="444" height="484"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ynT-gQ-75b">
-                                        <rect key="frame" x="328" y="85" width="49" height="31"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </switch>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="4mH-AH-7LQ">
-                                        <rect key="frame" x="328" y="182" width="49" height="31"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </switch>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="vNY-yJ-bdt">
-                                        <rect key="frame" x="328" y="268" width="49" height="31"/>
+                                        <rect key="frame" x="300" y="182" width="49" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hat" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cMx-Lp-w2D">
@@ -112,15 +100,23 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Necklace" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zjc-7Y-8xw">
-                                        <rect key="frame" x="61" y="263" width="120" height="41"/>
+                                    <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F3i-wb-WoG">
+                                        <rect key="frame" x="253" y="248" width="141" height="82"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    </pickerView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Color" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="un0-YI-s18">
+                                        <rect key="frame" x="61" y="269" width="120" height="41"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ynT-gQ-75b">
+                                        <rect key="frame" x="300" y="85" width="49" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </switch>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.7408651610731376" green="0.93062385424059046" blue="0.96216261386871338" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wnI-Ap-vHY">
                                 <rect key="frame" x="20" y="20" width="100" height="100"/>
@@ -129,31 +125,26 @@
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="LevelBackButton:" destination="7m5-N1-3SW" eventType="touchUpInside" id="Mpi-sN-Jm9"/>
-                                    <segue destination="X32-sL-gdi" kind="unwind" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="VhI-6J-hWr"/>
+                                    <segue destination="X32-sL-gdi" kind="unwind" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="OzX-Ug-lhQ"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Character Customization Coming Soon!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hS5-kK-ESj">
-                                <rect key="frame" x="20" y="167" width="1072" height="500"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.2635648545" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="63"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fxg-9v-ajH">
+                                <rect key="frame" x="472" y="52" width="576" height="600"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="UoM-NK-XM8"/>
                     </view>
                     <connections>
-                        <outlet property="AccountBackButton" destination="wnI-Ap-vHY" id="Qau-6T-gLQ"/>
-                        <outlet property="LevelBackButton" destination="wnI-Ap-vHY" id="KXC-R0-r5G"/>
+                        <outlet property="character" destination="Fxg-9v-ajH" id="mRf-2X-lEu"/>
+                        <outlet property="dropDown" destination="F3i-wb-WoG" id="hcC-P6-L1S"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dLN-h6-PGV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="X32-sL-gdi" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="960" y="131"/>
+            <point key="canvasLocation" x="46" y="473"/>
         </scene>
         <!--Progress View Controller-->
         <scene sceneID="9WL-xZ-VXf">
@@ -191,7 +182,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lv1-Cn-wah" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="xgD-6X-1XN" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="968.52517985611519" y="887.05035971223026"/>
+            <point key="canvasLocation" x="46" y="-750"/>
         </scene>
         <!--Level View Controller-->
         <scene sceneID="sQj-DK-F0T">
@@ -231,7 +222,7 @@
                                                         <color key="titleColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <segue destination="Z4S-wT-u8j" kind="show" identifier="Game_Segue" id="apl-SM-HxO"/>
+                                                        <action selector="buttonClick:" destination="Rdv-CE-vUu" eventType="touchUpInside" id="RAn-WC-91o"/>
                                                     </connections>
                                                 </button>
                                                 <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xrs-N0-5E9">
@@ -291,12 +282,12 @@
                                     <segue destination="I4C-gG-lhH" kind="unwind" unwindAction="unwindToMainMenuWithUnwindSegue:" id="xIa-Tf-BEN"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0za-8a-AuA">
+                            <button opaque="NO" tag="1000" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0za-8a-AuA">
                                 <rect key="frame" x="962" y="20" width="130" height="130"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="Idle_000"/>
+                                <state key="normal" image="Blue_Idle_000"/>
                                 <connections>
-                                    <segue destination="7m5-N1-3SW" kind="show" id="bvY-Lq-HWd"/>
+                                    <action selector="buttonClick:" destination="Rdv-CE-vUu" eventType="touchUpInside" id="W93-Ux-aS3"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -306,12 +297,16 @@
                     <navigationItem key="navigationItem" id="lyX-xa-OOk"/>
                     <connections>
                         <outlet property="LevelCollectionView" destination="bcp-W1-DOp" id="0ea-r5-Xyl"/>
+                        <outlet property="charButton" destination="0za-8a-AuA" id="Lh7-8h-huF"/>
+                        <segue destination="hW7-wa-qBw" kind="show" identifier="TAPPING_SEGUE" id="VtS-Ka-4kV"/>
+                        <segue destination="Z4S-wT-u8j" kind="show" identifier="TOW_SEGUE" id="ddh-sx-Owm"/>
+                        <segue destination="7m5-N1-3SW" kind="show" identifier="CHARACTER_CUSTOM_SEGUE" id="AAs-IL-fq7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="czJ-GG-1Dd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="I4C-gG-lhH" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="960.43165467625897" y="-628.05755395683457"/>
+            <point key="canvasLocation" x="1032" y="-750"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="X16-D9-nV6">
@@ -338,12 +333,38 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fyg-1e-ODo" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="rHw-tu-PAZ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2206" y="-1327"/>
+            <point key="canvasLocation" x="1032" y="473"/>
+        </scene>
+        <!--Tapping Game View Controller-->
+        <scene sceneID="dqP-7e-lqV">
+            <objects>
+                <viewController id="hW7-wa-qBw" customClass="TappingGameViewController" customModule="Reading_Robot" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1PP-zD-EFs" customClass="SKView">
+                        <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fy3-JK-kNY">
+                                <rect key="frame" x="20" y="20" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="Back"/>
+                                <connections>
+                                    <segue destination="Wwy-fq-qO6" kind="unwind" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="fbg-Ve-N1w"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="1fB-70-oJ3"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iQM-oe-PLM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Wwy-fq-qO6" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2140" y="473"/>
         </scene>
     </scenes>
     <resources>
         <image name="Back" width="225" height="225"/>
-        <image name="Idle_000" width="600" height="600"/>
+        <image name="Blue_Idle_000" width="600" height="600"/>
         <image name="Idle_000_Right" width="600" height="600"/>
         <image name="LevelsBackground" width="4267" height="3200"/>
         <image name="Title_Screen-1" width="871" height="939"/>
