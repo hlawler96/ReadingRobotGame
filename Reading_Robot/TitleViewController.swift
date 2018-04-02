@@ -66,7 +66,11 @@ class TitleViewController: UIViewController {
         if(music == 1)
         {
         playBackgroundMusic(filename: "music")
+<<<<<<< HEAD
         }
+=======
+        oppColor = "Blue"
+>>>>>>> 1168a6f4c4f422c6d9d647cf35599a4321875b0d
     }
 
 

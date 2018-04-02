@@ -15,7 +15,6 @@ class GameScene: SKScene {
     var player = SKSpriteNode(imageNamed: userColor + "_Attack_005")
     let player2 = SKSpriteNode(imageNamed: userColor + "_Attack_005")
     let bottom = SKSpriteNode(imageNamed: "rectangle-2")
-    let bucket = SKSpriteNode(imageNamed: "bucket")
     let ok_button = SKSpriteNode(imageNamed: "rounded-square")
     let popup = SKSpriteNode(imageNamed: "rounded-square")
     let pull0 = SKTexture(imageNamed: userColor + "_Attack_007")
@@ -26,7 +25,8 @@ class GameScene: SKScene {
     var oppPull2 = SKTexture(imageNamed: userColor + "_Attack_005")
     let scoreboard = SKSpriteNode(imageNamed: "rectangle")
     let label = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
-    var oppColor = "Blue"
+    var viewController : UIViewController!
+    
     
     var timeToPull = true
     var levelNumber = 0
@@ -68,15 +68,11 @@ class GameScene: SKScene {
     var pattern : String!
     var numWords : Int!
     var gameSpeed : String!
-    
-    var bucket_direction : Int!
-    var bucket_taps = 0
+
     
     // function called at start of game
     override func didMove(to view: SKView) {
         
-        bucket_direction = 0
-        bucket_taps = 0
         
         //pauseBackgroundMusic()
         
@@ -356,26 +352,7 @@ class GameScene: SKScene {
                 ok_text.position = CGPoint(x: 0, y: -15)
                 ok_text.zPosition = 7
                 ok_button.addChild(ok_text)
-                
-                // positioning bucket based on result. loss = over user, win = over cpu
-                var bucketPosX : CGFloat!
-                
-                if(stars == 0){
-                    bucketPosX = size.width * 0.4
-                    bucket_direction = 2 //bucket goes left, onto user's robotˆ
-                }else{
-                    bucketPosX = size.width * 0.45
-                    bucket_direction = 1 //bucket goes right, onto cpu's robot
-                }
-                    bucket.size.width = size.width / 5
-                    bucket.size.height = size.height / 4
-                    bucket.position = CGPoint(x: bucketPosX , y: size.height * 0.6)
-                    bucket.zPosition = 2
-                    addChild(bucket)
-               
-                }else{
-                    //end-game mudbath game starts
-                    bucket.zPosition = 2
+                    
                 }
             }
         }
@@ -429,40 +406,13 @@ class GameScene: SKScene {
                 for node in touchedNodes {
                     // check and see if node touched was ok_button
                     if node == ok_button{ // if it is, we clear the screen of end-game message and clouds
-                        
-                        popup.removeAllActions()
-                        popup.removeAllChildren()
-                        popup.removeFromParent()
-                        
-                        for i in 0...2{
-                            cloudArray[i].removeAllActions()
-                            cloudArray[i].removeAllChildren()
-                            cloudArray[i].removeFromParent()
-                        }
-                        
-                        for word in wordsShownArray {
-                            word.removeAllActions()
-                            word.removeFromParent()
-                        }
-                        
-                        ok_button.removeAllActions()
-                        ok_button.removeAllChildren()
-                        ok_button.removeFromParent()
-                    }
-                    if node == bucket {
-                        bucket_taps += 1
-                        if bucket_taps > 75 {
-                            return
-                            // spill the mud (TODO)
-                        }
-                        
-                        if bucket_direction == 1 { // rotating right, onto cpu
-                            bucket.zRotation = -(CGFloat((Double.pi / 4) / 45) * (CGFloat(bucket_taps)))
-                        }
-                        else if bucket_direction == 2 { //rotating left, onto user
-                            bucket.zRotation = (CGFloat((Double.pi / 4) / 45) * (CGFloat(bucket_taps)))
+                        if getStars() > 0 {
+                        viewController.performSegue(withIdentifier: "TAPPING_GAME", sender: viewController)
+                        }else{
+                        viewController.performSegue(withIdentifier: "UNWIND_TO_LEVEL_MENU", sender: viewController)
                         }
                     }
+                    
                 }
             }
         }
@@ -508,7 +458,7 @@ class GameScene: SKScene {
         
         //traversing through all the records
         while(sqlite3_step(stmt) == SQLITE_ROW){
-            let word = String(cString: sqlite3_column_text(stmt, 0))
+            let word = String(cString: sqlite3_column_text(stmt, 0)).lowercased()
             wordArray.append(word)
         }
         wordArray.shuffle();
@@ -534,7 +484,7 @@ class GameScene: SKScene {
         
         //traversing through all the records
         while(sqlite3_step(stmt) == SQLITE_ROW){
-            let word = String(cString: sqlite3_column_text(stmt, 0))
+            let word = String(cString: sqlite3_column_text(stmt, 0)).lowercased()
             //adding values to list
 //            print(word)
             wordArray.append(word)
