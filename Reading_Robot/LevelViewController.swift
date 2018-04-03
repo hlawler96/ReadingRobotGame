@@ -9,10 +9,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     @IBOutlet weak var charButton: UIButton!
     @IBOutlet weak var LevelCollectionView: UICollectionView!
     
-    @IBAction func unwindToLevelMenu(unwindSegue: UIStoryboardSegue)
-    {
-        
-    }
+    @IBAction func unwindToLevelMenu(unwindSegue: UIStoryboardSegue){}
 
     
     @IBAction func buttonClick(_ sender: UIButton) {

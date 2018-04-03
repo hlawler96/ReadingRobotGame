@@ -273,7 +273,9 @@ class GameScene: SKScene {
                     }
                     let numStars = getStars()
                     let wrong_words = wrongAnswers.joined(separator: ", ")
+                    //let correct_words = correctWords.joined(separator: ", ")
                     let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) , \(numStars) , '\(wrong_words)', CURRENT_TIMESTAMP)"
+                    //", \(correct_words)"
                    
                     //Move players to one side or the other
                     let speed = size.width/15.0

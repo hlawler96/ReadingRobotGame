@@ -11,9 +11,9 @@ import UIKit
 class ProgressTableViewCell: UITableViewCell {
     
     
-
+    @IBOutlet weak var PhonemeType: UILabel!
     @IBOutlet weak var theView: UIView!
     @IBOutlet weak var ProgressBar: UIProgressView!
-    @IBOutlet weak var PhonemeType: UILabel!
+    @IBOutlet weak var ProgressLevel: UILabel!
     
 }
