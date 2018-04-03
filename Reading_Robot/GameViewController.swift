@@ -12,10 +12,11 @@ import GameplayKit
 
 class GameViewController: UIViewController {
     var levelNumber: Int!
+    var scene: GameScene!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let scene = GameScene(size: view.bounds.size)
+        scene = GameScene(size: view.bounds.size)
         scene.viewController = self
         scene.levelNumber = levelNumber
         let skView = view as! SKView
@@ -41,5 +42,26 @@ class GameViewController: UIViewController {
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        var bucketScale = CGFloat(1.4)
+        var playerScale = CGFloat(0.7)
+        if scene.cloudPeriod == 3.0 {
+            bucketScale = 0.8
+            playerScale =  1.0
+        }else if scene.cloudPeriod == 2.0 {
+            bucketScale = 1.0
+            playerScale = 0.9
+        }else if scene.cloudPeriod == 1.5{
+            bucketScale = 1.2
+            playerScale = 0.8
+        }
+        
+       if segue.identifier == "TAPPING_GAME" {
+            let tap = segue.destination as! TappingGameViewController
+            tap.playerScale = playerScale
+            tap.bucketScale = bucketScale
+        }
     }
 }

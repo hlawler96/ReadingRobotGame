@@ -14,7 +14,9 @@ import SQLite3
 import AVKit
 
 var db, db2: OpaquePointer?
-var userColor, oppColor: String!
+var backgroundMusicPlayer: AVAudioPlayer!
+var userColor, oppColor, font: String!
+var stillMode : Bool!
 var music = 1
 
 class TitleViewController: UIViewController {
@@ -28,47 +30,31 @@ class TitleViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // open db variables for project and local databases
         openLocalDB()
         openProjectDB()
         
 //        dropDB(db: db, table: "UserData")
+        
         // checking for UserData table, creating if not found
         if sqlite3_exec(db, "create table if not exists UserData (miniGame text , lvl int , stars int , wrongWords text , time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
         
-        
+        if sqlite3_exec(db, "create table if not exists SettingsData (musicVol real, fxVol real, font text, stillMode int)", nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error creating table: \(errmsg)")
+        }
         
         if sqlite3_exec(db, "create table if not exists CharacterData (user int, color text, accessory text)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
-        
-        
-        let queryString = "select color from CharacterData WHERE user = 1"
-        var stmt:OpaquePointer?
-        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("error preparing select: \(errmsg)")
-        }
-        
-        if(sqlite3_step(stmt) != SQLITE_ROW){
-            if sqlite3_exec(db, "Insert into CharacterData(user,color,accessory) SELECT 1, 'Blue', 'none' WHERE NOT EXISTS (SELECT * FROM CharacterData)", nil, nil, nil) != SQLITE_OK {
-                let errmsg = String(cString: sqlite3_errmsg(db)!)
-                print("error inserting into table: \(errmsg)")
-            }
-            userColor = "Blue"
-        }else{
-            userColor = String(cString: sqlite3_column_text(stmt, 0))
-        }
-        sqlite3_finalize(stmt)
-        if(music == 1)
-        {
-            playBackgroundMusic(filename: "music")
-        }
-
+        playBackgroundMusic(filename: "music")
+        loadUserColor()
+        loadSettings()
         oppColor = "Blue"
 
     }
@@ -131,11 +117,58 @@ class TitleViewController: UIViewController {
             print("error opening database")
         }
     }
+    func loadUserColor(){
+        let queryString = "select color from CharacterData WHERE user = 1"
+        var stmt:OpaquePointer?
+        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error preparing select: \(errmsg)")
+        }
+        
+        if(sqlite3_step(stmt) != SQLITE_ROW){
+            if sqlite3_exec(db, "Insert into CharacterData(user,color,accessory) SELECT 1, 'Blue', 'none' WHERE NOT EXISTS (SELECT * FROM CharacterData)", nil, nil, nil) != SQLITE_OK {
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("error inserting into table: \(errmsg)")
+            }
+            userColor = "Blue"
+            
+        }else{
+            userColor = String(cString: sqlite3_column_text(stmt, 0))
+        }
+        sqlite3_finalize(stmt)
+    }
+    
+    func loadSettings(){
+        let queryString = "select * from SettingsData"
+        var stmt:OpaquePointer?
+        if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error preparing select: \(errmsg)")
+        }
+        
+        if(sqlite3_step(stmt) != SQLITE_ROW){
+            if sqlite3_exec(db, "Insert into SettingsData VALUES(1.0, 1.0, 'ChalkboardSE-Bold', 0 ) ", nil, nil, nil) != SQLITE_OK {
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("error inserting into table: \(errmsg)")
+            }
+            font = "ChalkboardSE-Bold"
+            
+        }else{
+            backgroundMusicPlayer.volume = Float(sqlite3_column_double(stmt, 0))
+            // fxVolume.volume = Float(sqlite3_column_double(stmt,1))
+            font = String(cString: sqlite3_column_text(stmt, 2))
+            let still = Int(sqlite3_column_int(stmt, 3))
+            if still == 0 {
+                stillMode = false
+            }else {
+                stillMode = true
+            }
+            
+        }
+        sqlite3_finalize(stmt)
+    }
     
 }
-
-
-var backgroundMusicPlayer: AVAudioPlayer!
 
 func playBackgroundMusic(filename: String) {
     

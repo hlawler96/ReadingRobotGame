@@ -53,17 +53,6 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         
-      /*  let queryString = "SELECT AVG(U.stars) from UserData U.lvl = \(3)"
-        var stmt:OpaquePointer?
-        if sqlite3_prepare(db2, queryString, -1, &stmt, nil) != SQLITE_OK{
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("error preparing select: \(errmsg)")
-        }
-        while(sqlite3_step(stmt) == SQLITE_ROW){
-            cell1.PhonemeType = Int(sqlite3_column_int(stmt, 0))
-            break;
-        }
-        */
         return cell1
         
     }
@@ -72,9 +61,6 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.delegate = self
         tableView.dataSource = self
         super.viewDidLoad()
-    }
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .landscape
     }
     
     override var shouldAutorotate: Bool {

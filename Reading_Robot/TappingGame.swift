@@ -14,7 +14,7 @@ class TappingGame: SKScene {
     let bucket = SKSpriteNode(imageNamed: "bucket")
     let background = SKSpriteNode(imageNamed: "LevelBackground1")
     let rectangle = SKSpriteNode(imageNamed: "rectangle")
-    let rectLabel = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
+    let rectLabel = SKLabelNode(fontNamed: font)
     
     let cropNode = SKCropNode()
     let mud = SKSpriteNode(imageNamed: "mud")
@@ -25,21 +25,23 @@ class TappingGame: SKScene {
     var spillingMud = false
     var bucketFalling = false
     var bucket_taps = 0.0
+    var bucketScaling = CGFloat(1.0)
+    var playerScaling = CGFloat(1.0)
     
     override func didMove(to view: SKView) {
         // pause background at start if its already playing
         pauseBackgroundMusic()
         
         //add opposing player to the scene, size should be determined by difficulty of the level
-        player.size.width = size.width / 5
-        player.size.height = size.height / 3.2
-        player.position = CGPoint(x: size.width/2, y: size.height * 0.26)
+        player.size.width = size.width / 5 * playerScaling
+        player.size.height = size.height / 3.2 * playerScaling
+        player.position = CGPoint(x: size.width/2, y: size.height * 0.1 + player.size.height/2.2)
         player.zPosition = 1
         addChild(player)
         
         // add bucket to the scene and place it directly over the player
-        bucket.size.width = size.width / 4
-        bucket.size.height = size.height / 3.2
+        bucket.size.width = size.width / 4 * bucketScaling
+        bucket.size.height = size.height / 3.2 * bucketScaling
         bucket.position = CGPoint(x: size.width/2 - player.size.width*0.05 , y: size.height * 0.65)
         bucket.zPosition = 2
         addChild(bucket)
@@ -55,19 +57,18 @@ class TappingGame: SKScene {
         mudStartY = bucket.position.y - bucket.size.height/2 + mud.size.height/2
         
         // add first mud to the scene, hidden until spillingMud = true
-        mud.size.width = player.size.width
-        mud.size.height = frame.size.height*1.3
+        mud.size.width = bucket.size.width * 0.8
+        mud.size.height = frame.size.height * 1.3
         mud.position = CGPoint(x: bucket.position.x+15  , y: mudStartY)
         mud.zPosition = 3
         
         // second mud node used so that you can have one node visible on the scene and the other node can be moved to create a continuous stream
-        mud2.size.width = player.size.width
-        mud2.size.height = frame.size.height*1.3
+        mud2.size = mud.size
         mud2.position = CGPoint(x: bucket.position.x+15  , y: mudStartY + mud2.size.height - 20)
         mud2.zPosition = 3
         
         //Crop Node used so that the mud is only visible below the bucket, creates the concept of pouring out of the bucket
-        let rect = CGRect(x: bucket.position.x - bucket.size.width/2, y: bucket.position.y - bucket.size.height/2.5 - frame.size.height, width: player.size.width*1.2, height: frame.size.height)
+        let rect = CGRect(x: bucket.position.x - bucket.size.width/2, y: bucket.position.y - bucket.size.height/2.5 - frame.size.height, width: bucket.size.width, height: frame.size.height)
         let shapeNode = SKShapeNode(rect: rect)
         shapeNode.fillColor = UIColor.white
         cropNode.maskNode = shapeNode
@@ -130,7 +131,7 @@ class TappingGame: SKScene {
             spillingMud = true
         }else if !bucketFalling && bucket_taps > 0.1 {
             //this is the pull back against the users taps, this number should be changed based on the difficulty of the level
-            bucket_taps = bucket_taps - 0.1
+            bucket_taps = bucket_taps - Double(0.4 * bucketScaling)
              bucket.zRotation = -(CGFloat((Double.pi / 4) / 25) * (CGFloat(bucket_taps)))
         }
     }

@@ -304,10 +304,16 @@
                                     <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="gYx-kD-DBb">
                                         <rect key="frame" x="583" y="125" width="118" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="MusicVolumeChanged:" destination="LKI-h1-6Mr" eventType="valueChanged" id="ujZ-Nt-iec"/>
+                                        </connections>
                                     </slider>
                                     <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="fEX-Z3-l80">
                                         <rect key="frame" x="583" y="206" width="118" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="MusicVolumeChanged:" destination="LKI-h1-6Mr" eventType="valueChanged" id="39k-cn-TvG"/>
+                                        </connections>
                                     </slider>
                                     <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5jx-6X-6kF">
                                         <rect key="frame" x="530" y="268" width="216" height="69"/>
@@ -316,6 +322,9 @@
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yfx-OW-U2M">
                                         <rect key="frame" x="621" y="369" width="49" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="stillModeSwitched:" destination="LKI-h1-6Mr" eventType="valueChanged" id="03E-bH-CPn"/>
+                                        </connections>
                                     </switch>
                                 </subviews>
                                 <color key="backgroundColor" red="0.7408651611" green="0.93062385420000004" blue="0.96216261390000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

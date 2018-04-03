@@ -24,7 +24,7 @@ class GameScene: SKScene {
     var oppPull1 = SKTexture(imageNamed: userColor + "_Attack_006")
     var oppPull2 = SKTexture(imageNamed: userColor + "_Attack_005")
     let scoreboard = SKSpriteNode(imageNamed: "rectangle")
-    let label = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
+    let label = SKLabelNode(fontNamed: font)
     var viewController : UIViewController!
     
     
@@ -184,7 +184,7 @@ class GameScene: SKScene {
         } else if t > 5 {
             label.text = "Tug Of War!"
             // if the game is still going on then have the two robots pull the rope back and forth
-            if time < Double(Words.count+2) * cloudPeriod{
+            if time < Double(Words.count+2) * cloudPeriod && !stillMode{
                 let pulling = [pull2, pull1, pull0, pull1, pull2]
                 let oppPulling = [oppPull2, oppPull1, oppPull0, oppPull1, oppPull2]
                 let remainder = time.truncatingRemainder(dividingBy: 8.0)
@@ -210,7 +210,9 @@ class GameScene: SKScene {
                 if wordCounter < 3 {
                     if !phaseTwo && dTime >= 2*cloudPeriod/3 {
                         phaseTwo = true
-                        cloudArray[cloudCounter].run( SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: cloudPeriod/3.0))
+                        if !stillMode{
+                            cloudArray[cloudCounter].run( SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: cloudPeriod/3.0))
+                        }
                     }else if dTime >= cloudPeriod {
                         previousTime = time
                         phaseTwo = false
@@ -233,12 +235,16 @@ class GameScene: SKScene {
                                 wrongAnswers.append(word)
                             }
                             wordsShownArray[cloudCounter].text = ""
-                            cloudArray[cloudCounter].run(SKAction.resize(toWidth: 0, height: 0, duration: cloudPeriod/3.0))
+                            if !stillMode{
+                                cloudArray[cloudCounter].run(SKAction.resize(toWidth: 0, height: 0, duration: cloudPeriod/3.0))
+                            }
                         }
                     }else if !phaseTwo && dTime >= 2*cloudPeriod/3 {
                         //phase two is to make the cloud reappear
                         phaseTwo = true
-                         cloudArray[cloudCounter].run(SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: cloudPeriod / 3.0))
+                        if !stillMode{
+                            cloudArray[cloudCounter].run(SKAction.resize(toWidth: size.width/4, height: size.height/4, duration: cloudPeriod / 3.0))
+                        }
                         
                     }else if dTime >= cloudPeriod {
                         //phase 3 is to add the new word to the cloud the just reappeared
@@ -311,8 +317,8 @@ class GameScene: SKScene {
                 popup.zPosition = 4
                 addChild(popup)
                 
-                let text1 = SKLabelNode(fontNamed: "MarkerFelt-Thin")
-                let text2 = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                let text1 = SKLabelNode(fontNamed: font!)
+                let text2 = SKLabelNode(fontNamed: font!)
                 
                 if stars == 1 {
                     text1.text = "You got 1 star!"
@@ -347,7 +353,7 @@ class GameScene: SKScene {
                 ok_button.color = UIColor(red: 0, green: 0.6784, blue: 0.949, alpha: 1.0) /* #00adf2 */
                 addChild(ok_button)
                 //"OK" text on the button
-                let ok_text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+                let ok_text = SKLabelNode(fontNamed: font!)
                 ok_text.text = "OK"
                 ok_text.fontSize = 32
                 ok_text.fontColor = SKColor.black
@@ -394,7 +400,9 @@ class GameScene: SKScene {
                                 wrongAnswers.append(word)
                             }
                             wordsShownArray[i-1].text = ""
-                            cloudArray[i-1].run( SKAction.resize(toWidth: 0, height: 0, duration: cloudPeriod/3.0))
+                            if !stillMode {
+                                cloudArray[i-1].run( SKAction.resize(toWidth: 0, height: 0, duration: cloudPeriod/3.0))
+                            }
                             
                         }
                     }
@@ -428,14 +436,19 @@ class GameScene: SKScene {
         let cloud = SKSpriteNode(imageNamed: "cloud-cartoon")
         cloud.position = CGPoint(x: x, y: y)
         //grow to size.width / 4
-        cloud.size.width = 0
-        cloud.size.height = 0
+        if !stillMode {
+            cloud.size.width = 0
+            cloud.size.height = 0
+        } else {
+            cloud.size.width = size.width/4
+            cloud.size.height = size.height/4
+        }
         cloud.zPosition = 1
         addChild(cloud)
         cloud.name = "cloud-\(count)"
         cloudArray.append(cloud)
         
-        let text = SKLabelNode(fontNamed: "MarkerFelt-Thin")
+        let text = SKLabelNode(fontNamed: font!)
         text.text = ""
         text.fontSize = 64
         text.fontColor = SKColor.black

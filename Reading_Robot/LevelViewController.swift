@@ -30,7 +30,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         charButton.setImage(UIImage(named: userColor + "_Idle_000"), for: .normal)
         self.LevelCollectionView.reloadData()
         if !backgroundMusicPlayer.isPlaying {
-            playBackgroundMusic(filename: "music")
+            resumeBackgroundMusic()
         }
     }
     
@@ -51,6 +51,10 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         if(segue.identifier == "TOW_SEGUE"){
             let tow = segue.destination as! GameViewController
             tow.levelNumber = (sender as! UIButton).tag
+        }else if segue.identifier == "TAPPING_SEGUE" {
+            let tap = segue.destination as! TappingGameViewController
+            tap.playerScale = 1.0
+            tap.bucketScale = 1.0
         }
     }
     

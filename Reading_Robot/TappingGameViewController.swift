@@ -11,10 +11,13 @@ import SpriteKit
 import GameplayKit
 
 class TappingGameViewController: UIViewController {
+    var playerScale, bucketScale : CGFloat!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         let scene = TappingGame(size: view.bounds.size)
+        scene.playerScaling = playerScale
+        scene.bucketScaling = bucketScale
         let skView = view as! SKView
         skView.showsFPS = true
         skView.showsNodeCount = true
