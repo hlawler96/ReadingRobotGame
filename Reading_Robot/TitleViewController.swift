@@ -20,9 +20,10 @@ var music = 1
 class TitleViewController: UIViewController {
     
     @IBAction func unwindToMainMenu(unwindSegue: UIStoryboardSegue){}
-    @IBAction func MusicButton(_ sender: Any) {
-        if(music == 1){pauseBackgroundMusic()}
-        else{resumeBackgroundMusic()}
+    
+    
+    @IBAction func SettingsClicked(_ sender: Any) {
+        performSegue(withIdentifier: "SETTINGS_SEGUE", sender: sender)
     }
     
     override func viewDidLoad() {
@@ -163,11 +164,11 @@ func playBackgroundMusic(filename: String) {
 }
 
 func pauseBackgroundMusic(){
-    backgroundMusicPlayer.stop()
+    backgroundMusicPlayer.pause()
     music = 0
 }
 func resumeBackgroundMusic(){
-    playBackgroundMusic(filename: "music")
+    backgroundMusicPlayer.play()
     music = 1
 }
 

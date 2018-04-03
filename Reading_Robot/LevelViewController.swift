@@ -32,9 +32,9 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         super.viewWillAppear(animated)
         charButton.setImage(UIImage(named: userColor + "_Idle_000"), for: .normal)
         self.LevelCollectionView.reloadData()
-        //if !backgroundMusicPlayer.isPlaying {
-          //  playBackgroundMusic(filename: "music")
-        //}
+        if !backgroundMusicPlayer.isPlaying {
+            playBackgroundMusic(filename: "music")
+        }
     }
     
     //sets correct robot picture in top right corner and sets self as datasource/delegate for the level cells

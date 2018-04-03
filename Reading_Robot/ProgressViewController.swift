@@ -35,6 +35,15 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
     }
     
+    override var shouldAutorotate: Bool {
+        return true;
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .landscape
+    }
+    
+    
 
 
     
