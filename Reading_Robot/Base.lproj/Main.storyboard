@@ -459,7 +459,6 @@
                     <connections>
                         <outlet property="LevelCollectionView" destination="bcp-W1-DOp" id="0ea-r5-Xyl"/>
                         <outlet property="charButton" destination="0za-8a-AuA" id="Lh7-8h-huF"/>
-                        <segue destination="hW7-wa-qBw" kind="show" identifier="TAPPING_SEGUE" id="VtS-Ka-4kV"/>
                         <segue destination="Z4S-wT-u8j" kind="show" identifier="TOW_SEGUE" id="ddh-sx-Owm"/>
                         <segue destination="7m5-N1-3SW" kind="show" identifier="CHARACTER_CUSTOM_SEGUE" id="AAs-IL-fq7"/>
                     </connections>
@@ -497,7 +496,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fyg-1e-ODo" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="rHw-tu-PAZ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1032" y="473"/>
+            <point key="canvasLocation" x="945" y="655"/>
         </scene>
         <!--Tapping Game View Controller-->
         <scene sceneID="dqP-7e-lqV">
@@ -506,24 +505,18 @@
                     <view key="view" contentMode="scaleToFill" id="1PP-zD-EFs" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fy3-JK-kNY">
-                                <rect key="frame" x="20" y="20" width="100" height="100"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="Back"/>
-                                <connections>
-                                    <segue destination="Wwy-fq-qO6" kind="unwind" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="fbg-Ve-N1w"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="1fB-70-oJ3"/>
                     </view>
+                    <connections>
+                        <segue destination="Z4S-wT-u8j" kind="show" identifier="NEXT_LEVEL_SEGUE" id="8rB-IQ-kBl"/>
+                        <segue destination="Wwy-fq-qO6" kind="unwind" identifier="UNWIND_TO_LEVEL_MENU" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="TWE-ce-117"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iQM-oe-PLM" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Wwy-fq-qO6" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2140" y="473"/>
+            <point key="canvasLocation" x="1875.5395683453237" y="654.67625899280586"/>
         </scene>
     </scenes>
     <resources>
@@ -536,6 +529,7 @@
         <image name="rounded-square" width="300" height="300"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="VtS-Ka-4kV"/>
+        <segue reference="wEG-A6-ncr"/>
+        <segue reference="8rB-IQ-kBl"/>
     </inferredMetricsTieBreakers>
 </document>

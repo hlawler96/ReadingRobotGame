@@ -12,12 +12,15 @@ import GameplayKit
 
 class TappingGameViewController: UIViewController {
     var playerScale, bucketScale : CGFloat!
+    var level : Int!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         let scene = TappingGame(size: view.bounds.size)
         scene.playerScaling = playerScale
         scene.bucketScaling = bucketScale
+        scene.viewController = self
+        scene.levelFrom = level
         let skView = view as! SKView
         skView.showsFPS = true
         skView.showsNodeCount = true
@@ -41,6 +44,14 @@ class TappingGameViewController: UIViewController {
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    // if going to tug of war game it sets the corresponding class variable to the level number that was clicked
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == "NEXT_LEVEL_SEGUE"){
+            let tow = segue.destination as! GameViewController
+            tow.levelNumber = level + 1
+        }
     }
 
 }

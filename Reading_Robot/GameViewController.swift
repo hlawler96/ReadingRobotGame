@@ -62,6 +62,7 @@ class GameViewController: UIViewController {
             let tap = segue.destination as! TappingGameViewController
             tap.playerScale = playerScale
             tap.bucketScale = bucketScale
+            tap.level = levelNumber
         }
     }
 }

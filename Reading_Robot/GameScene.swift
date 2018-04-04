@@ -280,8 +280,9 @@ class GameScene: SKScene {
                     let numStars = getStars()
                     let wrong_words = wrongAnswers.joined(separator: ", ")
                     //let correct_words = correctWords.joined(separator: ", ")
-                    let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) , \(numStars) , '\(wrong_words)', CURRENT_TIMESTAMP)"
-                    //", \(correct_words)"
+                    let percentage = (Words.count - wrong_words.count) / Words.count
+                    let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) , \(numStars) , '\(wrong_words)', \(percentage), CURRENT_TIMESTAMP)"
+                  
                    
                     //Move players to one side or the other
                     let speed = size.width/15.0
@@ -312,7 +313,7 @@ class GameScene: SKScene {
                 //endgame message, showing number of stars earned
                 popup.position = CGPoint(x: 50, y: 50)
                 popup.size.width = size.width/1.3
-                popup.size.height = size.height/1.3
+                popup.size.height = size.height/1.8
                 popup.position = CGPoint(x: size.width/2, y: size.height/2)
                 popup.zPosition = 4
                 addChild(popup)
@@ -450,7 +451,7 @@ class GameScene: SKScene {
         
         let text = SKLabelNode(fontNamed: font!)
         text.text = ""
-        text.fontSize = 64
+        text.fontSize = 50
         text.fontColor = SKColor.black
         text.position = CGPoint(x: x, y: y - frame.size.height/32 )
         text.zPosition = 2

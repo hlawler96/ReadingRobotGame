@@ -14,11 +14,14 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     @IBAction func buttonClick(_ sender: UIButton) {
         // uses tag of button to perform proper segue
-        if sender.tag == numLevels + 1 {
-             performSegue(withIdentifier: "TAPPING_SEGUE", sender: sender)
-        }else if sender.tag == CHARACTER_CUSTOM_TAG {
+        if sender.tag == CHARACTER_CUSTOM_TAG {
             performSegue(withIdentifier: "CHARACTER_CUSTOM_SEGUE", sender: sender)
-        }else{
+        }else if sender.tag > 1{
+            let numStars = getStars(level : sender.tag-1)
+            if numStars > 0 {
+                performSegue(withIdentifier: "TOW_SEGUE", sender: sender)
+            }
+        }else {
             performSegue(withIdentifier: "TOW_SEGUE", sender: sender)
         }
         
@@ -51,10 +54,6 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         if(segue.identifier == "TOW_SEGUE"){
             let tow = segue.destination as! GameViewController
             tow.levelNumber = (sender as! UIButton).tag
-        }else if segue.identifier == "TAPPING_SEGUE" {
-            let tap = segue.destination as! TappingGameViewController
-            tap.playerScale = 1.0
-            tap.bucketScale = 1.0
         }
     }
     
@@ -78,7 +77,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
             break;
         }
         sqlite3_finalize(stmt)
-        return numLevels + 1
+        return numLevels
     }
     
 
@@ -88,14 +87,33 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         //for each cell gives the corresponding level number, the highest number of stars earned on that level and sets the right tag which is used for segues
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LevelCell", for: indexPath) as! CollectionViewCell
         cell.LevelButton.tag = indexPath.item + 1
-        
-        if (indexPath.item) == (numLevels!){
-            cell.LevelLabel.text = "test"
-            cell.LevelLabel.backgroundColor = UIColor.yellow
-        }else{
         cell.LevelLabel.text = String(indexPath.item + 1)
         cell.LevelLabel.backgroundColor = UIColor.cyan
-        let queryString = "SELECT max(U.stars) from UserData U where U.lvl = \(cell.LevelButton.tag)"
+        let numStars = getStars(level : cell.LevelButton.tag)
+        switch numStars {
+        case 1:
+           cell.StarView.image = UIImage(named: "Star.png")
+        case 2:
+             cell.StarView.image = UIImage(named: "Star.png")
+             cell.StarView1.image = UIImage(named: "Star.png")
+        case 3:
+             cell.StarView.image = UIImage(named: "Star.png")
+             cell.StarView1.image = UIImage(named: "Star.png")
+             cell.StarView2.image = UIImage(named: "Star.png")
+        default:
+            if cell.LevelButton.tag > 1 && getStars(level: cell.LevelButton.tag - 1) == 0 {
+                cell.LevelLabel.backgroundColor = UIColor.gray
+            }
+            cell.StarView.image = nil
+            cell.StarView1.image = nil
+            cell.StarView2.image = nil
+        }
+        
+        return cell
+    }
+    
+    func getStars(level: Int) -> Int {
+        let queryString = "SELECT max(U.stars) from UserData U where U.lvl = \(level)"
         var stmt:OpaquePointer?
         var numStars = 0
         //preparing the query
@@ -108,22 +126,8 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
             numStars = Int(sqlite3_column_int(stmt, 0))
             break;
         }
-        switch numStars {
-        case 1:
-           cell.StarView.image = UIImage(named: "Star.png")
-        case 2:
-             cell.StarView.image = UIImage(named: "Star.png")
-             cell.StarView1.image = UIImage(named: "Star.png")
-        case 3:
-             cell.StarView.image = UIImage(named: "Star.png")
-             cell.StarView1.image = UIImage(named: "Star.png")
-             cell.StarView2.image = UIImage(named: "Star.png")
-        default:
-            numStars = 0
-        }
-        sqlite3_finalize(stmt)
-        }
-        return cell
+        
+        return numStars
     }
     
 
