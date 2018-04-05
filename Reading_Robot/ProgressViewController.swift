@@ -47,7 +47,7 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
         while(sqlite3_step(stmt) == SQLITE_ROW){
             cell1.ProgressLevel.text = String(sqlite3_column_int(stmt, 0))
             cell1.PhonemeType.text = String(indexPath.row + 1)
-            cell1.ProgressBar.progress = Float(sqlite3_column_int(stmt, 0)) / 3.0
+            cell1.ProgressBar.progress = Float(sqlite3_column_int(stmt, 0))
 
             break;
         }
