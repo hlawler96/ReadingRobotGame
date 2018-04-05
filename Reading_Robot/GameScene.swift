@@ -280,7 +280,7 @@ class GameScene: SKScene {
                     let numStars = getStars()
                     let wrong_words = wrongAnswers.joined(separator: ", ")
                     //let correct_words = correctWords.joined(separator: ", ")
-                    let percentage = (Words.count - wrong_words.count) / Words.count
+                    let percentage = (Words.count - wrongAnswers.count) / Words.count
                     let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) , \(numStars) , '\(wrong_words)', \(percentage), CURRENT_TIMESTAMP)"
                   
                    

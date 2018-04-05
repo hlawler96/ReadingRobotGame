@@ -37,7 +37,7 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
         //cell1.textLabel?.text = x[indexPath.row]
         cell1.ProgressBar.progress = 0.5
         
-        let queryString = "SELECT AVG(U.stars) from UserData U where U.lvl = \(indexPath.row)"
+        let queryString = "SELECT AVG(U.percent) from UserData U where U.lvl = \(indexPath.row)"
 
         var stmt:OpaquePointer?
         if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
@@ -47,7 +47,7 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
         while(sqlite3_step(stmt) == SQLITE_ROW){
             cell1.ProgressLevel.text = String(sqlite3_column_int(stmt, 0))
             cell1.PhonemeType.text = String(indexPath.row + 1)
-            cell1.ProgressBar.progress = Float(sqlite3_column_int(stmt, 0)) / 3.0
+            cell1.ProgressBar.progress = Float(sqlite3_column_int(stmt, 0))
 
             break;
         }
