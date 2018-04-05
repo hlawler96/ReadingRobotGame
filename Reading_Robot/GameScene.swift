@@ -3,8 +3,6 @@ import SpriteKit
 import SQLite3
 
 //TODO:
-// 2) Add labels to players and scores at the top - ??
-// 5) Add an end game animation based on the number of stars - ??
 // 8) Add an extra frame to the rope pulling animation to make animation cleaner - ??
 
 
@@ -281,8 +279,8 @@ class GameScene: SKScene {
                     let wrong_words = wrongAnswers.joined(separator: ", ")
                     //let correct_words = correctWords.joined(separator: ", ")
                     let percentage = (Words.count - wrong_words.count) / Words.count
-                    let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) , \(numStars) , '\(wrong_words)', \(percentage), CURRENT_TIMESTAMP)"
-                  
+                    let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) , '\(pattern!)', \(numStars) , '\(wrong_words)', \(percentage), CURRENT_TIMESTAMP)"
+                    print(insert_query)
                    
                     //Move players to one side or the other
                     let speed = size.width/15.0
@@ -348,7 +346,7 @@ class GameScene: SKScene {
                 //button to remove results prompt and clouds to make room for the bucket game
                 ok_button.size.width = size.width/6.3
                 ok_button.size.height = size.height/8.3
-                ok_button.position = CGPoint(x: size.width/2, y: size.height/6 + 30)
+                ok_button.position = CGPoint(x: size.width/2, y: size.height/4)
                 ok_button.zPosition = 6
                 ok_button.colorBlendFactor = 1.0
                 ok_button.color = UIColor(red: 0, green: 0.6784, blue: 0.949, alpha: 1.0) /* #00adf2 */
