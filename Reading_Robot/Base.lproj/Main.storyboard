@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="ipad10_5" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="MarkerFeltWide.ttf">
+            <string>MarkerFelt-Wide</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Title View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -53,10 +58,10 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SrA-vm-Gmu">
-                                <rect key="frame" x="998" y="20" width="94" height="94"/>
+                                <rect key="frame" x="981" y="3" width="128" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="Settings" backgroundImage="rounded-square"/>
+                                <state key="normal" backgroundImage="settings"/>
                                 <connections>
                                     <action selector="SettingsClicked:" destination="BV1-FR-VrT" eventType="touchUpInside" id="xfW-Rr-mBT"/>
                                 </connections>
@@ -71,7 +76,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="716.54676258992811" y="-1763.3093525179856"/>
+            <point key="canvasLocation" x="1032" y="-1768"/>
         </scene>
         <!--Account View Controller-->
         <scene sceneID="ceE-5z-BLZ">
@@ -151,7 +156,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dLN-h6-PGV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="X32-sL-gdi" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="46" y="473"/>
+            <point key="canvasLocation" x="46" y="681"/>
         </scene>
         <!--Progress View Controller-->
         <scene sceneID="9WL-xZ-VXf">
@@ -272,69 +277,76 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PEr-93-Ncw">
-                                <rect key="frame" x="55" y="175" width="1000" height="484"/>
+                                <rect key="frame" x="55" y="175" width="1000" height="529"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Settings" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dnj-BM-Weh">
-                                        <rect key="frame" x="346" y="9" width="308" height="88"/>
+                                        <rect key="frame" x="346" y="9" width="308" height="96.5"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="61"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Music Volume" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lr6-gr-Bd3">
-                                        <rect key="frame" x="276" y="119" width="198" height="41"/>
+                                        <rect key="frame" x="276" y="119" width="198" height="46"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="FX Volume" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w1C-E8-sL8">
-                                        <rect key="frame" x="276" y="201" width="198" height="41"/>
+                                        <rect key="frame" x="276" y="201" width="198" height="47.5"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Font" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jG9-7u-diU">
-                                        <rect key="frame" x="228" y="282" width="294" height="41"/>
+                                        <rect key="frame" x="228" y="282" width="294" height="50"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Still Mode" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6BA-EP-Hvl">
-                                        <rect key="frame" x="228" y="364" width="294" height="41"/>
+                                        <rect key="frame" x="228" y="364" width="294" height="56.5"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="gYx-kD-DBb">
-                                        <rect key="frame" x="583" y="125" width="118" height="30"/>
+                                        <rect key="frame" x="583" y="128" width="118" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <action selector="MusicVolumeChanged:" destination="LKI-h1-6Mr" eventType="valueChanged" id="ujZ-Nt-iec"/>
                                         </connections>
                                     </slider>
                                     <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="fEX-Z3-l80">
-                                        <rect key="frame" x="583" y="206" width="118" height="30"/>
+                                        <rect key="frame" x="583" y="210" width="118" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <action selector="MusicVolumeChanged:" destination="LKI-h1-6Mr" eventType="valueChanged" id="39k-cn-TvG"/>
                                         </connections>
                                     </slider>
                                     <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5jx-6X-6kF">
-                                        <rect key="frame" x="530" y="268" width="216" height="69"/>
+                                        <rect key="frame" x="530" y="273" width="216" height="69"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     </pickerView>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yfx-OW-U2M">
-                                        <rect key="frame" x="621" y="369" width="49" height="31"/>
+                                        <rect key="frame" x="615" y="377" width="49" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <action selector="stillModeSwitched:" destination="LKI-h1-6Mr" eventType="valueChanged" id="03E-bH-CPn"/>
                                         </connections>
                                     </switch>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="* Music found at : https://freesound.org/people/PatrickLieberkind/sounds/396458/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JPZ-Hz-A2f">
+                                        <rect key="frame" x="185" y="468" width="631" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.7408651611" green="0.93062385420000004" blue="0.96216261390000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
@@ -352,7 +364,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="acv-LJ-FD5" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="t0L-Z7-05V" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1720.68345323741" y="-1762.5899280575541"/>
+            <point key="canvasLocation" x="2012" y="-750"/>
         </scene>
         <!--Level View Controller-->
         <scene sceneID="sQj-DK-F0T">
@@ -505,7 +517,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fyg-1e-ODo" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="rHw-tu-PAZ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="945" y="655"/>
+            <point key="canvasLocation" x="1032" y="681"/>
         </scene>
         <!--Tapping Game View Controller-->
         <scene sceneID="dqP-7e-lqV">
@@ -519,13 +531,13 @@
                     </view>
                     <connections>
                         <segue destination="Wwy-fq-qO6" kind="unwind" identifier="UNWIND_TO_LEVEL_MENU" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="TWE-ce-117"/>
-                        <segue destination="Z4S-wT-u8j" kind="show" identifier="NEXT_LEVEL_SEGUE" id="Sya-da-Rh3"/>
+                        <segue destination="Wwy-fq-qO6" kind="unwind" identifier="UNWIND_TO_GAME" unwindAction="unwindToGameWithSegue:" id="EsT-Mx-O4e"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iQM-oe-PLM" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Wwy-fq-qO6" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2151" y="655"/>
+            <point key="canvasLocation" x="2012" y="681"/>
         </scene>
     </scenes>
     <resources>
@@ -535,9 +547,12 @@
         <image name="LevelsBackground" width="4267" height="3200"/>
         <image name="Title_Screen-1" width="871" height="939"/>
         <image name="play" width="301" height="88"/>
-        <image name="rounded-square" width="300" height="300"/>
+        <image name="settings" width="128" height="128"/>
     </resources>
+<<<<<<< HEAD
     <inferredMetricsTieBreakers>
         <segue reference="Sya-da-Rh3"/>
     </inferredMetricsTieBreakers>
+=======
+>>>>>>> d4f5e2bfdddfd641021fa6c42b04bdbe859b2310
 </document>

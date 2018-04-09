@@ -13,13 +13,14 @@ import GameplayKit
 class GameViewController: UIViewController {
     var levelNumber: Int!
     var scene: GameScene!
+    var skView: SKView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         scene = GameScene(size: view.bounds.size)
         scene.viewController = self
         scene.levelNumber = levelNumber
-        let skView = view as! SKView
+        skView = view as! SKView
         skView.showsFPS = true
         skView.showsNodeCount = true
         skView.ignoresSiblingOrder = true
@@ -64,5 +65,15 @@ class GameViewController: UIViewController {
             tap.bucketScale = bucketScale
             tap.level = levelNumber
         }
+    }
+    
+    @IBAction func unwindToGame(segue:UIStoryboardSegue) {
+//        print("Coming back from tapping game")
+        scene = GameScene(size: view.bounds.size)
+        scene.viewController = self
+        scene.levelNumber = levelNumber
+        scene.scaleMode = .resizeFill
+        skView.presentScene(scene)
+        
     }
 }
