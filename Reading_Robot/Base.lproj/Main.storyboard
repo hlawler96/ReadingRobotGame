@@ -182,31 +182,31 @@
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ProgressTableViewCell" rowHeight="80" id="25t-62-BAl" customClass="ProgressTableViewCell" customModule="Reading_Robot" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="1072" height="80"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ProgressTableViewCell" rowHeight="100" id="25t-62-BAl" customClass="ProgressTableViewCell" customModule="Reading_Robot" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="1072" height="100"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="25t-62-BAl" id="gTy-3s-9pK" userLabel="TheView">
-                                            <rect key="frame" x="0.0" y="0.0" width="1072" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1072" height="99.5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <subviews>
-                                                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.59999999999999998" translatesAutoresizingMaskIntoConstraints="NO" id="Zpv-Eq-2TV">
-                                                    <rect key="frame" x="878" y="72.5" width="177" height="4"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                </progressView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GGL-eB-KWO">
-                                                    <rect key="frame" x="19" y="8.5" width="158" height="146"/>
+                                                    <rect key="frame" x="4" y="20.5" width="162.5" height="131.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZYr-U0-DKm">
-                                                    <rect key="frame" x="456.5" y="11" width="160.5" height="143"/>
+                                                    <rect key="frame" x="451" y="20.5" width="169.5" height="134.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.59999999999999998" translatesAutoresizingMaskIntoConstraints="NO" id="Zpv-Eq-2TV">
+                                                    <rect key="frame" x="871" y="61.5" width="186" height="5"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                </progressView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
@@ -223,14 +223,14 @@
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Type" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LSG-a8-3pV">
-                                <rect key="frame" x="20" y="128" width="231" height="21"/>
+                                <rect key="frame" x="20" y="93" width="231" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Percentage" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LPf-lX-ggo">
-                                <rect key="frame" x="505" y="128" width="101" height="21"/>
+                                <rect key="frame" x="505" y="93" width="101" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -247,7 +247,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lv1-Cn-wah" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="xgD-6X-1XN" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="45.863309352517987" y="-750.35971223021591"/>
+            <point key="canvasLocation" x="45" y="-751"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="Dvz-tr-g7X">
@@ -538,7 +538,6 @@
         <image name="rounded-square" width="300" height="300"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="wEG-A6-ncr"/>
         <segue reference="Sya-da-Rh3"/>
     </inferredMetricsTieBreakers>
 </document>
