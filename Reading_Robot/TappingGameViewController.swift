@@ -48,7 +48,7 @@ class TappingGameViewController: UIViewController {
     
     // if going to tug of war game it sets the corresponding class variable to the level number that was clicked
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if(segue.identifier == "NEXT_LEVEL_SEGUE"){
+        if(segue.identifier == "UNWIND_TO_GAME"){
             let tow = segue.destination as! GameViewController
             tow.levelNumber = level + 1
         }

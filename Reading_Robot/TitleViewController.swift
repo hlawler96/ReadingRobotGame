@@ -35,7 +35,7 @@ class TitleViewController: UIViewController {
         openLocalDB()
         openProjectDB()
         
-//        dropDB(db: db, table: "UserData")
+        dropDB(db: db, table: "UserData")
         
         // checking for UserData table, creating if not found
         if sqlite3_exec(db, "create table if not exists UserData (miniGame text , lvl int , pattern text, stars int , wrongWords text , percent real, time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {

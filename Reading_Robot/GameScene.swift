@@ -4,6 +4,7 @@ import SQLite3
 
 //TODO:
 // 8) Add an extra frame to the rope pulling animation to make animation cleaner - ??
+// stillMode errors
 
 
 
@@ -280,7 +281,7 @@ class GameScene: SKScene {
                     //let correct_words = correctWords.joined(separator: ", ")
                     let percentage = (Words.count - wrong_words.count) / Words.count
                     let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) , '\(pattern!)', \(numStars) , '\(wrong_words)', \(percentage), CURRENT_TIMESTAMP)"
-                    print(insert_query)
+//                    print(insert_query)
                    
                     //Move players to one side or the other
                     let speed = size.width/15.0

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="ipad10_5" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="MarkerFeltWide.ttf">
+            <string>MarkerFelt-Wide</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Title View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -71,7 +76,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="716.54676258992811" y="-1763.3093525179856"/>
+            <point key="canvasLocation" x="1032" y="-1768"/>
         </scene>
         <!--Account View Controller-->
         <scene sceneID="ceE-5z-BLZ">
@@ -151,7 +156,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dLN-h6-PGV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="X32-sL-gdi" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="46" y="473"/>
+            <point key="canvasLocation" x="46" y="681"/>
         </scene>
         <!--Progress View Controller-->
         <scene sceneID="9WL-xZ-VXf">
@@ -359,7 +364,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="acv-LJ-FD5" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="t0L-Z7-05V" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1720.68345323741" y="-1762.5899280575541"/>
+            <point key="canvasLocation" x="2012" y="-750"/>
         </scene>
         <!--Level View Controller-->
         <scene sceneID="sQj-DK-F0T">
@@ -512,7 +517,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fyg-1e-ODo" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="rHw-tu-PAZ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="945" y="655"/>
+            <point key="canvasLocation" x="1032" y="681"/>
         </scene>
         <!--Tapping Game View Controller-->
         <scene sceneID="dqP-7e-lqV">
@@ -526,13 +531,13 @@
                     </view>
                     <connections>
                         <segue destination="Wwy-fq-qO6" kind="unwind" identifier="UNWIND_TO_LEVEL_MENU" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="TWE-ce-117"/>
-                        <segue destination="Z4S-wT-u8j" kind="show" identifier="NEXT_LEVEL_SEGUE" id="Sya-da-Rh3"/>
+                        <segue destination="Wwy-fq-qO6" kind="unwind" identifier="UNWIND_TO_GAME" unwindAction="unwindToGameWithSegue:" id="EsT-Mx-O4e"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iQM-oe-PLM" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Wwy-fq-qO6" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2151" y="655"/>
+            <point key="canvasLocation" x="2012" y="681"/>
         </scene>
     </scenes>
     <resources>
@@ -542,10 +547,6 @@
         <image name="LevelsBackground" width="4267" height="3200"/>
         <image name="Title_Screen-1" width="871" height="939"/>
         <image name="play" width="301" height="88"/>
-        <image name="rounded-square" width="300" height="300"/>
+        <image name="settings" width="128" height="128"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="wEG-A6-ncr"/>
-        <segue reference="Sya-da-Rh3"/>
-    </inferredMetricsTieBreakers>
 </document>

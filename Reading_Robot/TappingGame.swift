@@ -111,7 +111,7 @@ class TappingGame: SKScene {
             mud2.position.y = mud2.position.y - 8
             
             //only drop mud until the mud has fallen completely 5 times, this number could be changed based on difficulty
-            if resetCount < 5 {
+            if resetCount < 3 {
                 if mud.position.y + mud.size.height/2 < 0 {
                     mud.position.y = mud2.position.y + mud.size.height - 10
                     resetCount += 1
@@ -162,8 +162,9 @@ class TappingGame: SKScene {
                 }else if node == ok_button {
                     viewController.performSegue(withIdentifier: "UNWIND_TO_LEVEL_MENU", sender: viewController)
                 }else if node == next_button {
-                    viewController.performSegue(withIdentifier: "NEXT_LEVEL_SEGUE", sender: viewController)
+                    viewController.performSegue(withIdentifier: "UNWIND_TO_GAME", sender: viewController)
                 }
+                
             }
         }
     }
