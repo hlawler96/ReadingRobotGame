@@ -37,8 +37,8 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
         //cell1.textLabel?.text = x[indexPath.row]
         cell1.ProgressBar.progress = 0.5
         
-        let queryString = "SELECT AVG(U.percent) from UserData U where U."
-        
+        let queryString = "SELECT AVG(U.percent) from UserData U where U.lvl = \(indexPath.row)"
+
         var stmt:OpaquePointer?
         if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
             let errmsg = String(cString: sqlite3_errmsg(db)!)

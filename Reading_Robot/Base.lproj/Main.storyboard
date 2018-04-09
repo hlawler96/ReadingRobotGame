@@ -542,9 +542,10 @@
         <image name="LevelsBackground" width="4267" height="3200"/>
         <image name="Title_Screen-1" width="871" height="939"/>
         <image name="play" width="301" height="88"/>
-        <image name="settings" width="128" height="128"/>
+        <image name="rounded-square" width="300" height="300"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="8rB-IQ-kBl"/>
+        <segue reference="wEG-A6-ncr"/>
+        <segue reference="Sya-da-Rh3"/>
     </inferredMetricsTieBreakers>
 </document>
