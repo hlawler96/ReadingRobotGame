@@ -10,7 +10,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     @IBOutlet weak var LevelCollectionView: UICollectionView!
     
     @IBAction func unwindToLevelMenu(unwindSegue: UIStoryboardSegue){}
-
+    
     
     @IBAction func buttonClick(_ sender: UIButton) {
         // uses tag of button to perform proper segue
@@ -43,7 +43,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         charButton.setImage(UIImage(named: userColor + "_Idle_000"), for: .normal)
         LevelCollectionView.delegate = self
         LevelCollectionView.dataSource = self
-       
+        
     }
     override var shouldAutorotate: Bool {
         return true;
@@ -80,7 +80,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         return numLevels
     }
     
-
+    
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
@@ -92,14 +92,14 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         let numStars = getStars(level : cell.LevelButton.tag)
         switch numStars {
         case 1:
-           cell.StarView.image = UIImage(named: "Star.png")
+            cell.StarView.image = UIImage(named: "Star.png")
         case 2:
-             cell.StarView.image = UIImage(named: "Star.png")
-             cell.StarView1.image = UIImage(named: "Star.png")
+            cell.StarView.image = UIImage(named: "Star.png")
+            cell.StarView1.image = UIImage(named: "Star.png")
         case 3:
-             cell.StarView.image = UIImage(named: "Star.png")
-             cell.StarView1.image = UIImage(named: "Star.png")
-             cell.StarView2.image = UIImage(named: "Star.png")
+            cell.StarView.image = UIImage(named: "Star.png")
+            cell.StarView1.image = UIImage(named: "Star.png")
+            cell.StarView2.image = UIImage(named: "Star.png")
         default:
             if cell.LevelButton.tag > 1 && getStars(level: cell.LevelButton.tag - 1) == 0 {
                 cell.LevelLabel.backgroundColor = UIColor.gray
@@ -107,9 +107,10 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
             cell.StarView.image = nil
             cell.StarView1.image = nil
             cell.StarView2.image = nil
+            
         }
-        
         return cell
+        
     }
     
     func getStars(level: Int) -> Int {
@@ -130,7 +131,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         return numStars
     }
     
-
+    
     
     
 }

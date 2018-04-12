@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC11A57B207F9B6700452ADA /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC11A57A207F9B6700452ADA /* TutorialViewController.swift */; };
+		BC11A57D207F9CBC00452ADA /* GameTutorial.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC11A57C207F9CBC00452ADA /* GameTutorial.swift */; };
 		BC1A4A782069B7AA00ED7463 /* TappingGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1A4A772069B7AA00ED7463 /* TappingGame.swift */; };
 		BC1A4A7A2069B8D500ED7463 /* TappingGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1A4A792069B8D500ED7463 /* TappingGameViewController.swift */; };
 		BC1A71802038E71E00B2ECE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1A717F2038E71E00B2ECE6 /* AppDelegate.swift */; };
@@ -27,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BC11A57A207F9B6700452ADA /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
+		BC11A57C207F9CBC00452ADA /* GameTutorial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTutorial.swift; sourceTree = "<group>"; };
 		BC1A4A772069B7AA00ED7463 /* TappingGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappingGame.swift; sourceTree = "<group>"; };
 		BC1A4A792069B8D500ED7463 /* TappingGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappingGameViewController.swift; sourceTree = "<group>"; };
 		BC1A717C2038E71E00B2ECE6 /* Reading_Robot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reading_Robot.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,6 +100,8 @@
 				BC1A4A772069B7AA00ED7463 /* TappingGame.swift */,
 				BC1A4A792069B8D500ED7463 /* TappingGameViewController.swift */,
 				BC99362E2072C7AA00F8F551 /* SettingsViewController.swift */,
+				BC11A57A207F9B6700452ADA /* TutorialViewController.swift */,
+				BC11A57C207F9CBC00452ADA /* GameTutorial.swift */,
 			);
 			path = Reading_Robot;
 			sourceTree = "<group>";
@@ -180,12 +186,14 @@
 				D5909FB2203F40F300C9BEF1 /* LevelViewController.swift in Sources */,
 				D5FFB68F2046321800619A1D /* AccountViewController.swift in Sources */,
 				D5150C97203F6A8200D75CD0 /* CollectionViewCell.swift in Sources */,
+				BC11A57B207F9B6700452ADA /* TutorialViewController.swift in Sources */,
 				D5873E4520729542008B3263 /* ProgressViewController.swift in Sources */,
 				D5909FB0203F3F0000C9BEF1 /* TitleViewController.swift in Sources */,
 				BCB8E7F7203F109500C12886 /* GameScene.swift in Sources */,
 				BC1A4A7A2069B8D500ED7463 /* TappingGameViewController.swift in Sources */,
 				BC1A71802038E71E00B2ECE6 /* AppDelegate.swift in Sources */,
 				BC99362F2072C7AA00F8F551 /* SettingsViewController.swift in Sources */,
+				BC11A57D207F9CBC00452ADA /* GameTutorial.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
