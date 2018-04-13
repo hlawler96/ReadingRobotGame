@@ -13,6 +13,7 @@ import GameplayKit
 class TappingGameViewController: UIViewController {
     var playerScale, bucketScale : CGFloat!
     var level : Int!
+    var mudType: String!
 
     override func viewDidLoad() {
         super.viewDidLoad()

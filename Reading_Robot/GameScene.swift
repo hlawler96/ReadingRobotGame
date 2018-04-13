@@ -280,7 +280,7 @@ class GameScene: SKScene {
                     let wrong_words = wrongAnswers.joined(separator: ", ")
                     let percentage = CFloat((Words.count - wrongAnswers.count)) / CFloat(Words.count)
 
-                    let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) ,'\(pattern!)' \(numStars) , '\(wrong_words)', \(percentage), CURRENT_TIMESTAMP)"
+                    let insert_query = "insert into UserData VALUES('TOW' , \(levelNumber) ,'\(pattern!)' , \(numStars) , '\(wrong_words)', \(percentage), CURRENT_TIMESTAMP)"
                     
                     //Move players to one side or the other
                     let speed = size.width/15.0

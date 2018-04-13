@@ -22,8 +22,8 @@ class TappingGame: SKScene {
     var levelFrom : Int!
     
     let cropNode = SKCropNode()
-    let mud = SKSpriteNode(imageNamed: "mud")
-    let mud2 = SKSpriteNode(imageNamed: "mud")
+    var mud : SKSpriteNode!
+    var mud2 : SKSpriteNode!
     var mudStartY : CGFloat!
     var resetCount = 0
     
@@ -33,12 +33,13 @@ class TappingGame: SKScene {
     var bucket_taps = 0.0
     var bucketScaling = CGFloat(1.0)
     var playerScaling = CGFloat(1.0)
+    var mudType = "mud"
     
     override func didMove(to view: SKView) {
         // pause background at start if its already playing
         pauseBackgroundMusic()
-        
-        
+        mud = SKSpriteNode(imageNamed: mudType)
+        mud2 = SKSpriteNode(imageNamed: mudType)
         
         //add opposing player to the scene, size should be determined by difficulty of the level
         player.size.width = size.width / 5 * playerScaling

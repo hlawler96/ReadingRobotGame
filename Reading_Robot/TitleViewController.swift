@@ -44,10 +44,6 @@ class TitleViewController: UIViewController {
         openLocalDB()
         openProjectDB()
         
-        dropDB(table: "UserData")
-        dropDB(table: "SettingsData")
-        dropDB(table: "CharacterData")
-        
         
         // checking for UserData table, creating if not found
         if sqlite3_exec(db, "create table if not exists UserData (miniGame text , lvl int , pattern text, stars int , wrongWords text , percent real, time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
@@ -176,9 +172,9 @@ class TitleViewController: UIViewController {
             
         }else{
             backgroundMusicPlayer.volume = Float(sqlite3_column_double(stmt, 0))
-            font = String(cString: sqlite3_column_text(stmt, 2))
-            let still = Int(sqlite3_column_int(stmt, 3))
-            print("NOT HIT")
+            font = String(cString: sqlite3_column_text(stmt, 1))
+            let still = Int(sqlite3_column_int(stmt, 2))
+            print("\(font)")
             if still == 0 {
                 stillMode = false
             }else {
