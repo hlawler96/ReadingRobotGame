@@ -21,10 +21,9 @@ class TappingGameViewController: UIViewController {
         scene.playerScaling = playerScale
         scene.bucketScaling = bucketScale
         scene.viewController = self
+        scene.mudType = mudType
         scene.levelFrom = level
         let skView = view as! SKView
-        skView.showsFPS = true
-        skView.showsNodeCount = true
         skView.ignoresSiblingOrder = true
         scene.scaleMode = .resizeFill
         skView.presentScene(scene)

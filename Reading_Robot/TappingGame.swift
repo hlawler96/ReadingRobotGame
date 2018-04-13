@@ -33,7 +33,7 @@ class TappingGame: SKScene {
     var bucket_taps = 0.0
     var bucketScaling = CGFloat(1.0)
     var playerScaling = CGFloat(1.0)
-    var mudType = "mud"
+    var mudType : String!
     
     override func didMove(to view: SKView) {
         // pause background at start if its already playing
