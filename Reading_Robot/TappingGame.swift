@@ -38,6 +38,15 @@ class TappingGame: SKScene {
     override func didMove(to view: SKView) {
         // pause background at start if its already playing
         pauseBackgroundMusic()
+        let i = Int(arc4random_uniform(3)) + 1
+        if i == 1 {
+            mudType = "mud"
+        }else if i == 2 {
+            mudType = "lava"
+        }else {
+            mudType = "slime"
+        }
+        
         mud = SKSpriteNode(imageNamed: mudType)
         mud2 = SKSpriteNode(imageNamed: mudType)
         
@@ -112,7 +121,7 @@ class TappingGame: SKScene {
             mud2.position.y = mud2.position.y - 8
             
             //only drop mud until the mud has fallen completely 5 times, this number could be changed based on difficulty
-            if resetCount < 3 {
+            if resetCount < 2 {
                 if mud.position.y + mud.size.height/2 < 0 {
                     mud.position.y = mud2.position.y + mud.size.height - 10
                     resetCount += 1
@@ -141,7 +150,7 @@ class TappingGame: SKScene {
             spillingMud = true
         }else if !bucketFalling && bucket_taps > 0.1 {
             //this is the pull back against the users taps, this number should be changed based on the difficulty of the level
-            bucket_taps = bucket_taps - Double(0.4 * bucketScaling)
+            bucket_taps = bucket_taps - Double(0.08 * bucketScaling)
              bucket.zRotation = -(CGFloat((Double.pi / 4) / 25) * (CGFloat(bucket_taps)))
         }
     }
@@ -151,7 +160,7 @@ class TappingGame: SKScene {
             let currentPoint = touch.location(in: self)
             let touchedNodes = self.nodes(at: currentPoint)
             for node in touchedNodes {
-                if node == bucket && !bucketFalling{
+                if !bucketFalling{
                     // if the user touches the bucket then increment the bucket taps the number of times the user tapped
                     bucket_taps = bucket_taps +  Double(2 * touches.count)
                     if bucket_taps >= 75 {
@@ -180,7 +189,7 @@ class TappingGame: SKScene {
         addChild(popup)
         
         let text1 = SKLabelNode(fontNamed: font!)
-        text1.text = "Great reading out there!"
+        text1.text = "Great reading out there \(playerName!)!"
         text1.fontSize = 32
         text1.fontColor = SKColor.black
         text1.position = CGPoint(x: 0, y: -1 *  popup.size.height / 4)

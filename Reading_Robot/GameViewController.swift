@@ -46,25 +46,21 @@ class GameViewController: UIViewController {
 
         var bucketScale = CGFloat(1.4)
         var playerScale = CGFloat(0.7)
-        var mudType = "mud"
         if scene.cloudPeriod == 3.0 {
             bucketScale = 0.8
             playerScale =  1.0
         }else if scene.cloudPeriod == 2.0 {
             bucketScale = 1.0
             playerScale = 0.9
-            mudType = "lava"
         }else if scene.cloudPeriod == 1.5{
             bucketScale = 1.2
             playerScale = 0.8
-            mudType = "slime"
         }
         
        if segue.identifier == "TAPPING_GAME" {
             let tap = segue.destination as! TappingGameViewController
             tap.playerScale = playerScale
             tap.bucketScale = bucketScale
-            tap.mudType = mudType
             tap.level = levelNumber
         }
     }

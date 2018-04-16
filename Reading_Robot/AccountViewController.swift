@@ -11,22 +11,33 @@ import SpriteKit
 import GameplayKit
 import SQLite3
 
-let colors = ["Red","Grey","Blue","Yellow","Turquoise","Green"]
+let colors = ["Blue","Grey","Red","Yellow","Turquoise","Green"]
+let names = ["Scrappie", "Rusty", "Sparky", "Tinker", "Ratchet", "Jet"]
+var playerName: String!
 
 class AccountViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate{
-  
-    
     
     @IBOutlet weak var character: UIImageView!
     @IBOutlet weak var dropDown: UIPickerView!
+    @IBOutlet weak var nameField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         dropDown.delegate = self
         dropDown.dataSource = self
         updateImage()
+        nameField.text = playerName
         
     }
+    
+    @IBAction func nameChanged(_ sender: UITextField) {
+        playerName = sender.text
+        if sqlite3_exec(db, "UPDATE CharacterData SET name = '" + playerName + "' WHERE user = 1", nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("error inserting into table: \(errmsg)")
+        }
+    }
+    
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -34,11 +45,11 @@ class AccountViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return colors.count
+        return names.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return colors[row]
+        return names[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

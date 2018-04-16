@@ -16,7 +16,7 @@ import AVKit
 var db, db2: OpaquePointer?
 var backgroundMusicPlayer: AVAudioPlayer!
 var userColor, oppColor, font: String!
-var stillMode : Bool!
+var stillMode, patternStaysOn : Bool!
 var music = 1
 var playedBefore = true
 class TitleViewController: UIViewController {
@@ -44,6 +44,9 @@ class TitleViewController: UIViewController {
         openLocalDB()
         openProjectDB()
         
+        dropDB(table: "UserData")
+        dropDB(table: "SettingsData")
+        dropDB(table: "CharacterData")
         
         // checking for UserData table, creating if not found
         if sqlite3_exec(db, "create table if not exists UserData (miniGame text , lvl int , pattern text, stars int , wrongWords text , percent real, time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {
@@ -51,12 +54,12 @@ class TitleViewController: UIViewController {
             print("error creating table: \(errmsg)")
         }
         
-        if sqlite3_exec(db, "create table if not exists SettingsData (musicVol real, font text, stillMode int)", nil, nil, nil) != SQLITE_OK {
+        if sqlite3_exec(db, "create table if not exists SettingsData (musicVol real, font text, stillMode int, patternStays int)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
         
-        if sqlite3_exec(db, "create table if not exists CharacterData (user int, color text, accessory text)", nil, nil, nil) != SQLITE_OK {
+        if sqlite3_exec(db, "create table if not exists CharacterData (user int, color text, accessory text, name text)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
@@ -65,9 +68,6 @@ class TitleViewController: UIViewController {
         oppColor = "Blue"
         loadSettings()
         
-        
-        
-
     }
 
 
@@ -81,7 +81,6 @@ class TitleViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -130,7 +129,7 @@ class TitleViewController: UIViewController {
         }
     }
     func loadUserColor(){
-        let queryString = "select color from CharacterData WHERE user = 1"
+        let queryString = "select color, name from CharacterData WHERE user = 1"
         var stmt:OpaquePointer?
         if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
             let errmsg = String(cString: sqlite3_errmsg(db)!)
@@ -138,15 +137,17 @@ class TitleViewController: UIViewController {
         }
         
         if(sqlite3_step(stmt) != SQLITE_ROW){
-            if sqlite3_exec(db, "Insert into CharacterData(user,color,accessory) SELECT 1, 'Blue', 'none' WHERE NOT EXISTS (SELECT * FROM CharacterData)", nil, nil, nil) != SQLITE_OK {
+            if sqlite3_exec(db, "Insert into CharacterData(user,color,accessory,name) SELECT 1, 'Blue', 'none', '' WHERE NOT EXISTS (SELECT * FROM CharacterData)", nil, nil, nil) != SQLITE_OK {
                 let errmsg = String(cString: sqlite3_errmsg(db)!)
                 print("error inserting into table: \(errmsg)")
             }
             playedBefore = false
             userColor = "Blue"
+            playerName = ""
             
         }else{
             userColor = String(cString: sqlite3_column_text(stmt, 0))
+            playerName = String(cString: sqlite3_column_text(stmt, 1))
         }
         sqlite3_finalize(stmt)
     }
@@ -160,7 +161,7 @@ class TitleViewController: UIViewController {
         }
         
         if(sqlite3_step(stmt) != SQLITE_ROW){
-            if sqlite3_exec(db, "Insert into SettingsData VALUES(1.0, 'ChalkboardSE-Bold', 0 ) ", nil, nil, nil) != SQLITE_OK {
+            if sqlite3_exec(db, "Insert into SettingsData VALUES(1.0, 'ChalkboardSE-Bold', 0 , 0) ", nil, nil, nil) != SQLITE_OK {
                 let errmsg = String(cString: sqlite3_errmsg(db)!)
                 print("error inserting into table: \(errmsg)")
             }
@@ -168,16 +169,25 @@ class TitleViewController: UIViewController {
             backgroundMusicPlayer.volume = 1.0
             stillMode = false
             playedBefore = false
+            patternStaysOn = false
             sqlite3_finalize(stmt)
             
         }else{
             backgroundMusicPlayer.volume = Float(sqlite3_column_double(stmt, 0))
             font = String(cString: sqlite3_column_text(stmt, 1))
             let still = Int(sqlite3_column_int(stmt, 2))
+            let patternStays = Int(sqlite3_column_int(stmt, 3))
+            
             if still == 0 {
                 stillMode = false
             }else {
                 stillMode = true
+            }
+            
+            if patternStays == 0 {
+                patternStaysOn = false
+            }else {
+                patternStaysOn = true
             }
              sqlite3_finalize(stmt)
         }

@@ -13,7 +13,6 @@ import GameplayKit
 class TappingGameViewController: UIViewController {
     var playerScale, bucketScale : CGFloat!
     var level : Int!
-    var mudType: String!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +20,6 @@ class TappingGameViewController: UIViewController {
         scene.playerScaling = playerScale
         scene.bucketScaling = bucketScale
         scene.viewController = self
-        scene.mudType = mudType
         scene.levelFrom = level
         let skView = view as! SKView
         skView.ignoresSiblingOrder = true
