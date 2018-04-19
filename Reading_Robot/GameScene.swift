@@ -10,7 +10,6 @@ import SQLite3
 
 class GameScene: SKScene {
     let rope = SKSpriteNode(imageNamed: "rope")
-    let background = SKSpriteNode(imageNamed: "LevelBackground1")
     var player = SKSpriteNode(imageNamed: userColor + "_Attack_005")
     let player2 = SKSpriteNode(imageNamed: userColor + "_Attack_005")
     let bottom = SKSpriteNode(imageNamed: "rectangle-2")
@@ -24,7 +23,7 @@ class GameScene: SKScene {
     var oppPull2 = SKTexture(imageNamed: userColor + "_Attack_005")
     let scoreboard = SKSpriteNode(imageNamed: "rectangle")
     let label = SKLabelNode(fontNamed: font)
-    let popupText = SKLabelNode(fontNamed: "GillSans-UltraBold")
+    let popupText = SKLabelNode(fontNamed: font)
     var viewController : UIViewController!
     
     var timeToPull = true
@@ -76,6 +75,7 @@ class GameScene: SKScene {
         pauseBackgroundMusic()
         
         // add background to view
+        let background = getBackground(i: levelNumber-1)
         background.size.width = size.width
         background.size.height = size.height
         background.position = CGPoint(x: size.width/2, y: size.height/2)
@@ -206,17 +206,36 @@ class GameScene: SKScene {
                 popup.size.height = size.height / 3
                 popup.zPosition = 6
                 
-                popupText.text = "\(playerName!) Vs. \(names[colors.index(of: oppColor)!])"
+                let playerOneName = SKLabelNode(fontNamed: font)
+                let playerTwoName = SKLabelNode(fontNamed: font)
+                playerOneName.text = playerName!
+                playerTwoName.text = names[colors.index(of: oppColor)!]
+                playerOneName.fontColor = colorToUIColor(color: userColor)
+                playerTwoName.fontColor =  colorToUIColor(color: oppColor)
+                playerOneName.fontSize = 64
+                playerTwoName.fontSize = 64
+                
+                popupText.text = " Vs."
                 popupText.fontSize = 64
-                popup.size.width = popupText.frame.width * 1.1
+                popup.size.width = (popupText.frame.width + playerOneName.frame.width + playerTwoName.frame.width) * 1.3
                 addChild(popup)
                 popupText.position.y = popupText.frame.height * -0.25
+                playerOneName.position.y = popupText.frame.height * -0.25
+                playerTwoName.position.y = popupText.frame.height * -0.25
+                playerOneName.zPosition = 1
+                playerTwoName.zPosition = 1
+                playerOneName.position.x = 0 - popupText.frame.width/2 - 2*playerOneName.frame.width/3
+                playerTwoName.position.x = 0 + popupText.frame.width/2 + 2*playerTwoName.frame.width/3
                 popupText.fontColor = UIColor.black
                 popupText.zPosition = 1
                 popup.addChild(popupText)
+                popup.addChild(playerOneName)
+                popup.addChild(playerTwoName)
             }
             
         }else if t > 3 && t < 6 {
+            popup.removeAllChildren()
+            popup.addChild(popupText)
             popupText.text = "Your pattern is \(pattern!)!"
             popup.size.width = popupText.frame.width * 1.1
         }else if t > 6 && t < 7 {
@@ -594,6 +613,8 @@ class GameScene: SKScene {
         }
     }
     
+    
+    
     func getLevelData() {
         let levelQuery = "SELECT * FROM LevelData L WHERE L.number=\(levelNumber)"
         //statement pointer
@@ -635,6 +656,40 @@ class GameScene: SKScene {
 
     }
     
+}
+
+func colorToUIColor (color: String) -> UIColor {
+    if color == "Blue"{
+        return UIColor.blue
+    }else if color == "Red" {
+        return UIColor.red
+    }else if color == "Green" {
+        return UIColor.green
+    }else if color == "Yellow" {
+        return UIColor.yellow
+    }else if color == "Grey"{
+        return UIColor.gray
+    }else {
+        return UIColor.init(red: 0, green: 206.0 / 255.0 , blue: 209.0 / 255.0 , alpha: 1.0)
+    }
+}
+
+func getBackground(i : Int) -> SKSpriteNode {
+    if i / 3 <= 0 {
+        return SKSpriteNode(imageNamed: "1-backgrounds")
+    }else if i / 3 <= 1{
+        return SKSpriteNode(imageNamed: "2-backgrounds")
+    }else if i / 3 <= 2 {
+        return SKSpriteNode(imageNamed: "3-backgrounds")
+    }else if i/3 <= 3 {
+        return SKSpriteNode(imageNamed: "4-backgrounds")
+    }else if i/3 <= 4 {
+        return SKSpriteNode(imageNamed: "5-backgrounds")
+    }else if i/3 <= 5 {
+        return SKSpriteNode(imageNamed: "6-backgrounds")
+    }else {
+        return getBackground(i: i - 18)
+    }
 }
 
 //following two extensions allow to call .shuffle() on arrays to make life simpler when choosing words

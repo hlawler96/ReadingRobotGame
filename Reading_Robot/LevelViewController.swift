@@ -11,7 +11,6 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     @IBAction func unwindToLevelMenu(unwindSegue: UIStoryboardSegue){}
     
-    
     @IBAction func buttonClick(_ sender: UIButton) {
         // uses tag of button to perform proper segue
         if sender.tag == CHARACTER_CUSTOM_TAG {
@@ -93,9 +92,12 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
         switch numStars {
         case 1:
             cell.StarView.image = UIImage(named: "Star.png")
+            cell.StarView1.image = nil
+            cell.StarView2.image = nil
         case 2:
             cell.StarView.image = UIImage(named: "Star.png")
             cell.StarView1.image = UIImage(named: "Star.png")
+            cell.StarView2.image = nil
         case 3:
             cell.StarView.image = UIImage(named: "Star.png")
             cell.StarView1.image = UIImage(named: "Star.png")

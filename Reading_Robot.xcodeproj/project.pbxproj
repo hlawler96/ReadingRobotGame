@@ -14,6 +14,9 @@
 		BC1A71802038E71E00B2ECE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1A717F2038E71E00B2ECE6 /* AppDelegate.swift */; };
 		BC1A71882038E71E00B2ECE6 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1A71872038E71E00B2ECE6 /* GameViewController.swift */; };
 		BC1A718D2038E71E00B2ECE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC1A718C2038E71E00B2ECE6 /* Assets.xcassets */; };
+		BC56FF6A208943830083E423 /* splat.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BC56FF69208943820083E423 /* splat.mp3 */; };
+		BC56FF6C208949330083E423 /* tap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BC56FF6B208949330083E423 /* tap.mp3 */; };
+		BC56FF6E20894C6C0083E423 /* trombone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BC56FF6D20894C6C0083E423 /* trombone.mp3 */; };
 		BC99362F2072C7AA00F8F551 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC99362E2072C7AA00F8F551 /* SettingsViewController.swift */; };
 		BCA9603B2060560E00451BC8 /* ReadingRobot.db in Resources */ = {isa = PBXBuildFile; fileRef = BCA9603A2060516900451BC8 /* ReadingRobot.db */; };
 		BCA9603D2060733800451BC8 /* music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCA9603C2060733700451BC8 /* music.mp3 */; };
@@ -38,6 +41,9 @@
 		BC1A71872038E71E00B2ECE6 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		BC1A718C2038E71E00B2ECE6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BC1A71912038E71E00B2ECE6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BC56FF69208943820083E423 /* splat.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = splat.mp3; path = "../../../../../Music/iTunes/iTunes Media/Music/Unknown Artist/Unknown Album/splat.mp3"; sourceTree = "<group>"; };
+		BC56FF6B208949330083E423 /* tap.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = tap.mp3; path = "../../../../../Music/iTunes/iTunes Media/Music/Unknown Artist/Unknown Album/tap.mp3"; sourceTree = "<group>"; };
+		BC56FF6D20894C6C0083E423 /* trombone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = trombone.mp3; path = "../../../../../Music/iTunes/iTunes Media/Music/Unknown Artist/Unknown Album/trombone.mp3"; sourceTree = "<group>"; };
 		BC99362E2072C7AA00F8F551 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		BCA9603A2060516900451BC8 /* ReadingRobot.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = ReadingRobot.db; sourceTree = "<group>"; };
 		BCA9603C2060733700451BC8 /* music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = music.mp3; sourceTree = "<group>"; };
@@ -88,8 +94,11 @@
 				D5909FB1203F40F300C9BEF1 /* LevelViewController.swift */,
 				D5873E4420729542008B3263 /* ProgressViewController.swift */,
 				D5873E482072AA5B008B3263 /* ProgressTableViewCell.swift */,
+				BC56FF69208943820083E423 /* splat.mp3 */,
 				D5150C96203F6A8200D75CD0 /* CollectionViewCell.swift */,
 				BCA9603C2060733700451BC8 /* music.mp3 */,
+				BC56FF6B208949330083E423 /* tap.mp3 */,
+				BC56FF6D20894C6C0083E423 /* trombone.mp3 */,
 				BC1A71872038E71E00B2ECE6 /* GameViewController.swift */,
 				D5FFB68E2046321800619A1D /* AccountViewController.swift */,
 				BC1A718C2038E71E00B2ECE6 /* Assets.xcassets */,
@@ -165,8 +174,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC56FF6E20894C6C0083E423 /* trombone.mp3 in Resources */,
 				BCA9603D2060733800451BC8 /* music.mp3 in Resources */,
+				BC56FF6A208943830083E423 /* splat.mp3 in Resources */,
 				BCA9603B2060560E00451BC8 /* ReadingRobot.db in Resources */,
+				BC56FF6C208949330083E423 /* tap.mp3 in Resources */,
 				BCB8E805203F12FA00C12886 /* Main.storyboard in Resources */,
 				BCB8E806203F12FA00C12886 /* LaunchScreen.storyboard in Resources */,
 				BC1A718D2038E71E00B2ECE6 /* Assets.xcassets in Resources */,
