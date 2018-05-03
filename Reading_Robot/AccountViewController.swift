@@ -3,7 +3,7 @@
 //  Reading_Robot
 //
 //  Created by Programming on 2/27/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
+//  Copyright © 2018 Derek Creason. All rights reserved.
 //
 
 import UIKit
@@ -26,17 +26,30 @@ class AccountViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         dropDown.delegate = self
         dropDown.dataSource = self
         updateImage()
-        nameField.text = playerName
+        if playerName == "" || playerName == nil {
+            nameField.text = names[colors.index(of: userColor)!]
+        }else{
+            nameField.text = playerName
+        }
+        
+        
         
     }
     
-    @IBAction func nameChanged(_ sender: UITextField) {
+    @IBAction func nameChanged(_ sender: UITextView) {
+        if sender.text!.count > 10 {
+            sender.text = String(sender.text!.prefix(10))
+        }
         playerName = sender.text
+        
         if sqlite3_exec(db, "UPDATE CharacterData SET name = '" + playerName + "' WHERE user = 1", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error inserting into table: \(errmsg)")
         }
     }
+   
+    
+    
     
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -45,16 +58,19 @@ class AccountViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return names.count
+        return colors.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return names[row]
+        return colors[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         userColor = colors[row]
         updateImage()
+        if playerName == "" || playerName == nil {
+            nameField.text = names[colors.index(of: userColor)!]
+        }
         if sqlite3_exec(db, "UPDATE CharacterData SET color = '" + userColor + "' WHERE user = 1", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error inserting into table: \(errmsg)")

@@ -93,11 +93,11 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o2r-Og-Hpa">
-                                <rect key="frame" x="334" y="652" width="444" height="110"/>
+                                <rect key="frame" x="57" y="350" width="444" height="110"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Robot" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="un0-YI-s18">
-                                        <rect key="frame" x="58" y="44" width="120" height="36"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Robot Color" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="un0-YI-s18">
+                                        <rect key="frame" x="41" y="44" width="154" height="36"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
@@ -121,11 +121,11 @@
                                 </connections>
                             </button>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fxg-9v-ajH">
-                                <rect key="frame" x="305" y="183" width="503" height="469"/>
+                                <rect key="frame" x="509" y="171" width="503" height="469"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </imageView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rq5-ut-QiR">
-                                <rect key="frame" x="334" y="65" width="444" height="110"/>
+                                <rect key="frame" x="57" y="171" width="444" height="110"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QD0-OL-kBK">
@@ -140,14 +140,28 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="47"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES" textContentType="name"/>
                                         <connections>
-                                            <action selector="nameChanged:" destination="7m5-N1-3SW" eventType="editingDidEnd" id="6fp-V2-3Ec"/>
+                                            <action selector="nameChanged:" destination="7m5-N1-3SW" eventType="editingChanged" id="kPp-6e-1H8"/>
+                                            <action selector="nameChanged:" destination="7m5-N1-3SW" eventType="valueChanged" id="oER-3v-mOg"/>
                                         </connections>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" red="0.7408651611" green="0.93062385420000004" blue="0.96216261390000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="09e-UL-gb7">
+                                <rect key="frame" x="196" y="519" width="167" height="75"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.27530199468887895" green="0.96216261390000002" blue="0.20018163467485925" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="65"/>
+                                <state key="normal" title="OK">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleShadowColor" red="0.7408651611" green="0.93062385420000004" blue="0.96216261390000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
+                                <connections>
+                                    <segue destination="X32-sL-gdi" kind="unwind" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="DAJ-03-3DD"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="UoM-NK-XM8"/>
@@ -561,14 +575,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ma2-8g-sT1">
-                                <rect key="frame" x="20" y="56" width="227" height="30"/>
+                                <rect key="frame" x="20" y="20" width="227" height="110"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.7408651611" green="0.93062385420000004" blue="0.96216261390000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="84"/>
                                 <state key="normal" title="Skip">
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
                                 <connections>
-                                    <segue destination="Wwy-fq-qO6" kind="unwind" unwindAction="unwindToLevelMenuWithUnwindSegue:" id="ujy-RY-kAB"/>
+                                    <action selector="SkipClicked:" destination="hW7-wa-qBw" eventType="touchUpInside" id="Isk-EM-d6r"/>
                                 </connections>
                             </button>
                         </subviews>

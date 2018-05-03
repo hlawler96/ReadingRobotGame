@@ -2,8 +2,8 @@
 //  TappingGame.swift
 //  Reading_Robot
 //
-//  Created by Hayden Lawler on 3/26/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
+//  Created by Derek Creason on 3/26/18.
+//  Copyright © 2018 Derek Creason. All rights reserved.
 //
 import SQLite3
 import SpriteKit
@@ -23,10 +23,9 @@ class TappingGame: SKScene {
     
     let cropNode = SKCropNode()
     var mud : SKSpriteNode!
-    var mud2 : SKSpriteNode!
     var mudStartY : CGFloat!
-    var resetCount = 0
     
+    var skipClicked = false
     var spillingMud = false
     var bucketFalling = false
     var gameOver = false
@@ -51,7 +50,6 @@ class TappingGame: SKScene {
         }
         
         mud = SKSpriteNode(imageNamed: mudType)
-        mud2 = SKSpriteNode(imageNamed: mudType)
         
         //add opposing player to the scene, size should be determined by difficulty of the level
         player.size.width = size.width / 5 * playerScaling
@@ -83,10 +81,6 @@ class TappingGame: SKScene {
         mud.position = CGPoint(x: bucket.position.x+15  , y: mudStartY)
         mud.zPosition = 3
         
-        // second mud node used so that you can have one node visible on the scene and the other node can be moved to create a continuous stream
-        mud2.size = mud.size
-        mud2.position = CGPoint(x: bucket.position.x+15  , y: mudStartY + mud2.size.height - 20)
-        mud2.zPosition = 3
         
         //Crop Node used so that the mud is only visible below the bucket, creates the concept of pouring out of the bucket
         let rect = CGRect(x: bucket.position.x - bucket.size.width/2, y: bucket.position.y - bucket.size.height/2.5 - frame.size.height, width: bucket.size.width, height: frame.size.height)
@@ -94,7 +88,6 @@ class TappingGame: SKScene {
         shapeNode.fillColor = UIColor.white
         cropNode.maskNode = shapeNode
         cropNode.addChild(mud)
-        cropNode.addChild(mud2)
         cropNode.zPosition = -1
         addChild(cropNode)
         
@@ -116,31 +109,31 @@ class TappingGame: SKScene {
     
     override func update(_ currentTime: TimeInterval){
         // spillingMud set to true once the bucket is all the way upside down
-        if spillingMud {
+        if skipClicked && bucket.zRotation < CGFloat.pi{
+            bucket.zRotation = CGFloat.pi
+            cropNode.removeAllChildren()
+            cropNode.removeFromParent()
+            player.texture = SKTexture(imageNamed: "blue_mud" )
+            bucketFalling = true
+            bucket_taps = 100
+            gameOver = true
+            addPopup()
+        }else if spillingMud{
             //put the Crop Node in front so the mud is visible
             cropNode.zPosition = 3
             //Move mud south
             mud.position.y = mud.position.y - 8
-            mud2.position.y = mud2.position.y - 8
             
-            //only drop mud until the mud has fallen completely 5 times, this number could be changed based on difficulty
-            if resetCount < 1 {
-                if mud.position.y + mud.size.height/2 < 0 {
-                    mud.position.y = mud2.position.y + mud.size.height - 10
-                    resetCount += 1
-                    player.texture = SKTexture(imageNamed: "blue_mud")
-                }else if mud2.position.y  + mud2.size.height/2 < 0 {
-                    mud2.position.y = mud.position.y + mud.size.height - 10
-                    resetCount += 1
-                }
-            }else {
+            if mud.position.y < mudStartY - mud.size.height/2 {
+                player.texture = SKTexture(imageNamed: "blue_mud" )
+            }
                 //If the mud is done falling and both are off the screen get rid of the mud nodes and the cropNode
-                if mud.position.y + mud.size.height/2 < 0 && mud2.position.y  + mud2.size.height/2 < 0 {
+                if mud.position.y + mud.size.height/2 < 0 {
                     cropNode.removeAllChildren()
                     cropNode.removeFromParent()
                     addPopup()
                 }
-            }
+            
         }else if bucketFalling && bucket_taps < 100{
             //Once the user clicks 75 times the bucket falls the rest of the way
             bucket_taps += 1

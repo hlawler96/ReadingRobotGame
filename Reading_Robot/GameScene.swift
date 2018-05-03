@@ -111,23 +111,33 @@ class GameScene: SKScene {
         playerNameLabel.text = names[colors.index(of: oppColor)!]
         playerNameLabel.position = CGPoint(x: player.size.width * 0.05, y: player.size.height * 0.3)
         playerNameLabel.zPosition = 1
-        playerNameLabel.color = UIColor.cyan
+        playerNameLabel.color = UIColor.white
+        playerNameLabel.fontColor = UIColor.black
         player.addChild(playerNameLabel)
         
-        let labelBackground = SKSpriteNode(color: UIColor.cyan, size: playerNameLabel.frame.size)
+        let labelBackground = SKSpriteNode(color: UIColor.white, size: playerNameLabel.frame.size)
+        labelBackground.size.height = labelBackground.size.height*1.3
         labelBackground.zPosition = -1
         labelBackground.position.y = labelBackground.size.height*0.3
         playerNameLabel.addChild(labelBackground)
         
+       
+        
         let player2NameLabel = SKLabelNode(fontNamed: font)
-        player2NameLabel.text = playerName
+        if playerName == "" || playerName == nil {
+            player2NameLabel.text = names[colors.index(of: userColor)!]
+        }else {
+            player2NameLabel.text = playerName
+        }
         player2NameLabel.position = CGPoint(x: player2.size.width * -0.05, y: player.size.height * 0.3)
         player2NameLabel.zPosition = 1
-        player2NameLabel.color = UIColor.cyan
+        player2NameLabel.fontColor = UIColor.black
+        player2NameLabel.color = UIColor.white
         player2NameLabel.xScale = player2NameLabel.xScale * -1
         player2.addChild(player2NameLabel)
         
-        let label2Background = SKSpriteNode(color: UIColor.cyan, size: player2NameLabel.frame.size)
+        let label2Background = SKSpriteNode(color: UIColor.white, size: player2NameLabel.frame.size)
+        label2Background.size.height = label2Background.size.height*1.3
         label2Background.zPosition = -1
         label2Background.position.y = label2Background.size.height*0.3
         player2NameLabel.addChild(label2Background)
@@ -208,7 +218,11 @@ class GameScene: SKScene {
                 
                 let playerOneName = SKLabelNode(fontNamed: font)
                 let playerTwoName = SKLabelNode(fontNamed: font)
-                playerOneName.text = playerName!
+                if playerName == "" || playerName == nil {
+                    playerOneName.text = names[colors.index(of: userColor)!]
+                }else{
+                    playerOneName.text = playerName!
+                }
                 playerTwoName.text = names[colors.index(of: oppColor)!]
                 playerOneName.fontColor = colorToUIColor(color: userColor)
                 playerTwoName.fontColor =  colorToUIColor(color: oppColor)
@@ -217,15 +231,17 @@ class GameScene: SKScene {
                 
                 popupText.text = " Vs."
                 popupText.fontSize = 64
-                popup.size.width = (popupText.frame.width + playerOneName.frame.width + playerTwoName.frame.width) * 1.3
+                playerOneName.position.x = 0 - popupText.frame.width/2 - 2*playerOneName.frame.width/3
+                playerTwoName.position.x = 0 + popupText.frame.width/2 + 2*playerTwoName.frame.width/3
+                popup.size.width = (popupText.frame.width + playerOneName.frame.width + playerTwoName.frame.width)*1.1 + playerTwoName.position.x - playerOneName.position.x
+                playerOneName.position.x = -1 * popup.size.width / 4
+                playerTwoName.position.x = popup.size.width/4
                 addChild(popup)
                 popupText.position.y = popupText.frame.height * -0.25
                 playerOneName.position.y = popupText.frame.height * -0.25
                 playerTwoName.position.y = popupText.frame.height * -0.25
                 playerOneName.zPosition = 1
                 playerTwoName.zPosition = 1
-                playerOneName.position.x = 0 - popupText.frame.width/2 - 2*playerOneName.frame.width/3
-                playerTwoName.position.x = 0 + popupText.frame.width/2 + 2*playerTwoName.frame.width/3
                 popupText.fontColor = UIColor.black
                 popupText.zPosition = 1
                 popup.addChild(popupText)
@@ -256,8 +272,9 @@ class GameScene: SKScene {
                     label.text = "Tug Of War!"
                 }
             }
+            
             // if the game is still going on then have the two robots pull the rope back and forth
-            if time < Double(Words.count+2) * cloudPeriod && !stillMode{
+            if time < Double(Words.count+2) * cloudPeriod && !stillMode && circleCounter < circles.count{
                 let pulling = [pull2, pull1, pull0, pull1, pull2]
                 let oppPulling = [oppPull2, oppPull1, oppPull0, oppPull1, oppPull2]
                 let remainder = time.truncatingRemainder(dividingBy: 8.0)
@@ -279,7 +296,7 @@ class GameScene: SKScene {
            
             }
             // if there are still words to go, then modify the clouds/words every cloud Period (assigned based on speed instance variable
-            if wordCounter < Words.count {
+            if wordCounter < Words.count && circleCounter < circles.count{
                 if wordCounter < 3 {
                     if !phaseTwo && dTime >= 2*cloudPeriod/3 {
                         phaseTwo = true
@@ -336,7 +353,7 @@ class GameScene: SKScene {
                         }
                     }
                 }
-            }else if time >= Double(Words.count+2) * cloudPeriod{
+            }else if time >= Double(Words.count+2) * cloudPeriod || circleCounter >= circles.count{
                 // end game
                 // update db with data, asserting gameOver, printing most recent data
                 if !gameOver {
@@ -649,9 +666,14 @@ class GameScene: SKScene {
         
         player = SKSpriteNode(imageNamed: oppColor + "_Attack_005")
         correctWords = getRandomCorrectWords(pattern: pattern, db: db2)
+        let correctWord = correctWords[0]
+        correctWords.remove(at: 0)
         Words = getRandomWrongWords(pattern: pattern, db: db2)
         Words.append(contentsOf: correctWords)
+        let randIndex = Int(arc4random_uniform(3))
         Words.shuffle()
+        Words.insert(correctWord, at: randIndex)
+        correctWords.append(correctWord)
         sqlite3_finalize(stmt)
 
     }

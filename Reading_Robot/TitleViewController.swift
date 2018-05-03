@@ -3,7 +3,7 @@
 //  Reading_Robot
 //
 //  Created by Programming on 2/22/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
+//  Copyright © 2018 Derek Creason. All rights reserved.
 //
 
 import Foundation
@@ -40,13 +40,12 @@ class TitleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // open db variables for project and local databases
         openLocalDB()
         openProjectDB()
         
-        dropDB(table: "UserData")
-        dropDB(table: "SettingsData")
-        dropDB(table: "CharacterData")
+//        dropDB(table: "UserData")
+//        dropDB(table: "SettingsData")
+//        dropDB(table: "CharacterData")
         
         // checking for UserData table, creating if not found
         if sqlite3_exec(db, "create table if not exists UserData (miniGame text , lvl int , pattern text, stars int , wrongWords text , percent real, time CURRENT_TIMESTAMP)", nil, nil, nil) != SQLITE_OK {

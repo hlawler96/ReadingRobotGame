@@ -2,8 +2,8 @@
 //  SettingsViewController.swift
 //  Reading_Robot
 //
-//  Created by Hayden Lawler on 4/2/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
+//  Created by Derek Creason on 4/2/18.
+//  Copyright © 2018 Derek Creason. All rights reserved.
 //
 
 import UIKit
@@ -27,6 +27,7 @@ class SettingsViewController: UIViewController,  UIPickerViewDataSource, UIPicke
 //        fxSlider.value = fxValue // still todo
         fontPicker.selectRow(fonts.index(of: font)!, inComponent: 0, animated: true)
         stillModeSwitch.isOn = stillMode
+        patternOnSwitch.isOn = patternStaysOn
         
     }
 

@@ -3,7 +3,7 @@
 //  Reading_Robot
 //
 //  Created by Programming on 2/22/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
+//  Copyright © 2018 Derek Creason. All rights reserved.
 //
 
 import UIKit

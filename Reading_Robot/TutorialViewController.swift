@@ -2,8 +2,8 @@
 //  TutorialViewController.swift
 //  Reading_Robot
 //
-//  Created by Hayden Lawler on 4/12/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
+//  Created by Derek Creason on 4/12/18.
+//  Copyright © 2018 Derek Creason. All rights reserved.
 //
 
 import UIKit
