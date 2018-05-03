@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  Reading_Robot
 //
-//  Created by Hayden Lawler on 2/17/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
+//  Created by Derek Creason on 2/17/18.
+//  Copyright © 2018 Derek Creason. All rights reserved.
 //
 
 import UIKit

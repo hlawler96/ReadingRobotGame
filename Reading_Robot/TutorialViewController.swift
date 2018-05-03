@@ -2,8 +2,8 @@
 //  TutorialViewController.swift
 //  Reading_Robot
 //
-//  Created by Hayden Lawler on 4/12/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
+//  Created by Derek Creason on 4/12/18.
+//  Copyright © 2018 Derek Creason. All rights reserved.
 //
 
 import UIKit
@@ -20,8 +20,6 @@ class TutorialViewController: UIViewController {
         scene = GameTutorial(size: view.bounds.size)
         scene.viewController = self
         skView = view as! SKView
-        skView.showsFPS = true
-        skView.showsNodeCount = true
         skView.ignoresSiblingOrder = true
         scene.scaleMode = .resizeFill
         skView.presentScene(scene)

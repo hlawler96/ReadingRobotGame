@@ -2,8 +2,8 @@
 //  SettingsViewController.swift
 //  Reading_Robot
 //
-//  Created by Hayden Lawler on 4/2/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
+//  Created by Derek Creason on 4/2/18.
+//  Copyright © 2018 Derek Creason. All rights reserved.
 //
 
 import UIKit
@@ -17,6 +17,7 @@ class SettingsViewController: UIViewController,  UIPickerViewDataSource, UIPicke
     @IBOutlet weak var fxSlider: UISlider!
     @IBOutlet weak var fontPicker: UIPickerView!
     @IBOutlet weak var stillModeSwitch: UISwitch!
+    @IBOutlet weak var patternOnSwitch: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +27,8 @@ class SettingsViewController: UIViewController,  UIPickerViewDataSource, UIPicke
 //        fxSlider.value = fxValue // still todo
         fontPicker.selectRow(fonts.index(of: font)!, inComponent: 0, animated: true)
         stillModeSwitch.isOn = stillMode
-    
+        patternOnSwitch.isOn = patternStaysOn
+        
     }
 
 
@@ -71,16 +73,28 @@ class SettingsViewController: UIViewController,  UIPickerViewDataSource, UIPicke
         }
     }
 
-    @IBAction func stillModeSwitched(_ sender: Any) {
-        // 1 is true and 0 is false
-        stillMode = stillModeSwitch.isOn
-        var i = 0
-        if stillMode {
-            i = 1
-        }
-        if sqlite3_exec(db, "UPDATE SettingsData SET stillMode =  \(i) " , nil, nil, nil) != SQLITE_OK {
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("error updating table: \(errmsg)")
+    @IBAction func settingSwitched(_ sender: UISwitch) {
+        if sender == stillModeSwitch {
+            // 1 is true and 0 is false
+            stillMode = stillModeSwitch.isOn
+            var i = 0
+            if stillMode {
+                i = 1
+            }
+            if sqlite3_exec(db, "UPDATE SettingsData SET stillMode =  \(i) " , nil, nil, nil) != SQLITE_OK {
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("error updating table: \(errmsg)")
+            }
+        }else {
+            patternStaysOn = patternOnSwitch.isOn
+            var i = 0
+            if patternStaysOn {
+                i = 1
+            }
+            if sqlite3_exec(db, "UPDATE SettingsData SET patternStays =  \(i) " , nil, nil, nil) != SQLITE_OK {
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("error updating table: \(errmsg)")
+            }
         }
     }
     

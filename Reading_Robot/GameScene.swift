@@ -10,7 +10,6 @@ import SQLite3
 
 class GameScene: SKScene {
     let rope = SKSpriteNode(imageNamed: "rope")
-    let background = SKSpriteNode(imageNamed: "LevelBackground1")
     var player = SKSpriteNode(imageNamed: userColor + "_Attack_005")
     let player2 = SKSpriteNode(imageNamed: userColor + "_Attack_005")
     let bottom = SKSpriteNode(imageNamed: "rectangle-2")
@@ -24,8 +23,8 @@ class GameScene: SKScene {
     var oppPull2 = SKTexture(imageNamed: userColor + "_Attack_005")
     let scoreboard = SKSpriteNode(imageNamed: "rectangle")
     let label = SKLabelNode(fontNamed: font)
+    let popupText = SKLabelNode(fontNamed: font)
     var viewController : UIViewController!
-    
     
     var timeToPull = true
     var levelNumber = 0
@@ -76,6 +75,7 @@ class GameScene: SKScene {
         pauseBackgroundMusic()
         
         // add background to view
+        let background = getBackground(i: levelNumber-1)
         background.size.width = size.width
         background.size.height = size.height
         background.position = CGPoint(x: size.width/2, y: size.height/2)
@@ -107,6 +107,41 @@ class GameScene: SKScene {
         player2.xScale = player.xScale * -1;
         addChild(player2)
         
+        let playerNameLabel = SKLabelNode(fontNamed: font)
+        playerNameLabel.text = names[colors.index(of: oppColor)!]
+        playerNameLabel.position = CGPoint(x: player.size.width * 0.05, y: player.size.height * 0.3)
+        playerNameLabel.zPosition = 1
+        playerNameLabel.color = UIColor.white
+        playerNameLabel.fontColor = UIColor.black
+        player.addChild(playerNameLabel)
+        
+        let labelBackground = SKSpriteNode(color: UIColor.white, size: playerNameLabel.frame.size)
+        labelBackground.size.height = labelBackground.size.height*1.3
+        labelBackground.zPosition = -1
+        labelBackground.position.y = labelBackground.size.height*0.3
+        playerNameLabel.addChild(labelBackground)
+        
+       
+        
+        let player2NameLabel = SKLabelNode(fontNamed: font)
+        if playerName == "" || playerName == nil {
+            player2NameLabel.text = names[colors.index(of: userColor)!]
+        }else {
+            player2NameLabel.text = playerName
+        }
+        player2NameLabel.position = CGPoint(x: player2.size.width * -0.05, y: player.size.height * 0.3)
+        player2NameLabel.zPosition = 1
+        player2NameLabel.fontColor = UIColor.black
+        player2NameLabel.color = UIColor.white
+        player2NameLabel.xScale = player2NameLabel.xScale * -1
+        player2.addChild(player2NameLabel)
+        
+        let label2Background = SKSpriteNode(color: UIColor.white, size: player2NameLabel.frame.size)
+        label2Background.size.height = label2Background.size.height*1.3
+        label2Background.zPosition = -1
+        label2Background.position.y = label2Background.size.height*0.3
+        player2NameLabel.addChild(label2Background)
+        
         //add rope to the game
         rope.position = CGPoint(x: frame.size.width / 2, y: frame.size.height * 0.35  - player.size.height/4 )
         rope.size.width = size.width * 0.46
@@ -118,12 +153,11 @@ class GameScene: SKScene {
         bottom.position = CGPoint(x: frame.size.width/2, y:frame.size.height*0.08)
         bottom.size.height = frame.size.height * 0.16
         bottom.size.width  = frame.size.width
-//        print("Height \(bottom.size.height) , Width \(bottom.size.width)")
         bottom.zPosition = 3
         addChild(bottom)
         
         //add label for the bottom board, initialize with the pattern and then changed to ready, set , tug of war through first 5 seconds
-        label.text = "Your Pattern is: \(pattern!)"
+//        label.text = "Your Pattern is: \(pattern!)"
         label.position = CGPoint(x: frame.size.width/2, y: frame.size.height*0.04)
         label.fontSize = 100
         label.zPosition = 4
@@ -173,17 +207,74 @@ class GameScene: SKScene {
         //get time since the start of the game
         //t is used to determine the start of the game then time is used throughout the rest of the update code
         let t = getSecondsSinceStart()
-        let time = t - 5
+        let time = t - 8
         let dTime = time - previousTime
         // beginning
-        if t > 3 && t < 4 {
-            label.text = "Ready!"
-        } else if t > 4 && t < 5 {
-            label.text = "Set!"
-        } else if t > 5 {
-            label.text = "Tug Of War!"
+        if t > 0.3  && t < 3{
+            if popup.position.x == 0 {
+                popup.position = CGPoint(x: size.width/2, y: size.height/2)
+                popup.size.height = size.height / 3
+                popup.zPosition = 6
+                
+                let playerOneName = SKLabelNode(fontNamed: font)
+                let playerTwoName = SKLabelNode(fontNamed: font)
+                if playerName == "" || playerName == nil {
+                    playerOneName.text = names[colors.index(of: userColor)!]
+                }else{
+                    playerOneName.text = playerName!
+                }
+                playerTwoName.text = names[colors.index(of: oppColor)!]
+                playerOneName.fontColor = colorToUIColor(color: userColor)
+                playerTwoName.fontColor =  colorToUIColor(color: oppColor)
+                playerOneName.fontSize = 64
+                playerTwoName.fontSize = 64
+                
+                popupText.text = " Vs."
+                popupText.fontSize = 64
+                playerOneName.position.x = 0 - popupText.frame.width/2 - 2*playerOneName.frame.width/3
+                playerTwoName.position.x = 0 + popupText.frame.width/2 + 2*playerTwoName.frame.width/3
+                popup.size.width = (popupText.frame.width + playerOneName.frame.width + playerTwoName.frame.width)*1.1 + playerTwoName.position.x - playerOneName.position.x
+                playerOneName.position.x = -1 * popup.size.width / 4
+                playerTwoName.position.x = popup.size.width/4
+                addChild(popup)
+                popupText.position.y = popupText.frame.height * -0.25
+                playerOneName.position.y = popupText.frame.height * -0.25
+                playerTwoName.position.y = popupText.frame.height * -0.25
+                playerOneName.zPosition = 1
+                playerTwoName.zPosition = 1
+                popupText.fontColor = UIColor.black
+                popupText.zPosition = 1
+                popup.addChild(popupText)
+                popup.addChild(playerOneName)
+                popup.addChild(playerTwoName)
+            }
+            
+        }else if t > 3 && t < 6 {
+            popup.removeAllChildren()
+            popup.addChild(popupText)
+            popupText.text = "Your pattern is \(pattern!)!"
+            popup.size.width = popupText.frame.width * 1.1
+        }else if t > 6 && t < 7 {
+            popupText.fontSize = 100
+            popupText.text = "Ready!"
+            popupText.fontColor = UIColor.red
+            popup.size.width = popupText.frame.width * 1.1
+        } else if t > 7 && t < 8 {
+            popupText.text = "Set!"
+            popupText.fontColor = UIColor.yellow
+        } else if t > 8 {
+            if t < 9 {
+                popup.removeAllChildren()
+                popup.removeFromParent()
+                if patternStaysOn {
+                    label.text = "Your pattern is \(pattern!)!"
+                }else {
+                    label.text = "Tug Of War!"
+                }
+            }
+            
             // if the game is still going on then have the two robots pull the rope back and forth
-            if time < Double(Words.count+2) * cloudPeriod && !stillMode{
+            if time < Double(Words.count+2) * cloudPeriod && !stillMode && circleCounter < circles.count{
                 let pulling = [pull2, pull1, pull0, pull1, pull2]
                 let oppPulling = [oppPull2, oppPull1, oppPull0, oppPull1, oppPull2]
                 let remainder = time.truncatingRemainder(dividingBy: 8.0)
@@ -205,7 +296,7 @@ class GameScene: SKScene {
            
             }
             // if there are still words to go, then modify the clouds/words every cloud Period (assigned based on speed instance variable
-            if wordCounter < Words.count {
+            if wordCounter < Words.count && circleCounter < circles.count{
                 if wordCounter < 3 {
                     if !phaseTwo && dTime >= 2*cloudPeriod/3 {
                         phaseTwo = true
@@ -262,7 +353,7 @@ class GameScene: SKScene {
                         }
                     }
                 }
-            }else if time >= Double(Words.count+2) * cloudPeriod{
+            }else if time >= Double(Words.count+2) * cloudPeriod || circleCounter >= circles.count{
                 // end game
                 // update db with data, asserting gameOver, printing most recent data
                 if !gameOver {
@@ -321,11 +412,11 @@ class GameScene: SKScene {
                 
                 if stars == 1 {
                     text1.text = "You got 1 star!"
-                    text2.text = "Tap the bucket to soak your opponent in mud!"
+                    text2.text = "Tap the bucket to soak your opponent in goo!"
                 }
                 else if stars > 0 {
                     text1.text = "You got \(stars) stars!"
-                    text2.text = "Tap the bucket to soak your opponent in mud!"
+                    text2.text = "Tap the bucket to soak your opponent in goo!"
                 }
                 else {
                     text1.text = "You got 0 stars. Try again!"
@@ -369,7 +460,7 @@ class GameScene: SKScene {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        //choose one of the touches to work with
+        //choose one of the touches to work with 
         if !gameOver{
             if let touch = touches.first {
                 let currentPoint = touch.location(in: self)
@@ -524,8 +615,8 @@ class GameScene: SKScene {
         // 2 stars = 60 home points and greater than 0 away points
         // 3 stars is perfect game (60 home points, 0 away points)
         
-        if awayPoints < 50 && homePoints >= 40{
-            if homePoints < 60{
+        if awayPoints < 50 && homePoints >= (numWords - 2) * 10{
+            if homePoints < numWords*10{
                 return 1
             }
             else if awayPoints > 0{
@@ -538,6 +629,8 @@ class GameScene: SKScene {
             return 0
         }
     }
+    
+    
     
     func getLevelData() {
         let levelQuery = "SELECT * FROM LevelData L WHERE L.number=\(levelNumber)"
@@ -558,18 +651,14 @@ class GameScene: SKScene {
             oppColor = String(cString: sqlite3_column_text(stmt, 4))
 //            print("Pattern: \(pattern) , Number of Words: \(numWords) , Game Speed: \(gameSpeed)")
         }
-        var i = Int(arc4random_uniform(6))
+        let i = Int(arc4random_uniform(6))
         while(oppColor == userColor){
             oppColor = colors[i]
-            i = Int(arc4random_uniform(6))
         }
         
-        
         if(gameSpeed == "slow"){
-            cloudPeriod = 3.0
-        }else if(gameSpeed == "fast"){
             cloudPeriod = 2.0
-        }else if(gameSpeed == "very_fast"){
+        }else if(gameSpeed == "fast"){
             cloudPeriod = 1.5
         }else {
             cloudPeriod = 1.0
@@ -577,13 +666,52 @@ class GameScene: SKScene {
         
         player = SKSpriteNode(imageNamed: oppColor + "_Attack_005")
         correctWords = getRandomCorrectWords(pattern: pattern, db: db2)
+        let correctWord = correctWords[0]
+        correctWords.remove(at: 0)
         Words = getRandomWrongWords(pattern: pattern, db: db2)
         Words.append(contentsOf: correctWords)
+        let randIndex = Int(arc4random_uniform(3))
         Words.shuffle()
+        Words.insert(correctWord, at: randIndex)
+        correctWords.append(correctWord)
         sqlite3_finalize(stmt)
-        
+
     }
     
+}
+
+func colorToUIColor (color: String) -> UIColor {
+    if color == "Blue"{
+        return UIColor.blue
+    }else if color == "Red" {
+        return UIColor.red
+    }else if color == "Green" {
+        return UIColor.green
+    }else if color == "Yellow" {
+        return UIColor.yellow
+    }else if color == "Grey"{
+        return UIColor.gray
+    }else {
+        return UIColor.init(red: 0, green: 206.0 / 255.0 , blue: 209.0 / 255.0 , alpha: 1.0)
+    }
+}
+
+func getBackground(i : Int) -> SKSpriteNode {
+    if i / 3 <= 0 {
+        return SKSpriteNode(imageNamed: "1-backgrounds")
+    }else if i / 3 <= 1{
+        return SKSpriteNode(imageNamed: "2-backgrounds")
+    }else if i / 3 <= 2 {
+        return SKSpriteNode(imageNamed: "3-backgrounds")
+    }else if i/3 <= 3 {
+        return SKSpriteNode(imageNamed: "4-backgrounds")
+    }else if i/3 <= 4 {
+        return SKSpriteNode(imageNamed: "5-backgrounds")
+    }else if i/3 <= 5 {
+        return SKSpriteNode(imageNamed: "6-backgrounds")
+    }else {
+        return getBackground(i: i - 18)
+    }
 }
 
 //following two extensions allow to call .shuffle() on arrays to make life simpler when choosing words

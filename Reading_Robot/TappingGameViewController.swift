@@ -2,8 +2,8 @@
 //  TappingGameViewController.swift
 //  Reading_Robot
 //
-//  Created by Hayden Lawler on 3/26/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
+//  Created by Derek Creason on 3/26/18.
+//  Copyright © 2018 Derek Creason. All rights reserved.
 //
 
 import UIKit
@@ -13,15 +13,14 @@ import GameplayKit
 class TappingGameViewController: UIViewController {
     var playerScale, bucketScale : CGFloat!
     var level : Int!
-    var mudType: String!
+    var scene : TappingGame!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let scene = TappingGame(size: view.bounds.size)
+        scene = TappingGame(size: view.bounds.size)
         scene.playerScaling = playerScale
         scene.bucketScaling = bucketScale
         scene.viewController = self
-        scene.mudType = mudType
         scene.levelFrom = level
         let skView = view as! SKView
         skView.ignoresSiblingOrder = true
@@ -31,6 +30,9 @@ class TappingGameViewController: UIViewController {
     
     override var shouldAutorotate: Bool {
         return true;
+    }
+    @IBAction func SkipClicked(_ sender: UIButton) {
+        scene.skipClicked = true
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {

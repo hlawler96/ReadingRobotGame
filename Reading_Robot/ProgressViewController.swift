@@ -3,7 +3,7 @@
 //  Reading_Robot
 //
 //  Created by Programming on 4/2/18.
-//  Copyright © 2018 Hayden Lawler. All rights reserved.
+//  Copyright © 2018 Derek Creason. All rights reserved.
 //
 
 import SQLite3
