@@ -12,7 +12,6 @@ import Foundation
 
 class ProgressViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    //var x = ["test", "ing", "ch"]
     var x = 0
     var y = 0
     @IBOutlet weak var tableView: UITableView!
@@ -29,6 +28,7 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
             break;
         }
         sqlite3_finalize(stmt)
+        y = x
         return x
     }
     
@@ -37,7 +37,7 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
         //cell1.textLabel?.text = x[indexPath.row]
         //cell1.ProgressBar.progress = 0.5
         
-        let queryString = "SELECT AVG(U.percent) from UserData U where U.lvl = \(indexPath.row)"
+        let queryString = "SELECT AVG(U.percent) from UserData U where U.lvl = \(indexPath.row) + 1"
 
         var stmt:OpaquePointer?
         if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
@@ -46,11 +46,11 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
         }
         while(sqlite3_step(stmt) == SQLITE_ROW){
             cell1.ProgressLevel.text = String(indexPath.row + 1)
-            cell1.ProgressBar.progress = Float(sqlite3_column_double(stmt, 0))
+            cell1.PercentageLabel.text = String((sqlite3_column_double(stmt, 0) * 100).rounded()) + " %"
             break;
         }
-        /*
-        let queryString2 = "SELECT U.pattern from UserData U where U.lvl = \(indexPath.row)"
+        
+        let queryString2 = "SELECT U.pattern from UserData U where U.lvl = \(indexPath.row) + 1"
         
         var stmt2:OpaquePointer?
 
@@ -59,10 +59,9 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
             print("error preparing select: \(errmsg)")
         }
         while(sqlite3_step(stmt2) == SQLITE_ROW){
-            cell1.PhonemeType.text = String(sqlite3_column_text(stmt2, 0))
+            cell1.PhonemeType.text = String(cString : sqlite3_column_text(stmt2, 0))
             break;
         }
-        */
         //cell1.PhonemeType.text = "0"
         return cell1
         
