@@ -24,14 +24,13 @@ class SettingsViewController: UIViewController,  UIPickerViewDataSource, UIPicke
         fontPicker.delegate = self
         fontPicker.dataSource = self
         musicSlider.value = backgroundMusicPlayer.volume
-//        fxSlider.value = fxValue // still todo
         fontPicker.selectRow(fonts.index(of: font)!, inComponent: 0, animated: true)
         stillModeSwitch.isOn = stillMode
         patternOnSwitch.isOn = patternStaysOn
-        
     }
 
 
+    
     @IBAction func MusicVolumeChanged(_ sender: UISlider) {
         if sender == musicSlider {
             backgroundMusicPlayer.volume = musicSlider.value

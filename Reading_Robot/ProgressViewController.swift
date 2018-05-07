@@ -16,6 +16,14 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
     var y = 0
     @IBOutlet weak var tableView: UITableView!
     
+    @IBAction func clearData(_ sender: Any) {
+        dropDatabases()
+        loadUserColor()
+        oppColor = "Blue"
+        loadSettings()
+        
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let queryString = "SELECT COUNT(L.number) from LevelData L"
         var stmt:OpaquePointer?
@@ -62,6 +70,8 @@ class ProgressViewController: UIViewController, UITableViewDelegate, UITableView
             cell1.PhonemeType.text = String(cString : sqlite3_column_text(stmt2, 0))
             break;
         }
+         sqlite3_finalize(stmt)
+         sqlite3_finalize(stmt2)
         //cell1.PhonemeType.text = "0"
         return cell1
         

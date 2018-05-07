@@ -129,6 +129,7 @@ class LevelViewController: UIViewController, UICollectionViewDataSource, UIColle
             numStars = Int(sqlite3_column_int(stmt, 0))
             break;
         }
+         sqlite3_finalize(stmt)
         
         return numStars
     }
