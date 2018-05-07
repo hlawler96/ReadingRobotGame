@@ -33,6 +33,7 @@ class TappingGame: SKScene {
     var bucketScaling = CGFloat(1.0)
     var playerScaling = CGFloat(1.0)
     var mudType : String!
+    var playerInMud : SKTexture!
     
     override func didMove(to view: SKView) {
         // pause background at start if its already playing
@@ -43,10 +44,13 @@ class TappingGame: SKScene {
         let i = Int(arc4random_uniform(3)) + 1
         if i == 1 {
             mudType = "mud"
+            playerInMud = SKTexture(imageNamed: "blue_mud")
         }else if i == 2 {
             mudType = "lava"
+            playerInMud = SKTexture(imageNamed: "red mud")
         }else {
             mudType = "slime"
+            playerInMud = SKTexture(imageNamed: "green mud")
         }
         
         mud = SKSpriteNode(imageNamed: mudType)
@@ -113,7 +117,7 @@ class TappingGame: SKScene {
             bucket.zRotation = CGFloat.pi
             cropNode.removeAllChildren()
             cropNode.removeFromParent()
-            player.texture = SKTexture(imageNamed: "blue_mud" )
+            player.texture = playerInMud
             bucketFalling = true
             bucket_taps = 100
             gameOver = true
@@ -125,7 +129,7 @@ class TappingGame: SKScene {
             mud.position.y = mud.position.y - 8
             
             if mud.position.y < mudStartY - mud.size.height/2 {
-                player.texture = SKTexture(imageNamed: "blue_mud" )
+                player.texture = playerInMud
             }
                 //If the mud is done falling and both are off the screen get rid of the mud nodes and the cropNode
                 if mud.position.y + mud.size.height/2 < 0 {
